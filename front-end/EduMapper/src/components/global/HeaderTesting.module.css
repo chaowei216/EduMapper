@@ -1,0 +1,30 @@
+.header {
+    background-color: #f2f2f2 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .headerContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .logo img {
+    height: 40px;
+  }
+  
+  .timer {
+    font-weight: bold;
+  }
+  
+  .actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .exitTest {
+    color: #fff !important;
+  }
+  
+  .submit {
+    color: #fff !important;
+  }
