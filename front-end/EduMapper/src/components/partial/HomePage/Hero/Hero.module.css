@@ -1,0 +1,26 @@
+.heroWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  /* Tùy chỉnh theo kích thước bạn muốn */
+  margin: 0 auto;
+}
+
+.slideItem {
+  position: relative;
+}
+
+.carouselImage {
+  width: 100%;
+  height: auto;
+}
+
+.caption {
+  position: absolute;
+  bottom: 10px;
+  left: 20px;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border-radius: 5px;
+}

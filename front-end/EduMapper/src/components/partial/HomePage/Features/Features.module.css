@@ -1,0 +1,133 @@
+.featuresWrapper {
+  flex-direction: column;
+  background: #FFFAF3;
+  height: 700px;
+  max-height: 700px;
+}
+
+.featuresHeading {
+  margin: 75px 10px 30px 10px;
+  font-size:1.8rem;
+  text-align: center;
+}
+
+.featuresList {
+  width: 1100px;
+  height: 390px;
+  margin-right: 20px;
+
+}
+
+.featuresListWrapper{
+  max-height: 500px;
+}
+
+.cardBody{
+  height: 150px;
+  max-height: 150px;
+
+}
+
+.cardBody h5{
+  margin-top: 10px;
+}
+
+.cardBody p{
+  margin-top: 5px;
+}
+
+.swiper{
+  width: 950px;
+}
+.card{
+  position: relative;
+  background: #fff;
+  border-radius: 20px;
+  margin: 20px 0;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+.card::before{
+  content: "";
+  position: absolute;
+  height: 40%;
+  width: 100%;
+  background: #4DA8DA;
+  border-radius: 20px 20px 0 0;
+  top: -30px;
+}
+.card .cardContent{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  position: relative;
+  z-index: 100;
+}
+.card .image{
+  height: 140px;
+  width: 140px;
+  border-radius: 50%;
+  padding: 3px;
+  background: #4DA8DA;
+}
+.card .image img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #fff;
+}
+
+
+.courseList, .classList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  font-size: 14px;
+}
+
+.class, .course {
+  color: blue;
+  font-weight: 600;
+  padding-top: 12px;
+}
+
+.boxItem p {
+  padding: 5px;
+  font-weight: 600;
+  white-space: nowrap; /* Đảm bảo không bị ngắt dòng */
+}
+
+.course::after, .class::after {
+  content: ",";
+}
+
+.course:last-child::after, .class:last-child::after {
+  content: none;
+}
+
+.boxItem{
+  margin-left: -5px;
+}
+
+.boxItem2{
+  margin-left: -5px;
+  
+}
+
+.boxItem2 p {
+  padding-top: 10px;
+}
+
+.ratingStars{
+  font-size: 23px;
+  margin-top: 25px;
+  
+}
+
+.ratingValue{
+  margin-left: 10px;
+}
+
+
+

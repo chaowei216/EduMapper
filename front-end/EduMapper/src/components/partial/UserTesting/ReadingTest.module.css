@@ -1,0 +1,16 @@
+.customResizer {
+    background: #ddd;
+    cursor: col-resize;
+    width: 10px; /* Adjust width as needed */
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .customResizer::before {
+    content: '<|>';
+    font-size: 15px; /* Adjust font size as needed */
+    color: #666; /* Adjust color as needed */
+  }
+  

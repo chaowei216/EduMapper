@@ -1,0 +1,55 @@
+
+
+.programsWrapper {
+  padding: 40px;
+  background: #caeaf347;
+
+}
+
+.programsTable{
+  margin: 10px 0 10px 0;
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.7);
+}
+
+.title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+  padding-top: 20px;
+  font-size: 25px;
+  font-weight: 600;
+}
+
+.pricingTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pricingTable th, .pricingTable td {
+  border: 1px solid #5a80a7;
+  padding: 12px;
+  text-align: center;
+}
+
+.pricingTable th {
+  background-color: #4DA8DA;
+  color: white;
+  font-weight: bold;
+}
+
+.groupHeader {
+  background-color: #E0F7FA ;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.pricingTable tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.pricingTable tr:hover {
+  background-color: #ddd;
+}
