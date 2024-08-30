@@ -7,9 +7,9 @@ namespace DAL.Repository
         IEnumerable<T> Get(
             Expression<Func<T, bool>>? filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
-            string includeProperties = "",
             int? pageIndex = null,
-            int? pageSize = null);
+            int? pageSize = null,
+            string includeProperties = "");
 
         T GetByID(object id);
 

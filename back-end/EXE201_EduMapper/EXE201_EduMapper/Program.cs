@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using EXE201_EduMapper.Extension;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +11,9 @@ builder.Services.AddControllers().AddJsonOptions(x =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-    
+builder.Services.AddDatabase();
+builder.Services.AddUnitOfWork();
+
 // auto mapper
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
