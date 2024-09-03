@@ -1,132 +1,351 @@
-import { useState } from "react";
-import styles from "./Navbar.module.css";
-import { Button, Stack } from "@mui/material";
-import ProfileMenu from "./ProfileMenu";
-import NotifyBell from "../Notification/Notification";
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import AdbIcon from "@mui/icons-material/Adb";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import logoEdu from "/img/logoEdu.png";
+import {
+  Flex,
+  Icon,
+  Image,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Stack,
+  Text,
+  useColorModeValue,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+const pages = [
+  "Trang chủ",
+  "Trung tâm tiếng anh",
+  "Thi thử",
+  "Liên hệ",
+  "Cộng đồng",
+];
+const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
-import { Link, useNavigate } from "react-router-dom";
-const Navbar = () => {
+function ResponsiveAppBar() {
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
   const navigate = useNavigate();
-  const handleClickLogin = () => {
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+  const { isOpen, onToggle } = useDisclosure();
+  const handleClick = () => {
     navigate("/login");
   };
-  const handleClickRegister = () => {
-    navigate("/registerParents");
-  };
-  const [anchorEl, setAnchorEl] = useState(null);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const buttonStyles = {
-    backgroundColor: "#e8e8e8",
-    borderRadius: "100px",
-    fontSize: "16px",
-    fontWeight: "600",
-    border: "none",
-    color: "#000",
-    transition: "color 0.2s ease",
-    "&:hover": {
-      color: "#ff0000 !important",
-      fontWeight: "bold",
-      border: "none !important",
-      backgroundColor: "#e8e8e8",
-    },
-  };
-  const handleClickCoin = () => {
-    navigate("/buycoin");
-  };
   return (
-    <header className={styles.navbarWrapper}>
-      <div className={styles.navbarInner}>
-        <img src={"ss}"} alt="logo" className={styles.brand} />
-      </div>
-      <div className={styles.navRight}>
-        <div className={styles.navLinksWrapper}>
-          <div className={styles.teal}>
-            <Link
-              to="/"
-              className={`${styles.nav} ${styles.center} ${styles.dropdownToggle}`}
+    <AppBar
+      position="static"
+      style={{
+        background: "#40C993",
+        borderRadius: "0px 0px 18px 18px",
+        marginBottom: "20px",
+      }}
+    >
+      <Container maxWidth="xl">
+        <Toolbar disableGutters style={{ height: "95px" }}>
+          <Image
+            boxSize="100px"
+            width={145}
+            objectFit="cover"
+            src={logoEdu}
+            alt="Dan Abramov"
+          />
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
             >
-              TRANG CHỦ
-            </Link>
-            <div
-              className={`${styles.dropdown} ${styles.dropdownWrapper}`}
-              style={{ width: "175px" }}
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: "block", md: "none" },
+              }}
             >
-              <a
-                className={`${styles.nav} ${styles.center} ${styles.dropdownToggle}`}
-              >
-                PHỤ HUYNH
-              </a>
-              <div className={styles.dropdownMenu}>
-                <Link to="/ParentPage" className={styles.dropdownItem}>
-                  Cập nhật hồ sơ
-                </Link>
-                <Link to="/" className={styles.dropdownItem}>
-                  Gia sư tiêu biểu
-                </Link>
-              </div>
-            </div>
-            <div
-              className={`${styles.dropdown} ${styles.dropdownMenuWrapper}`}
-              style={{ width: "130px" }}
-            >
-              <a
-                className={`${styles.nav} ${styles.center} ${styles.dropdownToggle}`}
-              >
-                GIA SƯ
-              </a>
-              <div className={styles.dropdownMenu}>
-                <Link to="/registerTutors" className={styles.dropdownItem}>
-                  Đăng ký làm gia sư
-                </Link>
-                <Link to="/BookTutorOnline" className={styles.dropdownItem}>
-                  Danh sách gia sư online
-                </Link>
-                <Link to="/BookTutorOffline" className={styles.dropdownItem}>
-                  Danh sách gia sư offline
-                </Link>
-              </div>
-            </div>
-            <Link to="/buycoin" className={`${styles.nav} ${styles.center}`}>
-              MUA COIN
-            </Link>
-            <Link to="/NewsPage" className={`${styles.nav} ${styles.center}`}>
-              TIN TỨC
-            </Link>
-          </div>
-        </div>
-        <div className={styles.nav_info}>
-          <button onClick={() => handleClickLogin()} className={styles.login}>
-            Đăng nhập
-          </button>
-          <button
-            onClick={() => handleClickRegister()}
-            className={styles.signup}
+              {pages.map((page) => (
+                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">{page}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          <Typography
+            variant="h5"
+            noWrap
+            component="a"
+            href="#app-bar-with-responsive-menu"
+            sx={{
+              mr: 2,
+              display: { xs: "flex", md: "none" },
+              flexGrow: 1,
+              fontFamily: "monospace",
+              fontWeight: 700,
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
+            }}
           >
-            Đăng ký
-          </button>
-        </div>
-        <div className={styles.nav_info}>
-          <Stack sx={{ marginRight: "20px" }} spacing={2} direction="row">
-            <NotifyBell />
-          </Stack>
-          <Button
-            onClick={handleClickCoin}
-            variant="text"
-            sx={buttonStyles}
-            style={{ textTransform: "none" }}
+            LOGO
+          </Typography>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "none", md: "flex" },
+              justifyContent: "center",
+            }}
           >
-            {"0"} Coin
-          </Button>
-          <ProfileMenu />
-        </div>
-      </div>
-    </header>
+            <Flex
+              style={{
+                my: 2,
+                display: "block",
+                zIndex: "1",
+                fontSize: "22px",
+                fontWeight: "700",
+                textTransform: "none",
+                fontFamily: "Inter",
+                margin: "10px 8px 0px 8px",
+              }}
+              display={{ base: "none", md: "flex" }}
+              ml={10}
+            >
+              <DesktopNav />
+            </Flex>
+          </Box>
+
+          <Box sx={{ flexGrow: 0 }}>
+            <Stack
+              flex={{ base: 1, md: 0 }}
+              justify={"flex-end"}
+              direction={"row"}
+              spacing={6}
+              sx={{ margin: "8px 8px 0px 8px" }}
+            >
+              <Button
+                onClick={handleClick}
+                variant="contained"
+                sx={{
+                  borderRadius: "20px",
+                  background: "#1EA26E",
+                  fontSize: "17px",
+                }}
+              >
+                Đăng nhập
+              </Button>
+            </Stack>
+          </Box>
+
+          {/* <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              {settings.map((setting) => (
+                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">{setting}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box> */}
+        </Toolbar>
+      </Container>
+    </AppBar>
+  );
+}
+export default ResponsiveAppBar;
+const NAV_ITEMS = [
+  {
+    label: "Trang chủ",
+    href: "/",
+  },
+  {
+    label: "Trung tâm tiếng anh",
+    children: [
+      {
+        label: "Explore Design Work",
+        subLabel: "Trending Design to inspire you",
+        href: "#",
+      },
+      {
+        label: "New & Noteworthy",
+        subLabel: "Up-and-coming Designers",
+        href: "#",
+      },
+    ],
+  },
+  {
+    label: "Thi thử",
+    children: [
+      {
+        label: "Job Board",
+        subLabel: "Find your dream design job",
+        href: "#",
+      },
+      {
+        label: "Freelance Projects",
+        subLabel: "An exclusive list for contract work",
+        href: "#",
+      },
+    ],
+  },
+  {
+    label: "Liên hệ",
+    href: "#",
+  },
+  {
+    label: "Cộng đồng",
+    href: "#",
+  },
+];
+const DesktopNav = () => {
+  const linkColor = useColorModeValue("gray.600", "gray.200");
+  const linkHoverColor = useColorModeValue("gray.800", "white");
+  const popoverContentBgColor = useColorModeValue("white", "gray.800");
+
+  return (
+    <Stack direction={"row"} spacing={4}>
+      {NAV_ITEMS.map((navItem) => (
+        <Box key={navItem.label}>
+          <Popover trigger={"hover"} placement={"bottom-start"}>
+            <PopoverTrigger>
+              <Box
+                as="a"
+                p={2}
+                href={navItem.href ?? "#"}
+                fontSize={"sm"}
+                fontWeight={500}
+                color={linkColor}
+                _hover={{
+                  textDecoration: "none",
+                  color: linkHoverColor,
+                }}
+              >
+                {navItem.label}
+              </Box>
+            </PopoverTrigger>
+
+            {navItem.children && (
+              <PopoverContent
+                border={0}
+                boxShadow={"xl"}
+                bg={popoverContentBgColor}
+                p={4}
+                rounded={"xl"}
+                minW={"sm"}
+              >
+                <Stack>
+                  {navItem.children.map((child) => (
+                    <DesktopSubNav key={child.label} {...child} />
+                  ))}
+                </Stack>
+              </PopoverContent>
+            )}
+          </Popover>
+        </Box>
+      ))}
+    </Stack>
   );
 };
 
-export default Navbar;
+const DesktopSubNav = ({ label, href, subLabel }) => {
+  return (
+    <Box
+      as="a"
+      href={href}
+      role={"group"}
+      display={"block"}
+      p={2}
+      rounded={"md"}
+      _hover={{ bg: useColorModeValue("pink.50", "gray.900") }}
+    >
+      <Stack direction={"row"} align={"center"}>
+        <Box>
+          <Text
+            transition={"all .3s ease"}
+            _groupHover={{ color: "pink.400" }}
+            fontWeight={500}
+            color={"gray.800"}
+          >
+            {label}
+          </Text>
+          <Text fontSize={"sm"} color={"gray.600"}>
+            {subLabel}
+          </Text>
+        </Box>
+        <Flex
+          transition={"all .3s ease"}
+          transform={"translateX(-10px)"}
+          opacity={0}
+          _groupHover={{ opacity: "100%", transform: "translateX(0)" }}
+          justify={"flex-end"}
+          align={"center"}
+          flex={1}
+        >
+          <Icon color={"pink.400"} w={5} h={5} as={ArrowRightIcon} />
+        </Flex>
+      </Stack>
+    </Box>
+  );
+};

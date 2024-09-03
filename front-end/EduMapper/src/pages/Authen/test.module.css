@@ -1,0 +1,9 @@
+/* App.module.css */
+.hiddenScroll {
+  overflow: auto; /* Cho phép cuộn */
+  scrollbar-width: none; /* Firefox */
+}
+
+.hiddenScroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, và các trình duyệt dựa trên WebKit */
+}

@@ -6,10 +6,30 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store/store.jsx";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { ChakraProvider } from "@chakra-ui/react";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
+const muiTheme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+      custom: 1630,
+    },
+  },
+});
+
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <StrictMode>
-      <App />
+      <ChakraProvider>
+        <ThemeProvider theme={muiTheme}>
+          <App />
+        </ThemeProvider>
+      </ChakraProvider>
     </StrictMode>
   </Provider>
 );

@@ -1,36 +1,24 @@
-/* Questions.module.css */
-/* .questionsWrapper {
+.questionsWrapper {
+  padding: 1rem;
+  padding-bottom: 50px;
+}
+
+.container_video {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-} */
-
-.questionsWrapper{
-  background: #caeaf347;
-  padding: 50px 0;
-}
-
-.counter {
-  font-size: 2em;
-  color: #000;
-  margin: 10px;
-  display: flex;
   align-items: center;
-  flex-direction: column;
-  align-items: center;
-  margin-left: 190px;
-  margin-bottom: 10px;
-  text-align: center;
 }
 
-.icon {
-  margin-right: 10px;
-  color: #23B527;
+.videoWrapper {
+  width: clamp(300px, 80%, 100rem);
+  padding: 3rem;
+  border-radius: 56px;
+  background: #53AC89;
+  box-shadow: 7px 7px 7.5px 0px rgba(0, 0, 0, 0.25) inset;
 }
 
-.counter p{
-  margin: 10px 0;
-  font-size: 28px;
-  font-weight: 500;
+.video {
+  width: 100%;
+  border-radius: 25px;
+  aspect-ratio: 16/9;
 }

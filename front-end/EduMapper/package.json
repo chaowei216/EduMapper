@@ -10,7 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emotion/react": "^11.13.0",
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
@@ -25,6 +26,7 @@
     "@reduxjs/toolkit": "^2.2.7",
     "debounce": "^2.1.0",
     "formik": "^2.4.6",
+    "framer-motion": "^11.3.29",
     "jwt-decode": "^4.0.0",
     "mdb-react-ui-kit": "^8.0.0",
     "react": "^18.3.1",

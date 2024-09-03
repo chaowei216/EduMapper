@@ -1,26 +1,80 @@
 .heroWrapper {
-  position: relative;
+  position: absolute;
   width: 100%;
-  max-width: 1200px;
-  /* Tùy chỉnh theo kích thước bạn muốn */
+  top: 2.95%;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 1400px;
+  /* Tăng chiều rộng tối đa của khung */
   margin: 0 auto;
+  padding: 0 10px;
+  /* Thêm padding để thêm không gian */
 }
 
-.slideItem {
+.test {
   position: relative;
+  padding: 40px;
+  width: 100%;
+  max-width: 1400px;
+  /* Đặt max-width cho khung bên trong */
+  background-color: #fff;
+  border-radius: 0 0 40px 40px;
 }
 
+/* Đặt chiều rộng và chiều cao ảnh để phù hợp với khung */
 .carouselImage {
   width: 100%;
   height: auto;
+  /* Đảm bảo ảnh tự động điều chỉnh chiều cao */
 }
 
-.caption {
-  position: absolute;
-  bottom: 10px;
-  left: 20px;
-  color: #fff;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 10px;
-  border-radius: 5px;
+@media (max-width: 1450px) {
+  .heroWrapper {
+    top: 4%;
+    padding: 0 20px;
+  }
+}
+
+/* Media Queries cho các kích thước màn hình khác nhau */
+@media (max-width: 1300px) {
+  .heroWrapper {
+    padding: 0 20px;
+    top: 5%;
+  }
+}
+
+@media (max-width: 1300px) {
+  .heroWrapper {
+    padding: 0 20px;
+    top: 5.5%;
+  }
+}
+
+@media (max-width: 1100px) {
+  .heroWrapper {
+    padding: 0 20px;
+    top: 6%;
+  }
+}
+
+@media (max-width: 900px) {
+  .heroWrapper {
+    padding: 0 15px;
+  }
+
+  .carouselImage {
+    height: 400px;
+    /* Giảm chiều cao ảnh cho màn hình nhỏ */
+  }
+}
+
+@media (max-width: 600px) {
+  .heroWrapper {
+    padding: 0 10px;
+  }
+
+  .carouselImage {
+    height: 300px;
+    /* Giảm chiều cao ảnh cho màn hình rất nhỏ */
+  }
 }

@@ -1,63 +1,120 @@
-import styles from "./Footer.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
 import {
-  faSquareFacebook,
-  faInstagram,
-  faTwitterSquare,
-} from "@fortawesome/free-brands-svg-icons";
+  Typography,
+  Button,
+  Box,
+  Container,
+  Grid,
+  ThemeProvider,
+  createTheme,
+  Divider,
+} from "@mui/material";
+import logoEdu from "/img/logoEdu.png";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import ShareIcon from "@mui/icons-material/Share";
+import { Image } from "@chakra-ui/react";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#4267B2", // Facebook blue
+    },
+    secondary: {
+      main: "#f0f2f5", // Light gray background
+    },
+  },
+});
+
+const LikeShareButtons = () => {
+  return (
+    <Box sx={{ mb: 2 }}>
+      <Button
+        variant="contained"
+        startIcon={<ThumbUpAltIcon />}
+        sx={{ mr: 1, borderRadius: 20 }}
+      >
+        Like 40k
+      </Button>
+      <Button
+        variant="contained"
+        startIcon={<ShareIcon />}
+        sx={{ borderRadius: 20 }}
+      >
+        Share
+      </Button>
+    </Box>
+  );
+};
+
+const FooterSection = ({ title, items }) => {
+  return (
+    <Box sx={{ mb: 3 }}>
+      <Typography variant="h6" sx={{ mb: 1, fontWeight: "bold" }}>
+        {title}
+      </Typography>
+      <Divider sx={{ mb: 1 }} />
+      {items.map((item, index) => (
+        <Typography key={index} variant="body2" sx={{ mb: 2, fontWeight: "bold", fontSize: "15px" }}>
+          {item}
+        </Typography>
+      ))}
+    </Box>
+  );
+};
 
 const Footer = () => {
   return (
-    <footer className={styles.footer}>
-      <div className={styles.footerContent}>
-        <div className={styles.footerSection}>
-          <h3>Về Chúng Tôi</h3>
-          <div className={styles.social}>
-            <img src={"A"} alt="logo" className={styles.brand} />
-            <div className={styles.socialIcon}>
-              <div className={styles.socialText}>
-                <FontAwesomeIcon icon={faSquareFacebook} />
-                <a href="">FaceBook</a>
-              </div>
-              <div className={styles.socialText}>
-                <FontAwesomeIcon icon={faInstagram} />
-                <a href="">Instagram</a>
-              </div>
-              <div className={styles.socialText}>
-                <FontAwesomeIcon icon={faTwitterSquare} />
-                <a href="">Twitter</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className={styles.footerSection}>
-          <h3>Liên Kết Nhanh</h3>
-          <ul>
-            <li>
-              <a href="/">Trang Chủ</a>
-            </li>
-            <li>
-              <a href="/services">Dịch Vụ</a>
-            </li>
-            <li>
-              <a href="/contact">Liên Hệ</a>
-            </li>
-            <li>
-              <a href="/about">Về Chúng Tôi</a>
-            </li>
-          </ul>
-        </div>
-        <div className={styles.footerSection}>
-          <h3>Liên Hệ</h3>
-          <p>Địa chỉ: 123 Đường ABC, TP HCM</p>
-          <p>Điện thoại: 0123 456 789</p>
-          <p>Email: contact@giasuhoctap.com</p>
-        </div>
-      </div>
-      <div className={styles.footerBottom}>
-        &copy; {new Date().getFullYear()} Gia Sư Học Tâp. All rights reserved.
-      </div>
-    </footer>
+    <Box component="footer" sx={{ bgcolor: "#D9D9D9", py: 3, mt: "auto" }}>
+      <Container maxWidth="lg">
+        <LikeShareButtons />
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={3}>
+            <Typography
+              variant="h5"
+              component="div"
+              sx={{ fontWeight: "bold", mb: 1 }}
+            >
+              Edumaper
+            </Typography>
+            <Typography variant="caption">© 2024</Typography>
+            <Image
+              boxSize="100px"
+              width={145}
+              objectFit="cover"
+              src={logoEdu}
+              alt="Dan Abramov"
+            />
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <FooterSection
+              title="Danh mục"
+              items={[
+                "Trang chủ",
+                "Tin trung tâm",
+                "Thông tin cần biết",
+                "Test Online",
+              ]}
+            />
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <FooterSection
+              title="Tài nguyên"
+              items={["Thư viện đề thi", "Blog", "Forum học tập"]}
+            />
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <FooterSection
+              title="Liên hệ"
+              items={[
+                "Địa chỉ: 32, 23 Phú hữu, Quận 9",
+                "Điện thoại: 01234559809",
+                "Email: Edumaper@gmail.com",
+              ]}
+            />
+          </Grid>
+        </Grid>
+      </Container>
+    </Box>
   );
 };
 

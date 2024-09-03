@@ -1,12 +1,10 @@
-
-
 .programsWrapper {
   padding: 40px;
   background: #caeaf347;
 
 }
 
-.programsTable{
+.programsTable {
   margin: 10px 0 10px 0;
   max-width: 800px;
   margin: 0 auto;
@@ -28,7 +26,8 @@
   border-collapse: collapse;
 }
 
-.pricingTable th, .pricingTable td {
+.pricingTable th,
+.pricingTable td {
   border: 1px solid #5a80a7;
   padding: 12px;
   text-align: center;
@@ -41,7 +40,7 @@
 }
 
 .groupHeader {
-  background-color: #E0F7FA ;
+  background-color: #E0F7FA;
   font-weight: bold;
   font-size: 1.1em;
 }
@@ -52,4 +51,10 @@
 
 .pricingTable tr:hover {
   background-color: #ddd;
+}
+
+@media (max-width: 1629px) {
+  .main {
+    margin-top: 20rem;
+  }
 }
