@@ -9,7 +9,7 @@ import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-
+import useAuth from "../../../../hooks/useAuth";
 import { styled } from "@mui/material/styles";
 
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from "../CustomIcons";
@@ -39,7 +39,7 @@ export default function SignInCard() {
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
-
+  const { login_type } = useAuth();
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -55,6 +55,22 @@ export default function SignInCard() {
       email: data.get("email"),
       password: data.get("password"),
     });
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await login_type("Google");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleFacebookSignIn = async () => {
+    try {
+      await login_type("Facebook");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const validateInputs = () => {
@@ -113,10 +129,25 @@ export default function SignInCard() {
           border: "2px solid #E8E8E8",
           color: "var(--Gray-3, #828282)",
         }}
-        onClick={() => alert("Sign in with Google")}
+        onClick={() => handleGoogleSignIn()}
         startIcon={<GoogleIcon />}
       >
         Tiếp tục với Google
+      </Button>
+      <Button
+        type="submit"
+        fullWidth
+        variant="outlined"
+        sx={{
+          textTransform: "none",
+          border: "2px solid #E8E8E8",
+          color: "var(--Gray-3, #828282)",
+          marginTop: "15px",
+        }}
+        onClick={() => handleFacebookSignIn()}
+        startIcon={<FacebookIcon />}
+      >
+        Tiếp tục với Facebook
       </Button>
       <Box
         display="flex"
