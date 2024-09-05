@@ -1,24 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using DAL.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DAO.Models
 {
     public class RefreshToken
     {
         [Key]
-        public int RefreshId { get; set; }
-        public string JwtId { get; set; } = null!;
+        public string RefreshTokenId { get; set; } = null!;
+        public string UserId { get; set; } = null!;
+        public string JwtTokenId { get; set; } = null!;
         public string Token { get; set; } = null!;
         public bool IsRevoked { get; set; }
-        public DateTime DateAdded { get; set; }
-        public DateTime DateExpired { get; set; }
-        public int UserId { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? RevokedAt { get; set; }
+        public DateTime ExpiredAt { get; set; }
         [ForeignKey("UserId")]
-        public Users User { get; set; } = null!;
+        public ApplicationUser User { get; set; } = null!;
     }
 }

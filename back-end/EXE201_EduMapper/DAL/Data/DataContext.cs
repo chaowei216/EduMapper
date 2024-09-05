@@ -1,35 +1,35 @@
 ﻿using DAL.Models;
 using DAO.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace DAL.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         #region Entities
-        public DbSet<Users> Users { get; set; }
-        public DbSet<Centers> Centers { get; set; }
-        public DbSet<Courses> Courses { get; set; }
-        public DbSet<Exams> Exams { get; set; }
-        public DbSet<MemberShips> MemberShips { get; set; }
-        public DbSet<MemberShipDetails> MemberShipDetails { get; set; }
-        public DbSet<Passages> Passages { get; set; }
-        public DbSet<ProgramTrainings> ProgramTrainings { get; set; }
+        public DbSet<Center> Centers { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Exam> Exams { get; set; }
+        public DbSet<MemberShip> MemberShips { get; set; }
+        public DbSet<MemberShipDetail> MemberShipDetails { get; set; }
+        public DbSet<Passage> Passages { get; set; }
+        public DbSet<ProgramTraining> ProgramTrainings { get; set; }
         public DbSet<Progress> Progresses { get; set; }
-        public DbSet<Questions> Questions { get; set; }
-        public DbSet<QuestionChoices> QuestionChoices { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<QuestionChoice> QuestionChoices { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
-        public DbSet<Tests> Tests { get; set; }
-        public DbSet<UserAnswers> UserAnswers { get; set; }
-        public DbSet<UserReferences> UserReferences { get; set; }
-        public DbSet<Roles> Roles { get; set; }
-        public DbSet<Feedbacks> Feedbacks { get; set; }
-        public DbSet<Notifications> Notifications { get; set; }
-        public DbSet<Transactions> Transactions { get; set; }
-        public DbSet<UserNotifications> UserNotifications { get; set; }
+        public DbSet<Test> Tests { get; set; }
+        public DbSet<UserAnswer> UserAnswers { get; set; }
+        public DbSet<UserReference> UserReferences { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<UserNotification> UserNotifications { get; set; }
 
         #endregion
 
@@ -39,7 +39,8 @@ namespace DAL.Data
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", false, true)
                 .Build();
-            string connectionString = configuration["ConnectionStrings:DefaultConnection"];
+
+            string connectionString = configuration["ConnectionStrings:DefaultConnection"]!;
             return connectionString;
         }
 
@@ -55,36 +56,38 @@ namespace DAL.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(DataContext).Assembly);
+
             #region M_M relationship
-            modelBuilder.Entity<UserAnswers>()
+            modelBuilder.Entity<UserAnswer>()
                 .HasKey(uc => new { uc.UserId, uc.QuestionId });
-            modelBuilder.Entity<UserAnswers>()
+            modelBuilder.Entity<UserAnswer>()
                 .HasOne(uc => uc.User)
                 .WithMany(uc => uc.UserAnswers)
                 .HasForeignKey(uc => uc.UserId);
-            modelBuilder.Entity<UserAnswers>()
+            modelBuilder.Entity<UserAnswer>()
                 .HasOne(uc => uc.Question)
                 .WithMany(uc => uc.UserAnswers)
                 .HasForeignKey(uc => uc.QuestionId);
 
-            modelBuilder.Entity<MemberShipDetails>()
+            modelBuilder.Entity<MemberShipDetail>()
                 .HasKey(uc => new { uc.UserId, uc.MemberShipId });
-            modelBuilder.Entity<MemberShipDetails>()
+            modelBuilder.Entity<MemberShipDetail>()
                 .HasOne(uc => uc.User)
                 .WithMany(uc => uc.MemberShipDetails)
                 .HasForeignKey(uc => uc.UserId);
-            modelBuilder.Entity<MemberShipDetails>()
+            modelBuilder.Entity<MemberShipDetail>()
                 .HasOne(uc => uc.MemberShip)
                 .WithMany(uc => uc.MemberShipDetails)
                 .HasForeignKey(uc => uc.MemberShipId);
 
-            modelBuilder.Entity<UserNotifications>()
+            modelBuilder.Entity<UserNotification>()
                .HasKey(uc => new { uc.UserId, uc.NotificationId });
-            modelBuilder.Entity<UserNotifications>()
+            modelBuilder.Entity<UserNotification>()
                 .HasOne(uc => uc.Notification)
                 .WithMany(uc => uc.UserNotification)
                 .HasForeignKey(uc => uc.NotificationId);
-            modelBuilder.Entity<UserNotifications>()
+            modelBuilder.Entity<UserNotification>()
                 .HasOne(uc => uc.User)
                 .WithMany(uc => uc.UserNotifications)
                 .HasForeignKey(uc => uc.UserId);

@@ -8,105 +8,104 @@ namespace DAL.UnitOfWork
     public class UnitOfWork : IUnitOfWork
     {
         private DataContext _context;
-        private GenericRepository<Users> _userRepository;
-        private GenericRepository<MemberShips> _memberShipRepository;
-        private GenericRepository<MemberShipDetails> _memberShipDetailRepository;
-        private GenericRepository<Centers> _centerRepository;
-        private GenericRepository<Courses> _courseRepository;
-        private GenericRepository<Exams> _examRepository;
-        private GenericRepository<Feedbacks> _feedbackRepository;
-        private GenericRepository<Notifications> _notificationRepository;
-        private GenericRepository<Passages> _passageRepository;
-        private GenericRepository<ProgramTrainings> _programTrainingRepository;
+        private GenericRepository<ApplicationUser> _userRepository;
+        private GenericRepository<MemberShip> _memberShipRepository;
+        private GenericRepository<MemberShipDetail> _memberShipDetailRepository;
+        private GenericRepository<Center> _centerRepository;
+        private GenericRepository<Course> _courseRepository;
+        private GenericRepository<Exam> _examRepository;
+        private GenericRepository<Feedback> _feedbackRepository;
+        private GenericRepository<Notification> _notificationRepository;
+        private GenericRepository<Passage> _passageRepository;
+        private GenericRepository<ProgramTraining> _programTrainingRepository;
         private GenericRepository<Progress> _progressRepository;
-        private GenericRepository<QuestionChoices> _questionChoiceRepository;
-        private GenericRepository<Questions> _questionRepository;
+        private GenericRepository<QuestionChoice> _questionChoiceRepository;
+        private GenericRepository<Question> _questionRepository;
         private GenericRepository<RefreshToken> _refreshTokenRepository;
-        private GenericRepository<Roles> _roleRepository;
-        private GenericRepository<Tests> _testRepository;
-        private GenericRepository<Transactions> _transactionRepository;
-        private GenericRepository<UserAnswers> _userAnswerRepository;
-        private GenericRepository<UserNotifications> _userNotificationRepository;
-        private GenericRepository<UserReferences> _userReferenceRepository;
+        private GenericRepository<Test> _testRepository;
+        private GenericRepository<Transaction> _transactionRepository;
+        private GenericRepository<UserAnswer> _userAnswerRepository;
+        private GenericRepository<UserNotification> _userNotificationRepository;
+        private GenericRepository<UserReference> _userReferenceRepository;
 
-        public IGenericRepository<Users> UserRepository
+        public IGenericRepository<ApplicationUser> UserRepository
         {
             get
             {
-                return _userRepository ??= new GenericRepository<Users>(_context);
+                return _userRepository ??= new GenericRepository<ApplicationUser>(_context);
             }
         }
 
-        public IGenericRepository<MemberShips> MemberShipRepository
+        public IGenericRepository<MemberShip> MemberShipRepository
         {
             get
             {
-                return _memberShipRepository ??= new GenericRepository<MemberShips>(_context);
+                return _memberShipRepository ??= new GenericRepository<MemberShip>(_context);
             }
         }
 
-        public IGenericRepository<MemberShipDetails> MemberShipDetailRepository
+        public IGenericRepository<MemberShipDetail> MemberShipDetailRepository
         {
             get
             {
-                return _memberShipDetailRepository ??= new GenericRepository<MemberShipDetails>(_context);
+                return _memberShipDetailRepository ??= new GenericRepository<MemberShipDetail>(_context);
             }
         }
 
-        public IGenericRepository<Centers> CenterRepository
+        public IGenericRepository<Center> CenterRepository
         {
             get
             {
-                return _centerRepository ??= new GenericRepository<Centers>(_context);
+                return _centerRepository ??= new GenericRepository<Center>(_context);
             }
         }
 
 
-        public IGenericRepository<Courses> CourseRepository
+        public IGenericRepository<Course> CourseRepository
         {
             get
             {
-                return _courseRepository ??= new GenericRepository<Courses>(_context);
+                return _courseRepository ??= new GenericRepository<Course>(_context);
             }
         }
 
-        public IGenericRepository<Exams> ExamRepository
+        public IGenericRepository<Exam> ExamRepository
         {
             get
             {
-                return _examRepository ??= new GenericRepository<Exams>(_context);
+                return _examRepository ??= new GenericRepository<Exam>(_context);
             }
         }
 
-        public IGenericRepository<Feedbacks> FeedbackRepository
+        public IGenericRepository<Feedback> FeedbackRepository
         {
             get
             {
-                return _feedbackRepository ??= new GenericRepository<Feedbacks>(_context);
+                return _feedbackRepository ??= new GenericRepository<Feedback>(_context);
             }
         }
 
-        public IGenericRepository<Notifications> NotificationRepository
+        public IGenericRepository<Notification> NotificationRepository
         {
             get
             {
-                return _notificationRepository ??= new GenericRepository<Notifications>(_context);
+                return _notificationRepository ??= new GenericRepository<Notification>(_context);
             }
         }
 
-        public IGenericRepository<Passages> PassageRepository
+        public IGenericRepository<Passage> PassageRepository
         {
             get
             {
-                return _passageRepository ??= new GenericRepository<Passages>(_context);
+                return _passageRepository ??= new GenericRepository<Passage>(_context);
             }
         }
 
-        public IGenericRepository<ProgramTrainings> ProgramTrainingRepository
+        public IGenericRepository<ProgramTraining> ProgramTrainingRepository
         {
             get
             {
-                return _programTrainingRepository ??= new GenericRepository<ProgramTrainings>(_context);
+                return _programTrainingRepository ??= new GenericRepository<ProgramTraining>(_context);
             }
         }
 
@@ -118,19 +117,19 @@ namespace DAL.UnitOfWork
             }
         }
 
-        public IGenericRepository<QuestionChoices> QuestionChoiceRepository
+        public IGenericRepository<QuestionChoice> QuestionChoiceRepository
         {
             get
             {
-                return _questionChoiceRepository ??= new GenericRepository<QuestionChoices>(_context);
+                return _questionChoiceRepository ??= new GenericRepository<QuestionChoice>(_context);
             }
         }
 
-        public IGenericRepository<Questions> QuestionRepository
+        public IGenericRepository<Question> QuestionRepository
         {
             get
             {
-                return _questionRepository ??= new GenericRepository<Questions>(_context);
+                return _questionRepository ??= new GenericRepository<Question>(_context);
             }
         }
 
@@ -142,51 +141,43 @@ namespace DAL.UnitOfWork
             }
         }
 
-        public IGenericRepository<Roles> RoleRepository
+        public IGenericRepository<Test> TestRepository
         {
             get
             {
-                return _roleRepository ??= new GenericRepository<Roles>(_context);
+                return _testRepository ??= new GenericRepository<Test>(_context);
             }
         }
 
-        public IGenericRepository<Tests> TestRepository
+        public IGenericRepository<Transaction> TransactionRepository
         {
             get
             {
-                return _testRepository ??= new GenericRepository<Tests>(_context);
+                return _transactionRepository ??= new GenericRepository<Transaction>(_context);
             }
         }
 
-        public IGenericRepository<Transactions> TransactionRepository
+        public IGenericRepository<UserAnswer> UserAnswerRepository
         {
             get
             {
-                return _transactionRepository ??= new GenericRepository<Transactions>(_context);
+                return _userAnswerRepository ??= new GenericRepository<UserAnswer>(_context);
             }
         }
 
-        public IGenericRepository<UserAnswers> UserAnswerRepository
+        public IGenericRepository<UserNotification> UserNotificationRepository
         {
             get
             {
-                return _userAnswerRepository ??= new GenericRepository<UserAnswers>(_context);
+                return _userNotificationRepository ??= new GenericRepository<UserNotification>(_context);
             }
         }
 
-        public IGenericRepository<UserNotifications> UserNotificationRepository
+        public IGenericRepository<UserReference> UserReferenceRepository
         {
             get
             {
-                return _userNotificationRepository ??= new GenericRepository<UserNotifications>(_context);
-            }
-        }
-
-        public IGenericRepository<UserReferences> UserReferenceRepository
-        {
-            get
-            {
-                return _userReferenceRepository ??= new GenericRepository<UserReferences>(_context);
+                return _userReferenceRepository ??= new GenericRepository<UserReference>(_context);
             }
         }
 

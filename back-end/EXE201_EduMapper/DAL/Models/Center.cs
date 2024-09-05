@@ -1,15 +1,12 @@
 ﻿using DAO.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace DAL.Models
 {
-    public class Centers
+    public class Center
     {
-        public int CentersId { get; set; }  
+        [Key]
+        public string CenterId { get; set; } = null!; 
         public string CentersName { get; set; } = string.Empty;
         public string Location { get; set; } = string.Empty;
         public string ContactInfor { get; set; } = string.Empty;
@@ -17,7 +14,7 @@ namespace DAL.Models
         public string? ReviewText {  get; set; } = string.Empty;
         public double Rating { get; set; } 
         public DateTime ReviewDate { get; set; }
-        public ICollection<Feedbacks> Feedbacks { get; set; } = null!;
-        public ICollection<ProgramTrainings> ProgramTrainings { get; set; } = null!;
+        public ICollection<Feedback> Feedbacks { get; set; } = null!;
+        public ICollection<ProgramTraining> ProgramTrainings { get; set; } = null!;
     }
 }

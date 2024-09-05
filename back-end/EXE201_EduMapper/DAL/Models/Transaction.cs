@@ -1,12 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DAL.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAO.Models
 {
-    public class Transactions
+    public class Transaction
     {
         [Key]
-        public int TransactionId { get; set; }
+        public string TransactionId { get; set; } = null!;
         [Required]
         public string TransactionNumber { get; set; } = null!;
         [Required]
@@ -19,8 +20,8 @@ namespace DAO.Models
         public double Amount { get; set; }
         [Required]
         public string Status { get; set; } = null!;
-        public int UserId { get; set; }
+        public string UserId { get; set; } = null!;
         [ForeignKey("UserId")]
-        public Users User { get; set; } = null!;
+        public ApplicationUser User { get; set; } = null!;
     }
 }

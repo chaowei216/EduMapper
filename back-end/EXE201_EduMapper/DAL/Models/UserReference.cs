@@ -1,23 +1,22 @@
-﻿using DAO.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAL.Models
 {
-    public class UserReferences
+    public class UserReference
     {
         [Key]
-        public int ReferenceId { get; set; }
+        public string ReferenceId { get; set; } = null!;
         public double Budget { get; set; }
         public string Type { get; set; } = string.Empty;
-        public DateTime CreateDate { get; set; }
+        public DateTime CreatedDate { get; set; }
         public string Location { get; set; } = string.Empty;
         public double Target { get; set; }
-        public DateTime UpdateDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
         public int? Age { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; } = null!;
         [ForeignKey("UserId")]
-        public Users User { get; set; } = null!;
+        public ApplicationUser User { get; set; } = null!;
     }
 }

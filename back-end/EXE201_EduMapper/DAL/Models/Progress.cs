@@ -1,11 +1,5 @@
-﻿using DAO.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DAL.Models
 {
@@ -15,14 +9,14 @@ namespace DAL.Models
         public int ProgressId { get; set; }
         public double? Percent {  get; set; }
         public double? Score { get; set; }
-        public DateTime TestDate { get; set; }
-        public DateTime? UpdateDate { get; set; }
+        public DateTime TestedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
         public string Status { get; set; }  = string.Empty;
-        public int TestId { get; set; }
-        public int UserId { get; set; }
+        public string TestId { get; set; } = null!;
+        public string UserId { get; set; } = null!;
         [ForeignKey("UserId")]
-        public Users User { get; set; } = null!;
+        public ApplicationUser User { get; set; } = null!;
         [ForeignKey("TestId")]
-        public Tests Test { get; set; } = null!;
+        public Test Test { get; set; } = null!;
     }
 }

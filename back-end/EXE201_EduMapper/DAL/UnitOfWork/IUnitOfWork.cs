@@ -6,26 +6,25 @@ namespace DAL.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {
-        IGenericRepository<Users> UserRepository { get; }
-        IGenericRepository<MemberShips> MemberShipRepository { get; }
-        IGenericRepository<MemberShipDetails> MemberShipDetailRepository { get; }
-        IGenericRepository<Centers> CenterRepository { get; }
-        IGenericRepository<Courses> CourseRepository { get; }
-        IGenericRepository<Exams> ExamRepository { get; }
-        IGenericRepository<Feedbacks> FeedbackRepository { get; }
-        IGenericRepository<Notifications> NotificationRepository { get; }
-        IGenericRepository<Passages> PassageRepository { get; }
-        IGenericRepository<ProgramTrainings> ProgramTrainingRepository { get; }
+        IGenericRepository<ApplicationUser> UserRepository { get; }
+        IGenericRepository<MemberShip> MemberShipRepository { get; }
+        IGenericRepository<MemberShipDetail> MemberShipDetailRepository { get; }
+        IGenericRepository<Center> CenterRepository { get; }
+        IGenericRepository<Course> CourseRepository { get; }
+        IGenericRepository<Exam> ExamRepository { get; }
+        IGenericRepository<Feedback> FeedbackRepository { get; }
+        IGenericRepository<Notification> NotificationRepository { get; }
+        IGenericRepository<Passage> PassageRepository { get; }
+        IGenericRepository<ProgramTraining> ProgramTrainingRepository { get; }
         IGenericRepository<Progress> ProgressRepository { get; }
-        IGenericRepository<QuestionChoices> QuestionChoiceRepository { get; }
-        IGenericRepository<Questions> QuestionRepository { get; }
+        IGenericRepository<QuestionChoice> QuestionChoiceRepository { get; }
+        IGenericRepository<Question> QuestionRepository { get; }
         IGenericRepository<RefreshToken> RefreshTokenRepository { get; }
-        IGenericRepository<Roles> RoleRepository { get; }
-        IGenericRepository<Tests> TestRepository { get; }
-        IGenericRepository<Transactions> TransactionRepository { get; }
-        IGenericRepository<UserAnswers> UserAnswerRepository { get; }
-        IGenericRepository<UserNotifications> UserNotificationRepository { get; }
-        IGenericRepository<UserReferences> UserReferenceRepository { get; }
+        IGenericRepository<Test> TestRepository { get; }
+        IGenericRepository<Transaction> TransactionRepository { get; }
+        IGenericRepository<UserAnswer> UserAnswerRepository { get; }
+        IGenericRepository<UserNotification> UserNotificationRepository { get; }
+        IGenericRepository<UserReference> UserReferenceRepository { get; }
         void Save();
     }
 }
