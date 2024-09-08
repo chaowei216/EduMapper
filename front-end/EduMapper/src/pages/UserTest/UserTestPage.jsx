@@ -1,4 +1,5 @@
 import HeaderTesting from "../../components/global/HeaderTesting";
+import TestProgress from "../../components/partial/UserTesting/PartQuestion";
 import ReadingTest from "../../components/partial/UserTesting/ReadingTest";
 function UserTestPage() {
   return (
@@ -9,9 +10,8 @@ function UserTestPage() {
       >
         <HeaderTesting />
       </div>
-      <div className="fixed top-28 left-0 right-0 z-10">
         <ReadingTest />
-      </div>
+      <TestProgress />
     </div>
   );
 }

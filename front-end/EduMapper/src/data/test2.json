@@ -1,0 +1,207 @@
+{
+  "Tests": [
+    {
+      "TestID": 1,
+      "CreatedDate": "2023-09-01",
+      "UpdatedDate": "2023-09-01",
+      "Type": "IELTS Reading",
+      "Description": "IELTS Academic Reading Test",
+      "IsRequired": true,
+      "Exams": [
+        {
+          "ExamId": 101,
+          "ExamName": "Reading Test 1",
+          "NumOfQuestions": 12,
+          "TestID": 1,
+          "Passages": [
+            {
+              "PassageId": 1001,
+              "PassageTitle": "Climate Change and Coastal Erosion",
+              "PassageContent": "Climate change is accelerating coastal erosion. Programs to feed and educate children in poverty-stricken areas are becoming increasingly necessary. One such initiative, the feeding program at Meskeni, has reported that pass rates have risen with the program's help. Additionally, since the industrial revolution, the size of the modern human has grown...",
+              "SubQuestions": [
+                {
+                  "QuestionId": 10001,
+                  "QuestionType": "multiple_choice",
+                  "QuestionText": "What is the main impact of climate change on coastal regions?",
+                  "CorrectAnswer": "Increased erosion",
+                  "Choices": [
+                    {
+                      "ChoiceId": 1,
+                      "ChoiceContent": "Increased erosion"
+                    },
+                    {
+                      "ChoiceId": 2,
+                      "ChoiceContent": "Reduced tourism"
+                    },
+                    {
+                      "ChoiceId": 3,
+                      "ChoiceContent": "Improved biodiversity"
+                    },
+                    {
+                      "ChoiceId": 4,
+                      "ChoiceContent": "Enhanced beach formation"
+                    }
+                  ]
+                },
+                {
+                  "QuestionId": 10002,
+                  "QuestionType": "fill_in_blank",
+                  "QuestionText": "______ are exclusively offered to girls in the feeding programme.",
+                  "CorrectAnswer": "Scholarships"
+                },
+                {
+                  "QuestionId": 10003,
+                  "QuestionType": "fill_in_blank",
+                  "QuestionText": "Instead of going to school, many children in poverty are sent to collect ______ in the fields.",
+                  "CorrectAnswer": "firewood"
+                },
+                {
+                  "QuestionId": 10004,
+                  "QuestionType": "fill_in_blank",
+                  "QuestionText": "The pass rate at Meskeni has risen to ______ with the help of the feeding programme.",
+                  "CorrectAnswer": "85%"
+                },
+                {
+                  "QuestionId": 10005,
+                  "QuestionType": "fill_in_blank",
+                  "QuestionText": "Since the industrial revolution, the size of the modern human has grown by ______.",
+                  "CorrectAnswer": "10 cm"
+                },
+                {
+                  "QuestionId": 20001,
+                  "QuestionText": "Category is a summer event",
+                  "QuestionType": "heading_matching",
+                  "CorrectAnswer": "v",
+                  "Choices": [
+                    {
+                      "ChoiceId": "i",
+                      "ChoiceContent": "The best moment to migrate"
+                    },
+                    {
+                      "ChoiceId": "ii",
+                      "ChoiceContent": "The unexplained rejection of closer feeding ground"
+                    },
+                    {
+                      "ChoiceId": "iii",
+                      "ChoiceContent": "The influence of weather on the migration route"
+                    },
+                    {
+                      "ChoiceId": "iv",
+                      "ChoiceContent": "Physical characteristics that allow birds to migrate"
+                    },
+                    {
+                      "ChoiceId": "v",
+                      "ChoiceContent": "The main reason why birds migrate"
+                    }
+                  ]
+                },
+                {
+                  "QuestionId": 20002,
+                  "QuestionType": "heading_matching",
+                  "QuestionText": "Paragraph 2",
+                  "CorrectAnswer": "ii",
+                  "Choices": [
+                    {
+                      "ChoiceId": "i",
+                      "ChoiceContent": "The best moment to migrate"
+                    },
+                    {
+                      "ChoiceId": "ii",
+                      "ChoiceContent": "The unexplained rejection of closer feeding ground"
+                    },
+                    {
+                      "ChoiceId": "iii",
+                      "ChoiceContent": "The influence of weather on the migration route"
+                    },
+                    {
+                      "ChoiceId": "iv",
+                      "ChoiceContent": "Physical characteristics that allow birds to migrate"
+                    },
+                    {
+                      "ChoiceId": "v",
+                      "ChoiceContent": "The main reason why birds migrate"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PassageId": 1002,
+              "PassageTitle": "The History of Coffee",
+              "PassageContent": "Coffee, one of the world's most popular beverages, has a rich and fascinating history. Its origins can be traced back to the ancient coffee forests on the Ethiopian plateau. There, legend says the goat herder Kaldi first discovered the potential of these beloved beans. The story goes that Kaldi discovered coffee after noticing that his goats became so energetic that they did not want to sleep at night after eating the berries from a certain tree...",
+              "SubQuestions": [
+                {
+                  "QuestionId": 10006,
+                  "QuestionType": "multiple_choice",
+                  "QuestionText": "Where did coffee originate according to the passage?",
+                  "CorrectAnswer": "Ethiopian plateau",
+                  "Choices": [
+                    {
+                      "ChoiceId": 1,
+                      "ChoiceContent": "Ethiopian plateau"
+                    },
+                    {
+                      "ChoiceId": 2,
+                      "ChoiceContent": "Arabian Peninsula"
+                    },
+                    {
+                      "ChoiceId": 3,
+                      "ChoiceContent": "South America"
+                    },
+                    {
+                      "ChoiceId": 4,
+                      "ChoiceContent": "Southeast Asia"
+                    }
+                  ]
+                },
+                {
+                  "QuestionId": 10007,
+                  "QuestionType": "fill_in_blank",
+                  "QuestionText": "The goat herder who discovered coffee was named ______.",
+                  "CorrectAnswer": "Kaldi"
+                }
+              ]
+            },
+            {
+              "PassageId": 1003,
+              "PassageTitle": "The Future of Artificial Intelligence",
+              "PassageContent": "Artificial Intelligence (AI) is rapidly transforming various aspects of our lives, from how we work to how we interact with technology. As AI continues to advance, it promises to revolutionize industries, enhance decision-making processes, and potentially solve some of humanity's most pressing challenges. However, the rise of AI also raises important ethical considerations and concerns about job displacement...",
+              "SubQuestions": [
+                {
+                  "QuestionId": 10008,
+                  "QuestionType": "multiple_choice",
+                  "QuestionText": "What is one of the concerns mentioned about the advancement of AI?",
+                  "CorrectAnswer": "Job displacement",
+                  "Choices": [
+                    {
+                      "ChoiceId": 1,
+                      "ChoiceContent": "Job displacement"
+                    },
+                    {
+                      "ChoiceId": 2,
+                      "ChoiceContent": "Environmental impact"
+                    },
+                    {
+                      "ChoiceId": 3,
+                      "ChoiceContent": "Increased healthcare costs"
+                    },
+                    {
+                      "ChoiceId": 4,
+                      "ChoiceContent": "Reduced educational opportunities"
+                    }
+                  ]
+                },
+                {
+                  "QuestionId": 10009,
+                  "QuestionType": "fill_in_blank",
+                  "QuestionText": "AI has the potential to solve some of humanity's most ______ challenges.",
+                  "CorrectAnswer": "pressing"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

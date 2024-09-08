@@ -1,0 +1,47 @@
+{
+  "TestID": "reading_test_001",
+  "TestName": "IELTS Reading Practice Test",
+  "CreatedDate": "2024-09-08T12:00:00Z",
+  "UpdatedDate": "2024-09-08T12:30:00Z",
+  "Type": "Reading",
+  "Description": "IELTS Reading Test with passage 'Undersea Movement'",
+  "Passages": [
+    {
+      "PassageId": "passage_001",
+      "PassageTitle": "Undersea Movement",
+      "PassageContent": "The underwater world holds many challenges. The most basic of these is movement. The density of water makes it difficult for animals to move. Forward movement is a complex interaction of underwater forces. Additionally, water itself has movement. Strong currents carry incredible power that can easily sweep creatures away. The challenges to aquatic movement result in a variety of swimming methods, used by a wide range of animals. The result is a dazzling underwater ballet.",
+      "Questions": [
+        {
+          "QuestionId": "q_001",
+          "QuestionType": "multiple_choice",
+          "QuestionText": "What is one of the main challenges of the underwater world?",
+          "Choices": [
+            "Lack of oxygen",
+            "Strong currents",
+            "Density of water",
+            "Marine life"
+          ],
+          "CorrectAnswer": "Density of water"
+        },
+        {
+          "QuestionId": "q_002",
+          "QuestionType": "multiple_choice",
+          "QuestionText": "What do strong currents carry?",
+          "Choices": [
+            "Tiny marine animals",
+            "Incredible power",
+            "Dazzling corals",
+            "Water plants"
+          ],
+          "CorrectAnswer": "Incredible power"
+        },
+        {
+          "QuestionId": "q_003",
+          "QuestionType": "fill_in_blank",
+          "QuestionText": "The result of underwater movement is a ______ ballet.",
+          "CorrectAnswer": "dazzling"
+        }
+      ]
+    }
+  ]
+}

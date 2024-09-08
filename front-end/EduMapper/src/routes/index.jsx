@@ -9,6 +9,9 @@ import CenterPage from "../pages/CenterPage/CenterPage";
 import CenterDetailPage from "../pages/CenterPage/CenterDetailPage";
 import CenterRatingPage from "../pages/CenterPage/CenterRatingPage";
 import CreateCenterRating from "../components/partial/CenterRating/CreateCenterRating";
+import TakeTestPage from "../pages/TakeTestPage/TakeTestPage";
+import TakeTestPrePage from "../pages/TakeTestPage/TakeTestPrePage";
+import DoingTest2 from "../components/partial/DoingTest/DoingTest2";
 
 export const router = createBrowserRouter([
   {
@@ -50,5 +53,17 @@ export const router = createBrowserRouter([
   {
     path: "/create-rating",
     element: <CreateCenterRating />,
+  },
+  {
+    path: "/take-test",
+    element: <TakeTestPage />,
+  },
+  {
+    path: "/take-testPre",
+    element: <TakeTestPrePage />,
+  },
+  {
+    path: "/doing-test",
+    element: <DoingTest2 />,
   },
 ]);

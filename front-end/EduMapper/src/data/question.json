@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "question": "Which paragraph contains the following information? 'Categorization of fish by swimming speed'",
+    "options": ["A", "B", "C", "D"],
+    "correct_answer": "B"
+  },
+  {
+    "id": 2,
+    "question": "An example of fish capable of maintaining fast swimming for a long time",
+    "options": ["A", "B", "C", "D"],
+    "correct_answer": "C"
+  }
+]
