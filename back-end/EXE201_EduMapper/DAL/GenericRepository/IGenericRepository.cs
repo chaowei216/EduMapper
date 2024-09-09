@@ -11,7 +11,7 @@ namespace DAL.Repository
             int? pageSize = null,
             string includeProperties = "");
 
-        T GetByID(object id);
+        T? GetByID(object id);
 
         void Insert(T entity);
 

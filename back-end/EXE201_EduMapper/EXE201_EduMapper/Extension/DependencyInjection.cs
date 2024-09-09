@@ -1,7 +1,12 @@
-﻿using DAL.Data;
+﻿using BLL.Exceptions;
+using Common.Constant.Message;
+using Common.DTO;
+using Common.Enum;
+using DAL.Data;
 using DAL.Models;
 using DAL.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -23,7 +28,7 @@ namespace EXE201_EduMapper.Extension
             return services;
         }
 
-        public static IServiceCollection AddIdentityServices(this IServiceCollection services)
+        public static IServiceCollection ConfigIdentityServices(this IServiceCollection services)
         {
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
@@ -49,13 +54,14 @@ namespace EXE201_EduMapper.Extension
             return services;
         }
 
-        public static IServiceCollection AddAuthentication(this IServiceCollection services,
+        public static IServiceCollection ConfigAuthentication(this IServiceCollection services,
                                                                 IConfiguration configuration)
         {
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(options =>
             {

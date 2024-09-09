@@ -16,8 +16,8 @@ namespace DAL.Repository
         }
 
         public virtual IEnumerable<TEntity> Get(
-           Expression<Func<TEntity, bool>> filter,
-           Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+           Expression<Func<TEntity, bool>>? filter,
+           Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
            int? pageIndex = null,
            int? pageSize = null,
            string includeProperties = "")
@@ -51,7 +51,7 @@ namespace DAL.Repository
             return query.ToList();
         }
 
-        public virtual TEntity GetByID(object id)
+        public virtual TEntity? GetByID(object id)
         {
             return _dbSet.Find(id);
         }
@@ -64,14 +64,14 @@ namespace DAL.Repository
 
         public virtual bool Delete(object id)
         {
-            TEntity entityToDelete = GetByID(id);
+            TEntity? entityToDelete = GetByID(id);
             if (entityToDelete == null) return false;
             Delete(entityToDelete);
             return true;
         }
         public virtual bool Update(object id, TEntity entityUpdate)
         {
-            TEntity entity = GetByID(id);
+            TEntity? entity = GetByID(id);
             if (entity == null) return false;
             Update(entityUpdate);
             return true;
