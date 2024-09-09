@@ -1,7 +1,14 @@
+using System.Text;
 using System.Text.Json.Serialization;
+using BLL.IService;
+using BLL.Service;
+using Common.Constant.Message;
+using Common.DTO;
+using Common.Enum;
 using EXE201_EduMapper.Extension;
 using EXE201_EduMapper.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 
@@ -36,11 +43,13 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 builder.Services.AddDatabase();
-builder.Services.AddIdentityServices();
-builder.Services.AddAuthentication();
+builder.Services.ConfigIdentityServices();
+builder.Services.ConfigAuthentication(builder.Configuration);
 
 // Scoped
 builder.Services.AddUnitOfWork();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 // CORS
 builder.Services.AddCors(options =>
