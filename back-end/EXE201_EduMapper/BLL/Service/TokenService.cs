@@ -1,7 +1,10 @@
 ﻿using BLL.IService;
 using Common.DTO.Auth;
+using DAL.GenericRepository.IRepository;
+using DAL.GenericRepository.Repository;
 using DAL.Models;
 using DAL.Repository;
+using DAL.UnitOfWork;
 using DAO.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -15,16 +18,16 @@ namespace BLL.Service
     public class TokenService : ITokenService
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IGenericRepository<RefreshToken> _refreshTokenRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _configuration;
 
         public TokenService(UserManager<ApplicationUser> userManager,
-                            IGenericRepository<RefreshToken> refreshTokenRepository,
+                            IUnitOfWork unitOfWork,
                             IConfiguration configuration)
         {
             _configuration = configuration;
             _userManager = userManager;
-            _refreshTokenRepository = refreshTokenRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<TokenDTO> CreateTokenPair(ApplicationUser user)
@@ -98,7 +101,7 @@ namespace BLL.Service
                 JwtTokenId = jwtTokenId
             };
 
-            _refreshTokenRepository.Insert(refreshToken);
+            _unitOfWork.RefreshTokenRepository.Insert(refreshToken);
 
             return refreshToken.Token.ToString();
         }
