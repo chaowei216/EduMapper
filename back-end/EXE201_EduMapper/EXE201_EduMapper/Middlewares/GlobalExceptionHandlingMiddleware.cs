@@ -40,25 +40,34 @@ namespace EXE201_EduMapper.Middlewares
                     statusCode = StatusCodeEnum.BadRequest;
                     responseDto = new ResponseDTO
                     {
-                        Message = ex.Message,
+                        Message = badEx.Message,
                         StatusCode = statusCode
                     };
 
                     break;
 
-                case NotFoundException NotFoundEx:
+                case NotFoundException notFoundEx:
                     statusCode = StatusCodeEnum.NotFound;
                     responseDto = new ResponseDTO
                     {
-                        Message = ex.Message,
+                        Message = notFoundEx.Message,
                         StatusCode = statusCode
                     };
 
                     break;
 
-                
+                case UnAuthorizedException unAuthorizedEx:
+                    statusCode = StatusCodeEnum.UnAuthorized;
+                    responseDto = new ResponseDTO
+                    {
+                        Message = unAuthorizedEx.Message,
+                        StatusCode = statusCode
+                    };
+
+                    break;
+
+
                 default:
-                    statusCode = (StatusCodeEnum)context.Response.StatusCode;
                     responseDto = new ResponseDTO
                     {
                         Message = ex.Message,
