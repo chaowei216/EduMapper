@@ -7,15 +7,15 @@ namespace DAL.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {
-        IGenericRepository<ApplicationUser> UserRepository { get; }
-        IGenericRepository<MemberShip> MemberShipRepository { get; }
-        IGenericRepository<MemberShipDetail> MemberShipDetailRepository { get; }
-        IGenericRepository<Center> CenterRepository { get; }
-        IGenericRepository<Course> CourseRepository { get; }
-        IGenericRepository<Exam> ExamRepository { get; }
-        IGenericRepository<Feedback> FeedbackRepository { get; }
-        IGenericRepository<Notification> NotificationRepository { get; }
-        IGenericRepository<Passage> PassageRepository { get; }
+        IUserRepository UserRepository { get; }
+        IMemberShipRepository MemberShipRepository { get; }
+        IMemberShipDetailRepository MemberShipDetailRepository { get; }
+        ICenterRepository CenterRepository { get; }
+        ICourseRepository CourseRepository { get; }
+        IExamRepository ExamRepository { get; }
+        IFeedbackRepository FeedbackRepository { get; }
+        INotificationRepository NotificationRepository { get; }
+        IPassageRepository PassageRepository { get; }
         IProgramTrainingRepository ProgramTrainingRepository { get; }
         IProgressRepository ProgressRepository { get; }
         IQuestionChoiceRepository QuestionChoiceRepository { get; }

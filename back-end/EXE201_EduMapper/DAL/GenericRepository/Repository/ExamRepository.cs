@@ -5,9 +5,9 @@ using DAL.Repository;
 
 namespace DAL.GenericRepository.Repository
 {
-    public class IExamRepository : GenericRepository<Exam>, IRepository.IExamRepository
+    public class ExamRepository : GenericRepository<Exam>, IExamRepository
     {
-        public IExamRepository(DataContext context) : base(context)
+        public ExamRepository(DataContext context) : base(context)
         {
         }
     }
