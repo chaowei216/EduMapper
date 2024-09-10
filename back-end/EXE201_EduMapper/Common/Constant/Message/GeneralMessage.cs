@@ -11,5 +11,6 @@
 
         public const string UnAuthorized = "Unauthorized to access this function";
         public const string Forbidden = "Forbidden";
+        public const string NotFound = "Not found";
     }
 }
