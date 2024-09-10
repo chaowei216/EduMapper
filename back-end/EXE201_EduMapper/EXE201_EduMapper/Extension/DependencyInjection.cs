@@ -1,12 +1,7 @@
-﻿using BLL.Exceptions;
-using Common.Constant.Message;
-using Common.DTO;
-using Common.Enum;
-using DAL.Data;
+﻿using DAL.Data;
 using DAL.Models;
 using DAL.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
