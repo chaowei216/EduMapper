@@ -10,14 +10,6 @@ import { isValidToken, setSession } from "../utils/jwtValid";
 import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import PropTypes from "prop-types";
-import {
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-  onAuthStateChanged,
-  FacebookAuthProvider,
-} from "firebase/auth";
-import { auth } from "../configs/firebase";
 
 //---------------
 const initialState = {
@@ -25,6 +17,7 @@ const initialState = {
   isInitialized: false,
   user: null,
   isVerify: false,
+  tempUser: null,
 };
 
 const handlers = {
@@ -203,23 +196,15 @@ function AuthProvider({ children }) {
     });
   };
 
-  const login_type = async (type) => {
-    let res;
-    if (type === "Google") {
-      const provider = new GoogleAuthProvider();
-      res = await signInWithPopup(auth, provider);
-    } else if (type === "Facebook") {
-      const provider = new FacebookAuthProvider();
-      res = await signInWithPopup(auth, provider);
-    }
-    console.log(res);
-    console.log(res.user);
+  const login_type = async (user) => {
+    console.log(user);
     // if (res) {
     //   const response = await LoginExternal(type, {
     //     fullName: res.user.displayName,
     //     email: res.user.email,
     //     avatar: res.user.photoURL,
     //   });
+    // const response = await SignIn(userInput);
     //   console.log(response);
     //   if (response.status === 200) {
     //     const { accessToken, user, refreshToken } = response.data.metaData;

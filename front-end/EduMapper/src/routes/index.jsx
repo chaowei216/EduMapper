@@ -12,6 +12,7 @@ import CreateCenterRating from "../components/partial/CenterRating/CreateCenterR
 import TakeTestPage from "../pages/TakeTestPage/TakeTestPage";
 import TakeTestPrePage from "../pages/TakeTestPage/TakeTestPrePage";
 import DoingTest2 from "../components/partial/DoingTest/DoingTest2";
+import CompleteProfile from "../components/partial/Authen/SignIn/CompleteProfile";
 
 export const router = createBrowserRouter([
   {
@@ -65,5 +66,9 @@ export const router = createBrowserRouter([
   {
     path: "/doing-test",
     element: <DoingTest2 />,
+  },
+  {
+    path: "/complete-profile",
+    element: <CompleteProfile />,
   },
 ]);

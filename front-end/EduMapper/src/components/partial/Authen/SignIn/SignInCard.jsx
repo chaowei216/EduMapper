@@ -13,7 +13,16 @@ import useAuth from "../../../../hooks/useAuth";
 import { styled } from "@mui/material/styles";
 
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from "../CustomIcons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged,
+  FacebookAuthProvider,
+} from "firebase/auth";
+import { auth } from "/src/configs/firebase";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -39,7 +48,9 @@ export default function SignInCard() {
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
-  const { login_type } = useAuth();
+  const navigate = useNavigate();
+
+  const { login } = useAuth();
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -48,18 +59,26 @@ export default function SignInCard() {
     setOpen(false);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get("email"),
       password: data.get("password"),
     });
+    await login(data);
   };
 
   const handleGoogleSignIn = async () => {
     try {
-      await login_type("Google");
+      const provider = new GoogleAuthProvider();
+      const res = await signInWithPopup(auth, provider);
+      const user = {
+        fullName: res.user.displayName,
+        email: res.user.email,
+        avatar: res.user.photoURL,
+      };
+      navigate("/complete-profile", { state: { user } });
     } catch (err) {
       console.log(err);
     }
@@ -67,7 +86,14 @@ export default function SignInCard() {
 
   const handleFacebookSignIn = async () => {
     try {
-      await login_type("Facebook");
+      const provider = new FacebookAuthProvider();
+      const res = await signInWithPopup(auth, provider);
+      const user = {
+        fullName: res.user.displayName,
+        email: res.user.email,
+        avatar: res.user.photoURL,
+      };
+      navigate("/complete-profile", { state: { user } });
     } catch (err) {
       console.log(err);
     }

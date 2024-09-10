@@ -1,80 +1,61 @@
-import React, { useState } from 'react';
-import { Box, Typography, Button, Paper, CircularProgress } from '@mui/material';
-
-// Giả sử bạn đã import dữ liệu JSON
-import testData from '/src/data/test2';
-
-const TestProgress = () => {
-  const [currentPassage, setCurrentPassage] = useState(0);
-  const [answeredQuestions, setAnsweredQuestions] = useState({});
-
-  const test = testData.Tests[0];
-  const exam = test.Exams[0];
-  const passages = exam.Passages;
-
-  const handleQuestionClick = (questionId) => {
-    setAnsweredQuestions(prev => ({
-      ...prev,
-      [questionId]: !prev[questionId]
-    }));
-  };
-
-  const handlePassageChange = (index) => {
-    setCurrentPassage(index);
-  };
-
-  const getAnsweredCount = (passageIndex) => {
-    return passages[passageIndex].SubQuestions.filter(q => answeredQuestions[q.QuestionId]).length;
-  };
-
+import { Box, Button, AppBar, Toolbar } from "@mui/material";
+export default function TestProgress(pros) {
+  const {
+    handlePassageChange,
+    getAnsweredCount,
+    passages,
+    currentPassage,
+    selectedAnswers,
+  } = pros;
   return (
-    <Box sx={{ p: 2 }}>
-      <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          {passages.map((passage, index) => (
-            <Button 
-              key={passage.PassageId}
-              onClick={() => handlePassageChange(index)} 
-              variant={currentPassage === index ? "contained" : "outlined"}
-            >
-              Part {index + 1}: {getAnsweredCount(index)} of {passage.SubQuestions.length} questions
-            </Button>
-          ))}
-        </Box>
-      </Paper>
-
-      <Typography variant="h5" gutterBottom>{exam.ExamName}</Typography>
-      
-      <Box key={passages[currentPassage].PassageId} sx={{ mb: 2 }}>
-        <Typography variant="h6">{passages[currentPassage].PassageTitle}</Typography>
-        <Typography paragraph>{passages[currentPassage].PassageContent}</Typography>
-        
-        <Box display="flex" flexWrap="wrap" gap={2}>
+    <AppBar position="static" color="default" sx={{ top: "auto", bottom: 0 }}>
+      <Toolbar sx={{ justifyContent: "space-around" }}>
+        {passages.map((passage, index) => (
+          <Button
+            key={passage.PassageId}
+            onClick={() => handlePassageChange(index)}
+            variant={currentPassage === index ? "contained" : "outlined"}
+            color="primary"
+            sx={{ margin: "0 8px" }}
+          >
+            Part {index + 1}: {getAnsweredCount(index)} OF{" "}
+            {passage.SubQuestions.length} QUESTIONS
+          </Button>
+        ))}
+      </Toolbar>
+      {passages[currentPassage] && (
+        <Box
+          display="flex"
+          flexWrap="wrap"
+          justifyContent="center"
+          gap={2}
+          mb={2}
+        >
           {passages[currentPassage].SubQuestions.map((question, index) => (
-            <Box 
-              key={question.QuestionId} 
-              sx={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center', 
-                width: 40, 
-                height: 40, 
-                borderRadius: '50%', 
-                border: '2px solid',
-                borderColor: answeredQuestions[question.QuestionId] ? 'green' : 'grey.300',
-                backgroundColor: answeredQuestions[question.QuestionId] ? 'green' : 'transparent',
-                color: answeredQuestions[question.QuestionId] ? 'white' : 'black',
-                cursor: 'pointer'
+            <Box
+              key={question.QuestionId}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: 40,
+                height: 40,
+                borderRadius: "50%",
+                border: "2px solid",
+                borderColor: selectedAnswers[question.QuestionId]
+                  ? "green"
+                  : "grey.300",
+                backgroundColor: selectedAnswers[question.QuestionId]
+                  ? "green"
+                  : "transparent",
+                color: selectedAnswers[question.QuestionId] ? "white" : "black",
               }}
-              onClick={() => handleQuestionClick(question.QuestionId)}
             >
               {index + 1}
             </Box>
           ))}
         </Box>
-      </Box>
-    </Box>
+      )}
+    </AppBar>
   );
-};
-
-export default TestProgress;
+}
