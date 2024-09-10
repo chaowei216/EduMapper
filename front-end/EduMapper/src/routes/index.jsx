@@ -13,6 +13,7 @@ import TakeTestPage from "../pages/TakeTestPage/TakeTestPage";
 import TakeTestPrePage from "../pages/TakeTestPage/TakeTestPrePage";
 import DoingTest2 from "../components/partial/DoingTest/DoingTest2";
 import CompleteProfile from "../components/partial/Authen/SignIn/CompleteProfile";
+import ListeningTest from "../pages/UserTest/ListeningTest";
 
 export const router = createBrowserRouter([
   {
@@ -70,5 +71,9 @@ export const router = createBrowserRouter([
   {
     path: "/complete-profile",
     element: <CompleteProfile />,
+  },
+  {
+    path: "/listening-test",
+    element: <ListeningTest />,
   },
 ]);
