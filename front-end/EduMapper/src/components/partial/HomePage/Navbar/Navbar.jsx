@@ -69,7 +69,7 @@ function ResponsiveAppBar() {
         marginBottom: "20px",
       }}
     >
-      <Container maxWidth="xl">
+      <Container maxWidth="xl" id="Trang chủ">
         <Toolbar disableGutters style={{ height: "95px" }}>
           <Image
             boxSize="100px"

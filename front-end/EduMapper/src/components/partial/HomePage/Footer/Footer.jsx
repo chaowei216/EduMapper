@@ -46,15 +46,20 @@ const LikeShareButtons = () => {
   );
 };
 
-const FooterSection = ({ title, items }) => {
+const FooterSection = ({ title, items, handleButtonClick }) => {
   return (
-    <Box sx={{ mb: 3 }}>
+    <Box sx={{ mb: 3, cursor: "pointer" }}>
       <Typography variant="h6" sx={{ mb: 1, fontWeight: "bold" }}>
         {title}
       </Typography>
       <Divider sx={{ mb: 1 }} />
       {items.map((item, index) => (
-        <Typography key={index} variant="body2" sx={{ mb: 2, fontWeight: "bold", fontSize: "15px" }}>
+        <Typography
+          key={index}
+          onClick={() => handleButtonClick(`${item}`)}
+          variant="body2"
+          sx={{ mb: 2, fontWeight: "bold", fontSize: "15px" }}
+        >
           {item}
         </Typography>
       ))}
@@ -62,7 +67,8 @@ const FooterSection = ({ title, items }) => {
   );
 };
 
-const Footer = () => {
+const Footer = (pros) => {
+  const { handleButtonClick } = pros;
   return (
     <Box component="footer" sx={{ bgcolor: "#D9D9D9", py: 3, mt: "auto" }}>
       <Container maxWidth="lg">
@@ -94,6 +100,7 @@ const Footer = () => {
                 "Thông tin cần biết",
                 "Test Online",
               ]}
+              handleButtonClick={handleButtonClick}
             />
           </Grid>
           <Grid item xs={12} sm={3}>

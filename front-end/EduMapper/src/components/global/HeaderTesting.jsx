@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import styles from "./HeaderTesting.module.css";
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
 
-const HeaderTesting = () => {
+const HeaderTesting = (pros) => {
+  const { handleSubmit } = pros;
   const [timeRemaining, setTimeRemaining] = useState(3600); // 60 minutes in seconds
 
   useEffect(() => {
@@ -22,17 +23,21 @@ const HeaderTesting = () => {
   return (
     <div className={styles.headerContainer}>
       <div className={styles.logo}>
-        <img
-          src="/img/logoEdu.png"
-          alt="Edu Mapper Logo"
-        />
+        <img src="/img/logoEdu.png" alt="Edu Mapper Logo" />
       </div>
-      <div className={styles.timer}>{formatTime(timeRemaining)} minutes remaining</div>
+      <div className={styles.timer}>
+        {formatTime(timeRemaining)} minutes remaining
+      </div>
       <div className={styles.actions}>
         <Button variant="contained" color="error" className={styles.exitTest}>
           Exit Test
         </Button>
-        <Button variant="contained" color="success" className={styles.submit}>
+        <Button
+          variant="contained"
+          color="success"
+          className={styles.submit}
+          onClick={handleSubmit}
+        >
           Submit
         </Button>
       </div>

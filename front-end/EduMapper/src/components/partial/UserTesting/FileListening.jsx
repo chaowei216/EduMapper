@@ -8,8 +8,8 @@ const formatTime = (seconds) => {
   return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
 };
 
-const ListeningTest = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
+const FileListening = (pros) => {
+  const { passages, isPlaying, setIsPlaying } = pros;
   const [audioTime, setAudioTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(100);
@@ -95,7 +95,9 @@ const ListeningTest = () => {
         </div>
         <audio
           ref={audioRef}
-          src="/src/assets/lazy-girl-145417.mp3" // Đường dẫn tới file âm thanh của bạn
+          src={
+            passages?.PassageContent?.AudioClip || "/src/assets/thienlyoi.mp3"
+          } // Đường dẫn tới file âm thanh của bạn
           onTimeUpdate={handleTimeUpdate}
           onLoadedMetadata={handleAudioLoaded}
         />
@@ -104,4 +106,4 @@ const ListeningTest = () => {
   );
 };
 
-export default ListeningTest;
+export default FileListening;

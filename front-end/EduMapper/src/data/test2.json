@@ -18,11 +18,11 @@
               "PassageId": 1001,
               "PassageTitle": "Climate Change and Coastal Erosion",
               "PassageContent": {
-                "A": "The law influences all of us virtually all the time, it governs almost all aspects of our behavior, and even what happens to us when we are no longer alive. It affects us from the embryo onwards. It governs the air we breathe, the food and drink we consume, our travel, family relationships, and our property. It applies at the bottom of the ocean and in space. Each time we examine a label on a food product, engage in work as an employee or employer, travel on the roads, go to school to learn or to teach, stay in a hotel, borrow a library book, create or dissolve a commercial company, play sports, or engage the services of someone for anything from plumbing a sink to planning a city, we are in the world of law.",
-                "B": "Law has also become much more widely recognised as the standard by which behavior needs to be judged. A very telling development in recent history is the way in which the idea of law has permeated all parts of social life. The universal standard of whether something is socially tolerated is progressively becoming whether it is legal, rather than something that has always been considered acceptable. In earlier times, most people were illiterate. Today, by contrast, a vast number of people can read, and it is becoming easier for people to take an interest in law, and for the general population to help actually shape the law in many countries. However, law is a versatile instrument that can be used equally well for the improvement or the degradation of humanity.",
-                "C": "This, of course, puts law in a very significant position. In our rapidly developing world, all sorts of skills and knowledge are valuable. Those people, for example, with knowledge of computers, the internet, and communications technology are relied upon by the rest of us. There is now someone with IT skills or an IT help desk in every UK school, every company, every hospital, every local and central government office. Without their knowledge, many parts of commercial and social life today would seize up in minutes. But legal understanding is just as vital and as universally needed. The American comedian Jerry Seinfeld put it like this, 'We are all throwing the dice, playing the game, moving our pieces around the board, but if there is a problem, the lawyer is the only person who has read the inside of the top of the box.' In other words, the lawyer is the only person who has read and made sense of the rules.",
-                "D": "The number of laws has never been greater. In the UK alone, about 35 new Acts of Parliament are produced every year, thereby delivering thousands of new rules. The legislative output of the British Parliament has more than doubled in recent times from 1,100 pages a year in the early 1970s,to over 2,500 pages a year today. Between 1997 and 2006,the legislature passed 365 Acts of Parliament and more than 32,000 legally binding statutory instruments. In a system with so much law, lawyers do a great deal not just to vindicate the rights of citizens and organizations but also to help develop the law through legal arguments, some of which are adapted by judges to become laws. Law courts can and do produce new law and revise old law, but they do so having heard the arguments of lawyers. ",
-                "E": "However, despite their important role in developing the rules, lawyers are not universally admired. Anti-lawyer jokes have a long history going back to the ancient Greeks. More recently the son of a famous Hollywood actor was asked at his junior school what his father did for a living, to which he replied,'My daddy is a movie actor, and sometimes he plays the good guy, and sometimes he plays the lawyer. For balance, though, it Is worth remembering that there are and have been many heroic and revered lawyers such as the Roman philosopher and politician Cicero and Mahatma Gandi, the Indian campaigner for independence."
+                "A": "Shipping logistics have played a crucial role in global trade for centuries, but modern advancements in technology have brought about significant changes. Automated tracking systems now allow companies to monitor the movement of cargo in real time, increasing efficiency and reducing the chances of lost shipments. However, this technology also presents challenges, such as cybersecurity risks that must be addressed.",
+                "B": "The shipping industry has also had to adapt to new environmental regulations aimed at reducing emissions. Many companies are investing in eco-friendly ships that utilize cleaner fuels or even alternative power sources, such as electric or hybrid engines. Despite the costs involved, these investments are seen as essential for the long-term sustainability of the industry.",
+                "C": "One of the most pressing issues in the shipping industry today is the shortage of skilled workers. As older generations of workers retire, there are fewer younger people entering the field. Companies are now investing in training programs and collaborating with educational institutions to attract new talent and fill the gap.",
+                "D": "In addition to workforce challenges, the industry faces fluctuations in demand. Global events, such as economic downturns or pandemics, can drastically affect the need for shipping services. Companies must be agile and prepared to adjust their strategies quickly in order to remain competitive in this volatile market.",
+                "E": "Despite these challenges, the shipping industry continues to be a critical component of the global economy. As the world becomes more interconnected, the demand for fast, reliable shipping solutions will only increase, pushing the industry to innovate and overcome the hurdles it faces."
               },
               "SubQuestions": [
                 {
@@ -134,7 +134,13 @@
             {
               "PassageId": 1002,
               "PassageTitle": "The History of Coffee",
-              "PassageContent": "Coffee, one of the world's most popular beverages, has a rich and fascinating history. Its origins can be traced back to the ancient coffee forests on the Ethiopian plateau. There, legend says the goat herder Kaldi first discovered the potential of these beloved beans. The story goes that Kaldi discovered coffee after noticing that his goats became so energetic that they did not want to sleep at night after eating the berries from a certain tree...",
+              "PassageContent": {
+                "A": "The global shipping industry is the backbone of international trade, transporting goods across oceans and continents. Over 90% of the world's trade is carried out by sea, making it a critical part of the global economy. Shipping has evolved over centuries, from small wooden boats to massive cargo ships that carry thousands of containers. The efficiency of this system relies on carefully coordinated schedules, port logistics, and international regulations that ensure smooth operations.",
+                "B": "In recent years, the shipping industry has faced increasing pressure to reduce its environmental impact. The burning of heavy fuel oils by large vessels contributes significantly to air pollution and greenhouse gas emissions. To combat this, new regulations have been introduced, such as the International Maritime Organization's (IMO) sulfur cap, which limits the amount of sulfur in the fuel used by ships. Many companies are now exploring cleaner energy options like liquefied natural gas (LNG) and even hydrogen-based fuels to meet these standards.",
+                "C": "Another major challenge faced by the shipping industry is the rising cost of fuel and labor. Fuel prices fluctuate regularly, directly impacting shipping costs, while labor shortages at ports and on ships have made it harder to maintain smooth operations. Automation and the use of autonomous ships are being explored as potential solutions to reduce reliance on human labor and lower costs, but widespread adoption of such technologies remains a long-term goal.",
+                "D": "The COVID-19 pandemic has also highlighted the vulnerability of global supply chains. Port closures, quarantine regulations, and reduced workforce availability have led to significant delays in shipping schedules, causing disruptions in trade. This has forced companies to rethink their supply chain strategies, with many now looking to diversify their logistics options and build more resilient systems to prevent future disruptions.",
+                "E": "Despite these challenges, the future of shipping remains promising. Technological advancements, such as real-time tracking systems, blockchain for better transparency, and AI-driven logistics optimization, are set to revolutionize the industry. As global trade continues to grow, shipping will remain a crucial pillar of the global economy, adapting to new challenges and innovations to meet the needs of a changing world."
+              },
               "SubQuestions": [
                 {
                   "QuestionId": 10006,
@@ -171,7 +177,13 @@
             {
               "PassageId": 1003,
               "PassageTitle": "The Future of Artificial Intelligence",
-              "PassageContent": "Artificial Intelligence (AI) is rapidly transforming various aspects of our lives, from how we work to how we interact with technology. As AI continues to advance, it promises to revolutionize industries, enhance decision-making processes, and potentially solve some of humanity's most pressing challenges. However, the rise of AI also raises important ethical considerations and concerns about job displacement...",
+              "PassageContent": {
+                "A": "Healthcare systems around the world play a vital role in maintaining the well-being of populations. From advanced surgeries to routine check-ups, healthcare services ensure that people can live healthier and longer lives. Different countries adopt various models of healthcare, ranging from fully state-funded systems to private insurance-based models. Regardless of the structure, access to healthcare remains a universal concern as the demand for quality services grows with an aging population and rising chronic diseases.",
+                "B": "One of the major challenges faced by healthcare systems today is the increasing cost of medical care. Advanced technologies, new medications, and specialized treatments have improved the quality of care but have also driven up costs. In some countries, healthcare spending has skyrocketed, leading to debates on how to make healthcare more affordable and sustainable. In particular, the rising costs of elderly care and long-term treatment for chronic diseases place a heavy burden on both individuals and healthcare providers.",
+                "C": "Technological advancements, however, have also opened new doors for improving healthcare. Telemedicine, wearable health devices, and AI-driven diagnostics are revolutionizing patient care. Telemedicine allows patients to consult with doctors remotely, which became especially crucial during the COVID-19 pandemic. Wearable devices track vital signs, enabling individuals to monitor their health in real-time. AI systems are now being used to detect diseases such as cancer earlier and with greater accuracy, potentially saving lives.",
+                "D": "Despite these advancements, there are still significant disparities in access to healthcare. In rural and underserved areas, the lack of hospitals, clinics, and healthcare professionals limits the ability of individuals to receive necessary care. Moreover, socioeconomic factors such as income, education, and employment can greatly affect a person's access to healthcare services. In many parts of the world, vulnerable populations, including migrants and the homeless, face significant barriers in receiving care.",
+                "E": "The future of healthcare is likely to be shaped by both technological innovations and policy changes. Governments and healthcare providers will need to focus on creating more equitable systems that ensure access to care for all citizens. Furthermore, personalized medicine, where treatments are tailored to the individual’s genetic makeup, is set to become more prevalent, offering more effective and targeted healthcare solutions. The combination of technology and inclusivity will be key to addressing the growing challenges faced by healthcare systems in the coming decades."
+              },
               "SubQuestions": [
                 {
                   "QuestionId": 10008,
@@ -202,6 +214,80 @@
                   "QuestionType": "fill_in_blank",
                   "QuestionText": "AI has the potential to solve some of humanity's most _ challenges.",
                   "CorrectAnswer": "pressing"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ExamId": 102,
+          "ExamName": "Listening Test 1",
+          "NumOfQuestions": 8,
+          "TestID": 1,
+          "Passages": [
+            {
+              "PassageId": 1001,
+              "PassageTitle": "Denham's Shipping Agency Form",
+              "PassageContent": {
+                "AudioClip": "/src/assets/thienlyoi.mp3"
+              },
+              "SubQuestions": [
+                {
+                  "QuestionId": 10001,
+                  "QuestionType": "fill_in_blank",
+                  "QuestionText": "Name: Tim _",
+                  "CorrectAnswer": "Johnson"
+                },
+                {
+                  "QuestionId": 10002,
+                  "QuestionType": "fill_in_blank",
+                  "QuestionText": "Address to be collected from: _ University",
+                  "CorrectAnswer": "Bristol"
+                },
+                {
+                  "QuestionId": 10003,
+                  "QuestionType": "fill_in_blank",
+                  "QuestionText": "Postcode: _",
+                  "CorrectAnswer": "BN1 1AL"
+                },
+                {
+                  "QuestionId": 10004,
+                  "QuestionType": "fill_in_blank",
+                  "QuestionText": "Size of container: _",
+                  "CorrectAnswer": "20 cubic meters"
+                }
+              ]
+            },
+            {
+              "PassageId": 1002,
+              "PassageTitle": "Booking a Hotel Room",
+              "PassageContent": {
+                "AudioClip": "/src/assets/lazy-girl-145417.mp3"
+              },
+              "SubQuestions": [
+                {
+                  "QuestionId": 10005,
+                  "QuestionType": "multiple_choice",
+                  "QuestionText": "What type of room did the customer book?",
+                  "CorrectAnswer": "Double Room",
+                  "Choices": [
+                    {
+                      "ChoiceId": 1,
+                      "ChoiceContent": "Single Room"
+                    },
+                    {
+                      "ChoiceId": 2,
+                      "ChoiceContent": "Double Room"
+                    },
+                    {
+                      "ChoiceId": 3,
+                      "ChoiceContent": "Suite"
+                    },
+                    {
+                      "ChoiceId": 4,
+                      "ChoiceContent": "Family Room"
+                    }
+                  ]
                 }
               ]
             }

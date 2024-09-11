@@ -11,9 +11,8 @@ import CenterRatingPage from "../pages/CenterPage/CenterRatingPage";
 import CreateCenterRating from "../components/partial/CenterRating/CreateCenterRating";
 import TakeTestPage from "../pages/TakeTestPage/TakeTestPage";
 import TakeTestPrePage from "../pages/TakeTestPage/TakeTestPrePage";
-import DoingTest2 from "../components/partial/DoingTest/DoingTest2";
 import CompleteProfile from "../components/partial/Authen/SignIn/CompleteProfile";
-import ListeningTest from "../pages/UserTest/ListeningTest";
+import ListeningTestPage from "../pages/UserTest/ListeningTestPage";
 
 export const router = createBrowserRouter([
   {
@@ -66,7 +65,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/doing-test",
-    element: <DoingTest2 />,
+    element: <UserTestPage />,
   },
   {
     path: "/complete-profile",
@@ -74,6 +73,6 @@ export const router = createBrowserRouter([
   },
   {
     path: "/listening-test",
-    element: <ListeningTest />,
+    element: <ListeningTestPage />,
   },
 ]);

@@ -6,14 +6,22 @@ export default function TestProgress(pros) {
     passages,
     currentPassage,
     selectedAnswers,
+    setIsPlaying,
   } = pros;
   return (
-    <AppBar position="static" color="default" sx={{ top: "auto", bottom: 0 }}>
+    <AppBar
+      position="static"
+      color="default"
+      sx={{ top: "auto", bottom: 0, background: "#fff" }}
+    >
       <Toolbar sx={{ justifyContent: "space-around" }}>
         {passages.map((passage, index) => (
           <Button
             key={passage.PassageId}
-            onClick={() => handlePassageChange(index)}
+            onClick={() => {
+              handlePassageChange(index);
+              setIsPlaying(false);
+            }}
             variant={currentPassage === index ? "contained" : "outlined"}
             color="primary"
             sx={{ margin: "0 8px" }}

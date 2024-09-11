@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import HeaderTesting from "../../components/global/HeaderTesting";
 import TestProgress from "../../components/partial/UserTesting/PartQuestion";
-import ReadingTest from "../../components/partial/UserTesting/ReadingTest";
-function UserTestPage() {
+import ListeningTest from "../../components/partial/UserTesting/ListeningTest";
+function ListeningTestPage() {
   const [passages, setPassages] = useState([]);
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [currentPassage, setCurrentPassage] = useState(0);
-
+  const [isPlaying, setIsPlaying] = useState(false);
   useEffect(() => {
     const fetchTestData = async () => {
       try {
         const response = await fetch("/src/data/test2.json"); // Adjust path as necessary
         const data = await response.json();
-        setPassages(data.Tests[0].Exams[0].Passages); // Adjust based on your JSON structure
+        setPassages(data.Tests[0].Exams[1].Passages); // Adjust based on your JSON structure
       } catch (error) {
         console.error("Error fetching test data:", error);
       }
@@ -39,7 +39,7 @@ function UserTestPage() {
   const handleAnswerChange = (questionId, answer) => {
     setSelectedAnswers({ ...selectedAnswers, [questionId]: answer });
   };
-  
+
   return (
     <div className="flex flex-col h-screen overflow-hidden">
       <div
@@ -52,11 +52,13 @@ function UserTestPage() {
         className="flex-1 mt-[60px] overflow-y-auto"
         style={{ marginTop: "6rem" }}
       >
-        <ReadingTest
+        <ListeningTest
           passages={passages}
           currentPassage={currentPassage}
           selectedAnswers={selectedAnswers}
           handleAnswerChange={handleAnswerChange}
+          isPlaying = {isPlaying}
+          setIsPlaying = {setIsPlaying}
         />
       </div>
       <div
@@ -69,10 +71,11 @@ function UserTestPage() {
           passages={passages}
           currentPassage={currentPassage}
           selectedAnswers={selectedAnswers}
+          setIsPlaying={setIsPlaying}
         />
       </div>
     </div>
   );
 }
 
-export default UserTestPage;
+export default ListeningTestPage;
