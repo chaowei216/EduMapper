@@ -3,6 +3,7 @@ using BLL.Exceptions;
 using BLL.IService;
 using Common.Constant.Message;
 using Common.Constant.Message.Auth;
+using Common.Constant.Message.Email;
 using Common.DTO;
 using Common.DTO.Auth;
 using Common.DTO.User;
@@ -18,14 +19,17 @@ namespace BLL.Service
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITokenService _tokenService;
+        private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
 
         public AuthService(UserManager<ApplicationUser> userManager,
                            ITokenService tokenService,
+                           IEmailService emailService,
                            IMapper mapper)
         {
             _userManager = userManager;
             _tokenService = tokenService;
+            _emailService = emailService;
             _mapper = mapper;
         }
 
@@ -60,6 +64,29 @@ namespace BLL.Service
                 StatusCode = StatusCodeEnum.NoContent,
                 IsSuccess = true,
                 Message = GeneralMessage.UpdateSuccess
+            };
+        }
+
+        public async Task<ResponseDTO> ForgotPassword(ForgotPasswordDTO request)
+        {
+            // check if user is existed
+            var user = await _userManager.FindByEmailAsync(request.Email);
+
+            if (user == null)
+            {
+                throw new NotFoundException(LoginMessage.NotExistedUser);
+            }
+
+            // generate token
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            _emailService.SendOTPEmail(user.Email!, token, EmailMessage.ForgotPasswordSubject);
+
+            return new ResponseDTO
+            {
+                IsSuccess = true,
+                Message = GeneralMessage.CreateSuccess,
+                StatusCode = StatusCodeEnum.Created
             };
         }
 
@@ -209,6 +236,32 @@ namespace BLL.Service
                 StatusCode = StatusCodeEnum.Created,
                 Message = RegisterMessage.RegisterSuccess,
                 MetaData = responseUser
+            };
+        }
+
+        public async Task<ResponseDTO> ResetPassword(ResetPasswordDTO request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+
+            if (user == null)
+            {
+                throw new NotFoundException(LoginMessage.NotExistedUser);
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, request.Token, request.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                // handle if not success
+                var errors = string.Join(Environment.NewLine, result.Errors.Select(e => e.Description));
+                throw new BadRequestException(errors);
+            }
+
+            return new ResponseDTO
+            {
+                StatusCode = StatusCodeEnum.OK,
+                IsSuccess = true,
+                Message = GeneralMessage.UpdateSuccess
             };
         }
 

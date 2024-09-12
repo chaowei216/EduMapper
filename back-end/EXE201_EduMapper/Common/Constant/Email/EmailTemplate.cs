@@ -65,7 +65,7 @@
             <h1>{OTP_CODE}</h1>
         </div>
         <div class=""notice"">
-            <p>Expires in 15 minutes. <span class=""do-not""> DO NOT share this code with others, including EduMapper employees.</span>
+            <p>Expires in 1 hour. <span class=""do-not""> DO NOT share this code with others, including EduMapper employees.</span>
             </p>
         </div>
         <div class=""footer"">

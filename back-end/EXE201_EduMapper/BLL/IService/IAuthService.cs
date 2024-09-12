@@ -49,5 +49,19 @@ namespace BLL.IService
         /// <param name="request"></param>
         /// <returns></returns>
         Task<ResponseDTO> ChangePassword(string token, ChangePasswordDTO request);
+
+        /// <summary>
+        /// Forgot Password (send otp)
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<ResponseDTO> ForgotPassword(ForgotPasswordDTO request);
+
+        /// <summary>
+        /// Reset password
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<ResponseDTO> ResetPassword(ResetPasswordDTO request);
     }
 }
