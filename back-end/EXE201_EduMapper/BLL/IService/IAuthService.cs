@@ -63,5 +63,19 @@ namespace BLL.IService
         /// <param name="request"></param>
         /// <returns></returns>
         Task<ResponseDTO> ResetPassword(ResetPasswordDTO request);
+
+        /// <summary>
+        /// Verify Email (Sending OTP)
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<ResponseDTO> VerifyEmail(VerifyEmailDTO request);
+
+        /// <summary>
+        /// Confirm Email
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<ResponseDTO> ConfirmEmail(ConfirmEmailDTO request);
     }
 }
