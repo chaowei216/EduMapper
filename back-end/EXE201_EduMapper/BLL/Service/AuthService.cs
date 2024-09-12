@@ -13,7 +13,6 @@ using Common.Enum.Auth;
 using DAL.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace BLL.Service
 {
@@ -124,23 +123,38 @@ namespace BLL.Service
 
         public async Task<ResponseDTO> GetUserByToken(string token)
         {
-            var userId = ExtractUserIdFromToken(token);
+            var info = _tokenService.GetAccessTokenData(token);
 
-            if (string.IsNullOrEmpty(userId))
+            if (info == null || string.IsNullOrEmpty(info.UserId)
+                || string.IsNullOrEmpty(info.Email))
             {
                 throw new UnAuthorizedException(GeneralMessage.UnAuthorized);
             }
 
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(info.UserId);
 
             if (user == null)
             {
-                throw new NotFoundException(GeneralMessage.NotFound);
+                var adminAccount = _configuration["AdminAccount:Email"];
+                if (info.Email != adminAccount)
+                {
+                    throw new NotFoundException(GeneralMessage.NotFound);
+                } else
+                {
+                    user = new ApplicationUser
+                    {
+                        Email = adminAccount,
+                        FullName = Config.AdminName,                    
+                    };
+                }
+                
             }
 
             var mappedUser = _mapper.Map<UserAuthDTO>(user);
             mappedUser.ImageLinked = !string.IsNullOrEmpty(user.ImageLink);
             mappedUser.Avatar = !string.IsNullOrEmpty(user.Avatar) ? user.Avatar : user.ImageLink;
+            var roleList = await _userManager.GetRolesAsync(user);
+            mappedUser.RoleName = roleList.Count == 0 ? Config.AdminName : roleList[0];
 
             return new ResponseDTO
             {
@@ -202,6 +216,8 @@ namespace BLL.Service
             var mappedUser = _mapper.Map<UserAuthDTO>(user);
             mappedUser.ImageLinked = !string.IsNullOrEmpty(user.ImageLink);
             mappedUser.Avatar = !string.IsNullOrEmpty(user.Avatar) ? user.Avatar : user.ImageLink;
+            var roleList = await _userManager.GetRolesAsync(user);
+            mappedUser.RoleName = roleList.Count == 0 ? Config.AdminName : roleList[0];
 
             var response = new LoginResponseDTO
             {
@@ -250,6 +266,8 @@ namespace BLL.Service
             var mappedUser = _mapper.Map<UserAuthDTO>(user);
             mappedUser.ImageLinked = !string.IsNullOrEmpty(user.ImageLink);
             mappedUser.Avatar = !string.IsNullOrEmpty(user.Avatar) ? user.Avatar : user.ImageLink;
+            var roleList = await _userManager.GetRolesAsync(user);
+            mappedUser.RoleName = roleList.Count == 0 ? Config.AdminName : roleList[0];
 
             var response = new LoginResponseDTO
             {
@@ -334,8 +352,10 @@ namespace BLL.Service
             await _userManager.AddToRoleAsync(mappedUser, RoleEnum.CUSTOMER.ToString());
 
             var responseUser = _mapper.Map<UserAuthDTO>(user);
-            responseUser.ImageLinked = !string.IsNullOrEmpty(user.ImageLink);
+            responseUser.ImageLinked = !string.IsNullOrEmpty(user!.ImageLink);
             responseUser.Avatar = !string.IsNullOrEmpty(user.Avatar) ? user.Avatar : user.ImageLink;
+            var roleList = await _userManager.GetRolesAsync(user);
+            responseUser.RoleName = roleList.Count == 0 ? Config.AdminName : roleList[0];
 
             return new ResponseDTO
             {
@@ -392,16 +412,6 @@ namespace BLL.Service
                 IsSuccess = true,
                 Message = GeneralMessage.CreateSuccess
             };
-        }
-
-        private string ExtractUserIdFromToken(string accessToken)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var jwtToken = tokenHandler.ReadJwtToken(accessToken);
-            
-            //  take userId in claim of token
-            string userId = jwtToken.Subject;
-            return userId;
         }
 
         private ApplicationUser? CheckAdminAccount(string email, string password)

@@ -223,6 +223,7 @@ namespace BLL.Service
             return new AccessTokenDTO
             {
                 UserId = jwtInfo.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Sub)!.Value,
+                Email = jwtInfo.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email)!.Value,
                 JwtId = jwtInfo.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Jti)!.Value
             };
         }
