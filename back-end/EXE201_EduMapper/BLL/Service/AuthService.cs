@@ -38,16 +38,22 @@ namespace BLL.Service
             }
 
             var user = await _userManager.FindByIdAsync(userId);
+
             if (user == null)
             {
                 throw new NotFoundException(GeneralMessage.NotFound);
             }
+
+            var mappedUser = _mapper.Map<UserAuthDTO>(user);
+            mappedUser.ImageLinked = !string.IsNullOrEmpty(user.ImageLink);
+            mappedUser.Avatar = !string.IsNullOrEmpty(user.Avatar) ? user.Avatar : user.ImageLink;
+
             return new ResponseDTO
             {
                 IsSuccess = true,
                 Message = GeneralMessage.GetSuccess,
                 StatusCode = StatusCodeEnum.OK,
-                MetaData = _mapper.Map<UserAuthDTO>(user)
+                MetaData = mappedUser
             };
         }
 
@@ -72,9 +78,13 @@ namespace BLL.Service
             // create token pairs
             var tokenPairs = await _tokenService.CreateTokenPair(user);
 
+            var mappedUser = _mapper.Map<UserAuthDTO>(user);
+            mappedUser.ImageLinked = !string.IsNullOrEmpty(user.ImageLink);
+            mappedUser.Avatar = !string.IsNullOrEmpty(user.Avatar) ? user.Avatar : user.ImageLink;
+
             var response = new LoginResponseDTO
             {
-                User = _mapper.Map<UserAuthDTO>(user),
+                User = mappedUser,
                 AccessToken = tokenPairs.AccessToken,
                 RefreshToken = tokenPairs.RefreshToken
             };
@@ -154,12 +164,16 @@ namespace BLL.Service
             // add role for user
             await _userManager.AddToRoleAsync(mappedUser, RoleEnum.CUSTOMER.ToString());
 
+            var responseUser = _mapper.Map<UserAuthDTO>(user);
+            responseUser.ImageLinked = !string.IsNullOrEmpty(user.ImageLink);
+            responseUser.Avatar = !string.IsNullOrEmpty(user.Avatar) ? user.Avatar : user.ImageLink;
+
             return new ResponseDTO
             {
                 IsSuccess = true,
                 StatusCode = StatusCodeEnum.Created,
                 Message = RegisterMessage.RegisterSuccess,
-                MetaData = _mapper.Map<UserAuthDTO>(mappedUser)
+                MetaData = responseUser
             };
         }
 
