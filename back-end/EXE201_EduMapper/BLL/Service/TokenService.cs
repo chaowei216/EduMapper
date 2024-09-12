@@ -37,8 +37,13 @@ namespace BLL.Service
             // access token
             var accessToken = await GenerateAccessToken(user, jwtId);
 
-            // refresh token
-            var refreshToken = GenerateNewRefreshToken(user.Id, jwtId);
+            var refreshToken = string.Empty;
+
+            if (user.Email != _configuration["AdminAccount:Email"])
+            {
+                // refresh token
+                refreshToken = GenerateNewRefreshToken(user.Id, jwtId);
+            }
 
             return new TokenDTO
             {
@@ -155,6 +160,11 @@ namespace BLL.Service
         {
             // claims
             var roles = await _userManager.GetRolesAsync(user);
+
+            if (roles == null || roles.Count == 0)
+            {
+                roles = ["Administrator"];
+            }
 
             var claims = new List<Claim>
             {
