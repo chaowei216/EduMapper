@@ -68,7 +68,7 @@ namespace BLL.Service
             {
                 _unitOfWork.RefreshTokenRepository.RevokeToken(refreshToken);
 
-                return new TokenDTO();
+                throw new BadRequestException(TokenMessage.NotMatchedTokens);
             }
 
             // check if token is revoked, lock all refresh token in chain (fraud)
@@ -83,6 +83,9 @@ namespace BLL.Service
                     _unitOfWork.RefreshTokenRepository.RevokeToken(token);
                 }
 
+                // save changes
+                _unitOfWork.Save();
+
                 return new TokenDTO();
             }
 
@@ -90,21 +93,28 @@ namespace BLL.Service
             if (refreshToken.ExpiredAt < DateTime.Now)
             {
                 _unitOfWork.RefreshTokenRepository.RevokeToken(refreshToken);
+                _unitOfWork.Save();
                 return new TokenDTO();
             }
 
             // create new refresh token
             var newRefreshToken = new RefreshToken
             {
+                RefreshTokenId = Guid.NewGuid().ToString(),
                 UserId = refreshToken.UserId,
                 Token = Guid.NewGuid().ToString() + "-" + Guid.NewGuid().ToString(),
                 JwtTokenId = refreshToken.JwtTokenId,
+                CreatedAt = DateTime.Now,
+                ExpiredAt = DateTime.Now.AddDays(30),
             };
             
             _unitOfWork.RefreshTokenRepository.Insert(newRefreshToken);
 
             // revoke old refresh token
             _unitOfWork.RefreshTokenRepository.RevokeToken(refreshToken);
+
+            // save changes
+            _unitOfWork.Save();
 
             // create a new access token
             var user = await _userManager.FindByIdAsync(newRefreshToken.UserId);

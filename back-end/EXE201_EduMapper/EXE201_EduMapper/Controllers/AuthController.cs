@@ -19,6 +19,8 @@ namespace EXE201_EduMapper.Controllers
         }
 
         [HttpPost("login")]
+        [ProducesResponseType(200, Type = typeof(ResponseDTO))]
+        [ProducesResponseType(401)]
         public async Task<IActionResult> Login(LoginNormalRequestDTO request)
         {
             if (!ModelState.IsValid)
@@ -52,7 +54,7 @@ namespace EXE201_EduMapper.Controllers
 
         [HttpPost("logout")]
         [ProducesResponseType(200, Type = typeof(ResponseDTO))]
-        [ProducesResponseType(401)]
+        [Authorize]
         public IActionResult Logout([FromBody] LogoutRequestDTO request)
         {
             if (!ModelState.IsValid)
@@ -70,12 +72,40 @@ namespace EXE201_EduMapper.Controllers
         }
 
         [HttpGet("me")]
+        [ProducesResponseType(200, Type = typeof(ResponseDTO))]
         [Authorize]
         public async Task<IActionResult> GetInfo()
         {
             var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
 
             var response = await _authService.GetUserByToken(token);
+
+            return Ok(response);
+        }
+
+        [HttpPost("refresh-token")]
+        [ProducesResponseType(201, Type = typeof(ResponseDTO))]
+        [ProducesDefaultResponseType(typeof(ResponseDTO))]
+        [ProducesResponseType(400, Type = typeof(ResponseDTO))]
+        [Authorize]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenPairDTO request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO
+                {
+                    StatusCode = StatusCodeEnum.BadRequest,
+                    Message = ModelState.ToString()!
+                });
+            }
+
+            var accessToken = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+            var response = await _authService.RefreshTokenPair(new TokenDTO
+            {
+                AccessToken = accessToken,
+                RefreshToken = request.RefreshToken
+            });
 
             return Ok(response);
         }
