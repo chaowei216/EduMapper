@@ -12,6 +12,7 @@ using Common.Enum;
 using Common.Enum.Auth;
 using DAL.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace BLL.Service
@@ -21,16 +22,19 @@ namespace BLL.Service
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITokenService _tokenService;
         private readonly IEmailService _emailService;
+        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
 
         public AuthService(UserManager<ApplicationUser> userManager,
                            ITokenService tokenService,
                            IEmailService emailService,
+                           IConfiguration configuration,
                            IMapper mapper)
         {
             _userManager = userManager;
             _tokenService = tokenService;
             _emailService = emailService;
+            _configuration = configuration;
             _mapper = mapper;
         }
 
@@ -176,6 +180,8 @@ namespace BLL.Service
                     throw new BadRequestException(errors);
                 }
 
+                // send email password
+
                 // if success
                 // add role for user
                 await _userManager.AddToRoleAsync(user, RoleEnum.CUSTOMER.ToString());
@@ -215,20 +221,27 @@ namespace BLL.Service
 
         public async Task<ResponseDTO> LoginNormal(LoginNormalRequestDTO request)
         {
-            // check existed email
-            var user = await _userManager.FindByEmailAsync(request.Email);
+            // check if user is admin
+            var user = CheckAdminAccount(request.Email, request.Password);
 
             if (user == null)
             {
-                throw new UnAuthorizedException(LoginMessage.NotExistedUser);
-            }
+                // not admin
+                // check existed email
+                user = await _userManager.FindByEmailAsync(request.Email);
 
-            // check password
-            var isMatchedPassword = await _userManager.CheckPasswordAsync(user, request.Password);
+                if (user == null)
+                {
+                    throw new UnAuthorizedException(LoginMessage.NotExistedUser);
+                }
 
-            if (!isMatchedPassword)
-            {
-                throw new UnAuthorizedException(LoginMessage.LoginFail);
+                // check password
+                var isMatchedPassword = await _userManager.CheckPasswordAsync(user, request.Password);
+
+                if (!isMatchedPassword)
+                {
+                    throw new UnAuthorizedException(LoginMessage.LoginFail);
+                }
             }
 
             // create token pairs
@@ -389,6 +402,26 @@ namespace BLL.Service
             //  take userId in claim of token
             string userId = jwtToken.Subject;
             return userId;
+        }
+
+        private ApplicationUser? CheckAdminAccount(string email, string password)
+        {
+            var adminEmail = _configuration["AdminAccount:Email"];
+            var adminPassword = _configuration["AdminAccount:Password"];
+
+            if (!string.IsNullOrEmpty(adminEmail) && !string.IsNullOrEmpty(adminPassword))
+            {
+                if (adminEmail == email && adminPassword == password)
+                {
+                    return new ApplicationUser
+                    {
+                        Email = adminEmail,  
+                        FullName = Config.AdminName
+                    };
+                }
+            }
+
+            return null;
         }
     }
 }
