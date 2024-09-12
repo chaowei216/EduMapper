@@ -25,5 +25,12 @@ namespace BLL.IService
         /// <param name="tokens"></param>
         /// <returns></returns>
         Task<TokenDTO> RefreshTokenPair(TokenDTO tokens);
+
+        /// <summary>
+        /// get info from access token
+        /// </summary>
+        /// <param name="accessToken"></param>
+        /// <returns></returns>
+        AccessTokenDTO? GetAccessTokenData(string accessToken);
     }
 }

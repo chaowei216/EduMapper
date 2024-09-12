@@ -134,7 +134,7 @@ namespace BLL.Service
 
             if (refreshTokenDb == null)
             {
-                throw new BadRequestException(LogoutMessage.InValidToken);
+                throw new BadRequestException(TokenMessage.InValidToken);
             }
 
             if (refreshTokenDb.IsRevoked)
@@ -203,7 +203,7 @@ namespace BLL.Service
             return refreshToken.Token.ToString();
         }
 
-        private AccessTokenDTO? GetAccessTokenData(string accessToken)
+        public AccessTokenDTO? GetAccessTokenData(string accessToken)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwtInfo = tokenHandler.ReadJwtToken(accessToken);
