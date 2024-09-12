@@ -19,7 +19,7 @@ namespace DAL.Data
         public DbSet<MemberShipDetail> MemberShipDetails { get; set; }
         public DbSet<Passage> Passages { get; set; }
         public DbSet<ProgramTraining> ProgramTrainings { get; set; }
-        public DbSet<Progress> Progresses { get; set; }
+        public DbSet<Progress> Progress { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuestionChoice> QuestionChoices { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
@@ -30,6 +30,8 @@ namespace DAL.Data
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<UserNotification> UserNotifications { get; set; }
+        public DbSet<PassageSection> PassageSections { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         #endregion
 
