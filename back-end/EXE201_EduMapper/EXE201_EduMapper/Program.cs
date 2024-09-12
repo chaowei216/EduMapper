@@ -1,16 +1,10 @@
-using System.Text;
-using System.Text.Json.Serialization;
 using BLL.IService;
 using BLL.Service;
-using Common.Constant.Message;
-using Common.DTO;
-using Common.Enum;
 using EXE201_EduMapper.Extension;
 using EXE201_EduMapper.Middlewares;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +43,9 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddDatabase();
 builder.Services.ConfigIdentityServices();
 builder.Services.ConfigAuthentication(builder.Configuration);
+
+// Transient
+builder.Services.AddTransient<IEmailService, EmailService>();
 
 // Scoped
 builder.Services.AddUnitOfWork();

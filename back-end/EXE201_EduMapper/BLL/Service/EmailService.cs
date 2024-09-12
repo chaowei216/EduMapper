@@ -21,7 +21,7 @@ namespace BLL.Service
 
         public void SendOTPEmail(string userEmail, string otpCode, string subject)
         {
-            var sendEmail = _configuration.GetSection("SendEmailAccount")["Email"];
+            var sendEmail = _configuration.GetSection("SendEmailAccount")["Email"]!;
             var toEmail = userEmail;
             var htmlBody = EmailTemplate.OTPEmailTemplate(userEmail, otpCode, subject);
             MailMessage mailMessage = new MailMessage(sendEmail, toEmail, subject, htmlBody);

@@ -1,4 +1,5 @@
 ﻿using BLL.IService;
+using Common.Constant.Message;
 using Common.DTO;
 using Common.DTO.Auth;
 using Common.DTO.User;
@@ -131,6 +132,55 @@ namespace EXE201_EduMapper.Controllers
             var accessToken = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
 
             var response = await _authService.ChangePassword(accessToken, request);
+
+            if (response.IsSuccess)
+            {
+                return NoContent();
+            }
+
+            return StatusCode(500, new ResponseDTO
+            {
+                StatusCode = StatusCodeEnum.InteralServerError,
+                Message = GeneralMessage.GeneralError
+            });
+        }
+
+        [HttpPost("forgot-password")]
+        [ProducesResponseType(201, Type = typeof(ResponseDTO))]
+        [ProducesDefaultResponseType(typeof(ResponseDTO))]
+        [ProducesResponseType(404, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDTO request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO
+                {
+                    StatusCode = StatusCodeEnum.BadRequest,
+                    Message = ModelState.ToString()!
+                });
+            }
+
+            var response = await _authService.ForgotPassword(request);
+
+            return Ok(response);
+        }
+
+        [HttpPost("reset-password")]
+        [ProducesResponseType(200, Type = typeof(ResponseDTO))]
+        [ProducesDefaultResponseType(typeof(ResponseDTO))]
+        [ProducesResponseType(404, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO
+                {
+                    StatusCode = StatusCodeEnum.BadRequest,
+                    Message = ModelState.ToString()!
+                });
+            }
+
+            var response = await _authService.ResetPassword(request);
 
             return Ok(response);
         }
