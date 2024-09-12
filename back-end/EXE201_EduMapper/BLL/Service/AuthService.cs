@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BLL.Exceptions;
 using BLL.IService;
+using Common.Constant;
 using Common.Constant.Message;
 using Common.Constant.Message.Auth;
 using Common.Constant.Message.Email;
@@ -143,6 +144,72 @@ namespace BLL.Service
                 Message = GeneralMessage.GetSuccess,
                 StatusCode = StatusCodeEnum.OK,
                 MetaData = mappedUser
+            };
+        }
+
+        public async Task<ResponseDTO> LoginExternalParties(string type, ExternalLoginDTO request)
+        {
+            // check type
+            if (Enum.GetNames(typeof(ExternalParty)).Length < 0
+                || !Enum.GetNames(typeof(ExternalParty)).Contains(type.ToUpper()))
+            {
+                throw new BadRequestException(LoginMessage.NotSupportedSite);
+            }
+
+            // check if user is existed in system
+            var user = await _userManager.FindByEmailAsync(request.Email);
+
+            // user is not existed
+            if (user == null)
+            {
+                user = _mapper.Map<ApplicationUser>(request);
+                user.Status = (int)UserStatusEnum.ACTIVE;
+                user.UserName = request.Email;
+                user.EmailConfirmed = true;
+
+                var result = await _userManager.CreateAsync(user, Config.DefaultPassword);
+
+                if (!result.Succeeded)
+                {
+                    // handle if not success
+                    var errors = string.Join(Environment.NewLine, result.Errors.Select(e => e.Description));
+                    throw new BadRequestException(errors);
+                }
+
+                // if success
+                // add role for user
+                await _userManager.AddToRoleAsync(user, RoleEnum.CUSTOMER.ToString());
+            }
+
+            // check if user's email is confirmed
+            if (!user.EmailConfirmed)
+            {
+                // link to external parties email (update email confirmed)
+                user.EmailConfirmed = true;
+                await _userManager.UpdateAsync(user);
+            }
+
+            // return new token pair to user
+            // create token pair
+            var tokenPairs = await _tokenService.CreateTokenPair(user);
+
+            var mappedUser = _mapper.Map<UserAuthDTO>(user);
+            mappedUser.ImageLinked = !string.IsNullOrEmpty(user.ImageLink);
+            mappedUser.Avatar = !string.IsNullOrEmpty(user.Avatar) ? user.Avatar : user.ImageLink;
+
+            var response = new LoginResponseDTO
+            {
+                User = mappedUser,
+                AccessToken = tokenPairs.AccessToken,
+                RefreshToken = tokenPairs.RefreshToken
+            };
+
+            return new ResponseDTO
+            {
+                IsSuccess = true,
+                Message = LoginMessage.LoginSuccess,
+                MetaData = response,
+                StatusCode = StatusCodeEnum.OK
             };
         }
 

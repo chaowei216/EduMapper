@@ -10,6 +10,7 @@ namespace EXE201_EduMapper.Profiles
         {
             CreateMap<RegisterRequestDTO, ApplicationUser>().ReverseMap();
             CreateMap<UserAuthDTO, ApplicationUser>().ReverseMap();
+            CreateMap<ExternalLoginDTO, ApplicationUser>().ReverseMap();    
         }
     }
 }

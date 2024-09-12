@@ -22,8 +22,9 @@ namespace EXE201_EduMapper.Controllers
 
         [HttpPost("login")]
         [ProducesResponseType(200, Type = typeof(ResponseDTO))]
-        [ProducesResponseType(401)]
-        public async Task<IActionResult> Login(LoginNormalRequestDTO request)
+        [ProducesResponseType(400, Type = typeof(ResponseDTO))]
+        [ProducesResponseType(401, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> Login([FromBody] LoginNormalRequestDTO request)
         {
             if (!ModelState.IsValid)
             {
@@ -31,6 +32,22 @@ namespace EXE201_EduMapper.Controllers
             }
 
             var result = await _authService.LoginNormal(request);
+
+            return Ok(result);
+        }
+
+        [HttpPost("login-external")]
+        [ProducesResponseType(200, Type = typeof(ResponseDTO))]
+        [ProducesResponseType(400, Type = typeof(ResponseDTO))]
+        [ProducesResponseType(401, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> LoginExternal(string type, [FromBody] ExternalLoginDTO request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _authService.LoginExternalParties(type, request);
 
             return Ok(result);
         }

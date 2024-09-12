@@ -77,5 +77,13 @@ namespace BLL.IService
         /// <param name="request"></param>
         /// <returns></returns>
         Task<ResponseDTO> ConfirmEmail(ConfirmEmailDTO request);
+
+        /// <summary>
+        /// Login with external parties
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<ResponseDTO> LoginExternalParties(string type, ExternalLoginDTO request);
     }
 }
