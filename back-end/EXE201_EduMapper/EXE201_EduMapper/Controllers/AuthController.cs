@@ -1,6 +1,7 @@
 ﻿using BLL.IService;
 using Common.DTO;
 using Common.DTO.Auth;
+using Common.DTO.User;
 using Common.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -106,6 +107,30 @@ namespace EXE201_EduMapper.Controllers
                 AccessToken = accessToken,
                 RefreshToken = request.RefreshToken
             });
+
+            return Ok(response);
+        }
+
+        [HttpPatch("change-password")]
+        [ProducesResponseType(204, Type = typeof(ResponseDTO))]
+        [ProducesDefaultResponseType(typeof(ResponseDTO))]
+        [ProducesResponseType(400, Type = typeof(ResponseDTO))]
+        [ProducesResponseType(404, Type = typeof(ResponseDTO))]
+        [Authorize]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO
+                {
+                    StatusCode = StatusCodeEnum.BadRequest,
+                    Message = ModelState.ToString()!
+                });
+            }
+
+            var accessToken = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+            var response = await _authService.ChangePassword(accessToken, request);
 
             return Ok(response);
         }

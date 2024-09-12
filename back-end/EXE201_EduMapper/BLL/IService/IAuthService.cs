@@ -1,5 +1,6 @@
 ﻿using Common.DTO;
 using Common.DTO.Auth;
+using Common.DTO.User;
 using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace BLL.IService
@@ -40,5 +41,13 @@ namespace BLL.IService
         /// <param name="refreshToken"></param>
         /// <returns></returns>
         ResponseDTO Logout(string refreshToken);
+
+        /// <summary>
+        /// Change user's password
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<ResponseDTO> ChangePassword(string token, ChangePasswordDTO request);
     }
 }

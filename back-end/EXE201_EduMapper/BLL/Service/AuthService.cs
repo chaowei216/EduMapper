@@ -5,6 +5,7 @@ using Common.Constant.Message;
 using Common.Constant.Message.Auth;
 using Common.DTO;
 using Common.DTO.Auth;
+using Common.DTO.User;
 using Common.Enum;
 using Common.Enum.Auth;
 using DAL.Models;
@@ -26,6 +27,40 @@ namespace BLL.Service
             _userManager = userManager;
             _tokenService = tokenService;
             _mapper = mapper;
+        }
+
+        public async Task<ResponseDTO> ChangePassword(string token, ChangePasswordDTO request)
+        {
+            var tokenInfo = _tokenService.GetAccessTokenData(token);
+
+            if (tokenInfo == null
+                || string.IsNullOrEmpty(tokenInfo.UserId))
+            {
+                throw new BadRequestException(TokenMessage.InValidToken);
+            }
+
+            var user = await _userManager.FindByIdAsync(tokenInfo.UserId);
+
+            if (user == null)
+            {
+                throw new NotFoundException(LoginMessage.NotExistedUser);
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                // handle if not success
+                var errors = string.Join(Environment.NewLine, result.Errors.Select(e => e.Description));
+                throw new BadRequestException(errors);
+            }
+
+            return new ResponseDTO
+            {
+                StatusCode = StatusCodeEnum.NoContent,
+                IsSuccess = true,
+                Message = GeneralMessage.UpdateSuccess
+            };
         }
 
         public async Task<ResponseDTO> GetUserByToken(string token)
