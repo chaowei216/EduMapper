@@ -6,9 +6,10 @@ namespace DAL.Models
     public class ApplicationUser : IdentityUser
     {
         public string FullName { get; set; } = null!;
-        public string? UserImage { get; set; } = null!;
+        public string? Avatar { get; set; }
+        public string? ImageLink { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public string Status { get; set; } = null!;
+        public int Status { get; set; }
         public string Gender { get; set; } = null!;
         public ICollection<UserNotification> UserNotifications { get; set; } = null!;
         public ICollection<Transaction> Transactions { get; set; } = null!;
