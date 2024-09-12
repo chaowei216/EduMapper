@@ -184,5 +184,45 @@ namespace EXE201_EduMapper.Controllers
 
             return Ok(response);
         }
+
+        [HttpPost("verify-email")]
+        [ProducesResponseType(201, Type = typeof(ResponseDTO))]
+        [ProducesDefaultResponseType(typeof(ResponseDTO))]
+        [ProducesResponseType(404, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> VerifyEmail([FromBody] VerifyEmailDTO request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO
+                {
+                    StatusCode = StatusCodeEnum.BadRequest,
+                    Message = ModelState.ToString()!
+                });
+            }
+
+            var response = await _authService.VerifyEmail(request);
+
+            return Ok(response);
+        }
+
+        [HttpPost("confirm-email")]
+        [ProducesResponseType(200, Type = typeof(ResponseDTO))]
+        [ProducesDefaultResponseType(typeof(ResponseDTO))]
+        [ProducesResponseType(404, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailDTO request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO
+                {
+                    StatusCode = StatusCodeEnum.BadRequest,
+                    Message = ModelState.ToString()!
+                });
+            }
+
+            var response = await _authService.ConfirmEmail(request);
+
+            return Ok(response);
+        }
     }
 }

@@ -67,6 +67,33 @@ namespace BLL.Service
             };
         }
 
+        public async Task<ResponseDTO> ConfirmEmail(ConfirmEmailDTO request)
+        {
+            // check if user is existed
+            var user = await _userManager.FindByEmailAsync(request.Email);
+
+            if (user == null)
+            {
+                throw new NotFoundException(LoginMessage.NotExistedUser);
+            }
+
+            var result = await _userManager.ConfirmEmailAsync(user, request.Token);
+
+            if (!result.Succeeded)
+            {
+                // handle if not success
+                var errors = string.Join(Environment.NewLine, result.Errors.Select(e => e.Description));
+                throw new BadRequestException(errors);
+            }
+
+            return new ResponseDTO
+            {
+                IsSuccess = true,
+                Message = GeneralMessage.UpdateSuccess,
+                StatusCode = StatusCodeEnum.OK
+            };
+        }
+
         public async Task<ResponseDTO> ForgotPassword(ForgotPasswordDTO request)
         {
             // check if user is existed
@@ -262,6 +289,28 @@ namespace BLL.Service
                 StatusCode = StatusCodeEnum.OK,
                 IsSuccess = true,
                 Message = GeneralMessage.UpdateSuccess
+            };
+        }
+
+        public async Task<ResponseDTO> VerifyEmail(VerifyEmailDTO request)
+        {
+            // check if user is existed
+            var user = await _userManager.FindByEmailAsync(request.Email);
+
+            if (user == null)
+            {
+                throw new NotFoundException(LoginMessage.NotExistedUser);
+            }
+
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            _emailService.SendOTPEmail(user.Email!, token, EmailMessage.VerifyEmailSubject);
+
+            return new ResponseDTO
+            {
+                StatusCode = StatusCodeEnum.Created,
+                IsSuccess = true,
+                Message = GeneralMessage.CreateSuccess
             };
         }
 
