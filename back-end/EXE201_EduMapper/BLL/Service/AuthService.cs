@@ -6,9 +6,9 @@ using Common.Constant.Message.Auth;
 using Common.DTO;
 using Common.DTO.Auth;
 using Common.Enum;
+using Common.Enum.Auth;
 using DAL.Models;
 using Microsoft.AspNetCore.Identity;
-using Org.BouncyCastle.Asn1.Ocsp;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace BLL.Service
@@ -136,6 +136,7 @@ namespace BLL.Service
             // map user to domain object
             var mappedUser = _mapper.Map<ApplicationUser>(request);
             mappedUser.UserName = request.Email;
+            mappedUser.Status = (int)UserStatusEnum.ACTIVE;
 
             // create
             var result = await _userManager.CreateAsync(mappedUser, request.Password);
@@ -150,7 +151,7 @@ namespace BLL.Service
 
             // if success
             // add role for user
-            await _userManager.AddToRoleAsync(mappedUser, RoleEnum.Customer.ToString());
+            await _userManager.AddToRoleAsync(mappedUser, RoleEnum.CUSTOMER.ToString());
 
             return new ResponseDTO
             {
