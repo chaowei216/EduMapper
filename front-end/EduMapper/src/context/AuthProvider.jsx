@@ -2,8 +2,7 @@ import { createContext, useEffect, useReducer } from "react";
 import {
   GetUserByEmail,
   LoginExternal,
-  RegisterParent,
-  RegisterTutor,
+  Register,
   SignIn,
 } from "../api/AuthenApi";
 import { isValidToken, setSession } from "../utils/jwtValid";
@@ -56,16 +55,6 @@ const handlers = {
       user,
     };
   },
-
-  REGISTER_TUTOR: (state, action) => {
-    const { user } = action.payload;
-
-    return {
-      ...state,
-      isAuthenticated: true,
-      user,
-    };
-  },
 };
 
 const reducer = (state, action) =>
@@ -78,7 +67,6 @@ const AuthContext = createContext({
   login_type: () => Promise.resolve(),
   logout: () => Promise.resolve(),
   register: () => Promise.resolve(),
-  register_tutor: () => Promise.resolve(),
 });
 
 AuthProvider.propTypes = {
@@ -229,30 +217,16 @@ function AuthProvider({ children }) {
     return;
   };
 
-  const register = async (parents) => {
-    // Tạo một Blob từ chuỗi string
-    const blob = new Blob([parents.image], { type: "image/jpeg" }); // Thay 'image/jpeg' bằng kiểu dữ liệu của hình ảnh của bạn nếu cần
-    const formData = new FormData();
-    formData.append("Fullname", parents.fullName);
-    formData.append("Email", parents.email);
-    formData.append("Password", parents.password);
-    formData.append("Phonenumber", parents.phoneNumber);
-    formData.append("DateOfBirth", parents.dateOfBirth);
-    formData.append("Address", parents.address);
-    formData.append("District", parents.district);
-    formData.append("City", parents.city);
-    formData.append("Gender", parents.gender);
-    // formData.append("imageFile", parents.image);
-    formData.append("imageFile", blob, parents.image);
-    console.log(formData);
-    const response = await RegisterParent(formData);
+  const register = async (registerUser) => {
+    console.log(registerUser);
+    const response = await Register(registerUser);
     const responseJson = await response.json();
     console.log(responseJson.statusCode);
     if (responseJson.statusCode == 400) {
       toast.error(responseJson.message);
       return;
     }
-    const user = responseJson.data;
+    const user = responseJson.metaData;
     dispatch({
       type: "REGISTER",
       payload: {
@@ -260,7 +234,7 @@ function AuthProvider({ children }) {
       },
     });
     if (responseJson.statusCode == 201) {
-      toast.success("Đăng ký làm phụ huynh thành công");
+      toast.success("Đăng ký thành viên thành công");
       const timeout = setTimeout(() => {
         window.location.replace("/login");
       }, 2000);
@@ -273,64 +247,6 @@ function AuthProvider({ children }) {
     dispatch({ type: "LOGOUT" });
   };
 
-  const register_tutor = async (tutor) => {
-    const formData = new FormData();
-    formData.append("Fullname", tutor.fullName);
-    formData.append("Email", tutor.email);
-    formData.append("Password", tutor.password);
-    formData.append("Phonenumber", tutor.phoneNumber);
-    formData.append("DateOfBirth", tutor.dateOfBirth);
-    formData.append("Address", tutor.address);
-    formData.append("District", tutor.district);
-    formData.append("City", tutor.city);
-    formData.append("Gender", tutor.gender);
-    formData.append("IdentityNumber", tutor.idCart);
-    formData.append("Job", tutor.job);
-    formData.append("Major", tutor.major);
-
-    for (let i = 0; i < tutor.imageUser.length; i++) {
-      formData.append("imageFile", tutor.imageUser[i]);
-    }
-    for (let i = 0; i < tutor.imageIdentity.length; i++) {
-      formData.append("idenFiles", tutor.imageIdentity[i]);
-    }
-
-    for (let i = 0; i < tutor.imageCertificate.length; i++) {
-      formData.append("cerFiles", tutor.imageCertificate[i]);
-    }
-
-    // Upload ảnh chứng chỉ
-    for (const cerFileName of tutor.imageCertificate) {
-      const cerFile = await fetch(cerFileName)
-        .then((response) => response.blob())
-        .then(
-          (blob) => new File([blob], `${cerFileName}`, { type: "image/jpeg" })
-        );
-      formData.append("cerFiles", cerFile);
-    }
-
-    console.log(formData);
-    const response = await RegisterTutor(formData);
-    const responseJson = await response.json();
-    if (responseJson.statusCode == 400) {
-      toast.error(responseJson.message);
-      return;
-    }
-    const user = responseJson.data;
-    dispatch({
-      type: "REGISTER_TUTOR",
-      payload: {
-        user,
-      },
-    });
-    if (responseJson.statusCode == 201) {
-      toast.success("Đăng ký làm gia sư thành công");
-      const timeout = setTimeout(() => {
-        window.location.replace("/login");
-      }, 2000);
-      return () => clearTimeout(timeout);
-    }
-  };
   return (
     <>
       <AuthContext.Provider
@@ -341,7 +257,6 @@ function AuthProvider({ children }) {
           login_type,
           logout,
           register,
-          register_tutor,
         }}
       >
         {children}

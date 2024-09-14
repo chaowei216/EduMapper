@@ -8,7 +8,7 @@ export default function Content({ src }) {
         alignSelf: "center",
         gap: 4,
         width: "70%",
-        maxWidth: "42rem",
+        maxWidth: "50rem",
       }}
     >
       <img src={src}></img>

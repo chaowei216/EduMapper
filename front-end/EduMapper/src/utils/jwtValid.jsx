@@ -20,7 +20,7 @@ const isValidToken = (accessToken) => {
   return decoded.exp > currentTime;
 };
 
-const handleTokenExpired = (exp, refreshToken, accessToken) => {
+const handleTokenExpired = (exp, refreshToken) => {
   const currentTime = Date.now();
   const timeLeft = exp * 1000 - currentTime;
   // const refreshTimeLeft = timeLeft + 3000; // 5 second after expiration
@@ -41,7 +41,7 @@ const handleTokenExpired = (exp, refreshToken, accessToken) => {
       return;
     }
 
-    RefreshToken(accessToken, refreshToken)
+    RefreshToken(refreshToken)
       .then((response) => {
         if (response.statusCode === 200) {
           const { data } = response;
@@ -77,7 +77,7 @@ const setSession = (accessToken, refreshToken) => {
     // This function below will handle when token is expired
     const { exp } = jwtDecode(accessToken);
     // console.log(exp);
-    handleTokenExpired(exp, refreshToken, accessToken);
+    handleTokenExpired(exp, refreshToken);
   } else {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");

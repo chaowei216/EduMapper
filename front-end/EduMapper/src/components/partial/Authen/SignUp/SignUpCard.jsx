@@ -2,19 +2,22 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import MuiCard from "@mui/material/Card";
-import Checkbox from "@mui/material/Checkbox";
-import Divider from "@mui/material/Divider";
-import FormLabel from "@mui/material/FormLabel";
-import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-
+import FormLabel from "@mui/material/FormLabel";
+import FormControl from "@mui/material/FormControl";
+import Divider from "@mui/material/Divider";
+import RadioGroup from "@mui/material/RadioGroup";
+import Radio from "@mui/material/Radio";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import { styled } from "@mui/material/styles";
+import { Link } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { GoogleIcon, SitemarkIcon } from "../CustomIcons";
+import useAuth from "../../../../hooks/useAuth";
 
-import { GoogleIcon, FacebookIcon, SitemarkIcon } from "../CustomIcons";
-import { Link, NavLink } from "react-router-dom";
-
+// Styled Card component
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -27,264 +30,268 @@ const Card = styled(MuiCard)(({ theme }) => ({
   [theme.breakpoints.up("sm")]: {
     width: "450px",
   },
-  ...theme.applyStyles("dark", {
-    boxShadow:
-      "hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px",
-  }),
 }));
 
+// Schema validation với Yup
+const validationSchema = Yup.object({
+  fullName: Yup.string().required("Bắt buộc"),
+  email: Yup.string().email("Email không hợp lệ").required("Bắt buộc"),
+  password: Yup.string()
+    .min(6, "Mật khẩu phải có ít nhất 6 ký tự")
+    .required("Bắt buộc"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password"), null], "Mật khẩu không khớp")
+    .required("Bắt buộc"),
+  gender: Yup.string().required("Bắt buộc"),
+  dateOfBirth: Yup.date().required("Bắt buộc"),
+  phoneNumber: Yup.string()
+    .matches(/^[0-9]{10,11}$/, "Số điện thoại không hợp lệ")
+    .required("Bắt buộc"),
+});
+
 export default function SignUpCard() {
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
+  const { register } = useAuth();
+  const handleSubmit = async (values) => {
+    const userRegister = {
+      fullName: values.fullName,
+      email: values.email,
+      password: values.password,
+      gender: values.gender,
+      dateOfBirth: values.dateOfBirth,
+      phoneNumber: values.phoneNumber,
+    };
+    await register(userRegister);
   };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
-
-  const validateInputs = () => {
-    const email = document.getElementById("email");
-    const password = document.getElementById("password");
-
-    let isValid = true;
-
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage("Please enter a valid email address.");
-      isValid = false;
-    } else {
-      setEmailError(false);
-      setEmailErrorMessage("");
-    }
-
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage("Password must be at least 6 characters long.");
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage("");
-    }
-
-    return isValid;
-  };
+  // Sử dụng Formik để quản lý form và validation
+  const formik = useFormik({
+    initialValues: {
+      fullName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      gender: "",
+      dateOfBirth: "",
+      phoneNumber: "",
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      handleSubmit(values);
+    },
+  });
 
   return (
-    <Card sx={{ boxShadow: "none" }}>
+    <Card>
       <Box sx={{ display: { xs: "flex", md: "none" } }}>
         <SitemarkIcon />
       </Box>
       <Typography
         component="h1"
         variant="h4"
-        sx={{
-          color: "#000",
-          textAlign: "center",
-          fontFamily: "Inter",
-          fontSize: "42px",
-          fontStyle: "normal",
-          fontWeight: 400,
-          lineHeight: "normal",
-          textTransform: "uppercase",
-        }}
         textAlign="center"
+        sx={{ color: "#000", textTransform: "uppercase", fontSize: "42px" }}
       >
         Edumapper
       </Typography>
       <Typography
         component="h1"
         variant="h3"
-        sx={{
-          color: "#000",
-          fontFamily: "Urbanist",
-          fontSize: "20px",
-          fontStyle: "normal",
-          fontWeight: 400,
-          lineHeight: "normal",
-        }}
         textAlign="center"
+        sx={{ color: "#000", fontSize: "20px" }}
       >
         Chào mừng tới cộng đồng EduMapper
       </Typography>
       <Box
         component="form"
-        onSubmit={handleSubmit}
+        onSubmit={formik.handleSubmit}
         noValidate
-        sx={{ display: "flex", flexDirection: "column", width: "100%", gap: 2 }}
+        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
       >
+        {/* Full Name */}
         <FormControl>
-          <FormLabel
-            htmlFor="email"
-            sx={{
-              marginBottom: "20px",
-              fontWeight: "700",
-              fontSize: "19px",
-              fontFamily: "Inter",
-              color: "#294563",
-            }}
-          >
-            Tên
-          </FormLabel>
+          <FormLabel htmlFor="fullName">Họ và tên</FormLabel>
           <TextField
-            error={emailError}
-            helperText={emailErrorMessage}
-            id="email"
-            type="email"
-            name="email"
-            placeholder="Vui lòng điền email"
-            autoComplete="email"
-            autoFocus
-            required
+            id="fullName"
+            name="fullName"
+            placeholder="Vui lòng điền họ và tên"
             fullWidth
             variant="outlined"
-            color={emailError ? "error" : "primary"}
-            sx={{ ariaLabel: "email" }}
+            value={formik.values.fullName}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            helperText={
+              formik.touched.fullName && formik.errors.fullName
+                ? formik.errors.fullName
+                : ""
+            }
+            error={formik.touched.fullName && Boolean(formik.errors.fullName)}
           />
         </FormControl>
+
+        {/* Email */}
         <FormControl>
-          <FormLabel
-            htmlFor="email"
-            sx={{
-              marginBottom: "20px",
-              fontWeight: "700",
-              fontSize: "19px",
-              fontFamily: "Inter",
-              color: "#294563",
-            }}
-          >
-            Email
-          </FormLabel>
+          <FormLabel htmlFor="email">Email</FormLabel>
           <TextField
-            error={emailError}
-            helperText={emailErrorMessage}
             id="email"
-            type="email"
             name="email"
+            type="email"
             placeholder="Vui lòng điền email"
-            autoComplete="email"
-            autoFocus
-            required
             fullWidth
             variant="outlined"
-            color={emailError ? "error" : "primary"}
-            sx={{ ariaLabel: "email" }}
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            helperText={
+              formik.touched.email && formik.errors.email
+                ? formik.errors.email
+                : ""
+            }
+            error={formik.touched.email && Boolean(formik.errors.email)}
           />
         </FormControl>
+
+        {/* Phone Number */}
         <FormControl>
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <FormLabel
-              htmlFor="password"
-              sx={{
-                marginBottom: "20px",
-                fontWeight: "700",
-                fontSize: "19px",
-                fontFamily: "Inter",
-                color: "#294563",
-              }}
-            >
-              Mật khẩu
-            </FormLabel>
-          </Box>
+          <FormLabel htmlFor="phoneNumber">Số điện thoại</FormLabel>
           <TextField
-            error={passwordError}
-            helperText={passwordErrorMessage}
-            name="password"
-            placeholder="Vui lòng điền mật khẩu"
-            type="password"
+            id="phoneNumber"
+            name="phoneNumber"
+            placeholder="Vui lòng điền số điện thoại"
+            fullWidth
+            variant="outlined"
+            value={formik.values.phoneNumber}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            helperText={
+              formik.touched.phoneNumber && formik.errors.phoneNumber
+                ? formik.errors.phoneNumber
+                : ""
+            }
+            error={
+              formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)
+            }
+          />
+        </FormControl>
+
+        {/* Password */}
+        <FormControl>
+          <FormLabel htmlFor="password">Mật khẩu</FormLabel>
+          <TextField
             id="password"
-            autoComplete="current-password"
-            autoFocus
-            required
+            name="password"
+            type="password"
+            placeholder="Vui lòng điền mật khẩu"
             fullWidth
             variant="outlined"
-            color={passwordError ? "error" : "primary"}
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            helperText={
+              formik.touched.password && formik.errors.password
+                ? formik.errors.password
+                : ""
+            }
+            error={formik.touched.password && Boolean(formik.errors.password)}
           />
         </FormControl>
+
+        {/* Confirm Password */}
         <FormControl>
-          <FormLabel
-            htmlFor="email"
-            sx={{
-              marginBottom: "20px",
-              fontWeight: "700",
-              fontSize: "19px",
-              fontFamily: "Inter",
-              color: "#294563",
-            }}
-          >
-            Xác nhận mật khẩu
-          </FormLabel>
+          <FormLabel htmlFor="confirmPassword">Xác nhận mật khẩu</FormLabel>
           <TextField
-            error={emailError}
-            helperText={emailErrorMessage}
-            id="email"
-            type="email"
-            name="email"
-            placeholder="Vui lòng điền email"
-            autoComplete="email"
-            autoFocus
-            required
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            placeholder="Xác nhận mật khẩu"
             fullWidth
             variant="outlined"
-            color={emailError ? "error" : "primary"}
-            sx={{ ariaLabel: "email" }}
+            value={formik.values.confirmPassword}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            helperText={
+              formik.touched.confirmPassword && formik.errors.confirmPassword
+                ? formik.errors.confirmPassword
+                : ""
+            }
+            error={
+              formik.touched.confirmPassword &&
+              Boolean(formik.errors.confirmPassword)
+            }
           />
         </FormControl>
+
+        {/* Date of Birth */}
+        <FormControl>
+          <FormLabel htmlFor="dateOfBirth">Ngày sinh</FormLabel>
+          <TextField
+            id="dateOfBirth"
+            name="dateOfBirth"
+            type="date"
+            fullWidth
+            InputLabelProps={{ shrink: true }}
+            value={formik.values.dateOfBirth}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            helperText={
+              formik.touched.dateOfBirth && formik.errors.dateOfBirth
+                ? formik.errors.dateOfBirth
+                : ""
+            }
+            error={
+              formik.touched.dateOfBirth && Boolean(formik.errors.dateOfBirth)
+            }
+          />
+        </FormControl>
+
+        {/* Gender */}
+        <FormControl>
+          <FormLabel>Giới tính</FormLabel>
+          <RadioGroup
+            name="gender"
+            value={formik.values.gender}
+            onChange={formik.handleChange}
+          >
+            <FormControlLabel value="male" control={<Radio />} label="Nam" />
+            <FormControlLabel value="female" control={<Radio />} label="Nữ" />
+          </RadioGroup>
+          {formik.touched.gender && formik.errors.gender ? (
+            <Typography color="error">{formik.errors.gender}</Typography>
+          ) : null}
+        </FormControl>
+
+        {/* Submit Button */}
         <Button
           type="submit"
           fullWidth
           variant="contained"
-          onClick={validateInputs}
           sx={{ background: "#000" }}
         >
           Đăng ký
         </Button>
+
         <Divider
-          style={{
-            background: "#000",
-            height: "1px",
-            margin: "10px 0px 10px 0px",
-          }}
+          style={{ background: "#000", height: "1px", margin: "10px 0" }}
         />
+
         <Button
-          type="submit"
           fullWidth
           variant="outlined"
           sx={{
             textTransform: "none",
             border: "2px solid #E8E8E8",
             color: "#000",
-            fontWeight: "500",
           }}
           onClick={() => alert("Sign in with Google")}
           startIcon={<GoogleIcon />}
         >
           Đăng nhập với Google
         </Button>
-        <Typography
-          mt={2}
-          sx={{ textAlign: "center", color: "var(--Gray-3, #828282)" }}
-        >
-          Có tài khoản rồi ?{" "}
+
+        <Typography mt={2} sx={{ textAlign: "center", color: "#828282" }}>
+          Có tài khoản rồi?{" "}
           <span>
             <Link
               to="/login"
               style={{
-                alignSelf: "center",
                 color: "#7F265B",
                 textDecoration: "none",
                 fontSize: "15px",

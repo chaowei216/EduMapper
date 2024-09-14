@@ -53,6 +53,7 @@ export default function SignInCard() {
   const { login } = useAuth();
   const handleClickOpen = () => {
     setOpen(true);
+    navigate('/forgot-password')
   };
 
   const handleClose = () => {
@@ -75,6 +76,18 @@ export default function SignInCard() {
         email: res.user.email,
         avatar: res.user.photoURL,
       };
+      //xu ly logic login sau khi dang nhap lan sau
+
+      // if (!user.isProfileUpdated) {
+      // Nếu chưa cập nhật thông tin, điều hướng tới trang cập nhật
+      //   window.location.href = "/update-profile";
+      // } else {
+      // Nếu đã cập nhật thông tin, điều hướng tới trang chính
+      //   window.location.href = "/dashboard";
+      // }
+
+      ///const response = await
+
       navigate("/complete-profile", { state: { type: "Google", user } });
     } catch (err) {
       console.log(err);
@@ -90,7 +103,7 @@ export default function SignInCard() {
         email: res.user.email,
         avatar: res.user.photoURL,
       };
-      navigate("/complete-profile", { type: "Facebook" ,state: { user } });
+      navigate("/complete-profile", { type: "Facebook", state: { user } });
     } catch (err) {
       console.log(err);
     }

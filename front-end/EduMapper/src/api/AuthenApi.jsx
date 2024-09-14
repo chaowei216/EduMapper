@@ -20,14 +20,15 @@ export const SignIn = async (value) => {
   }
 };
 
-export const RegisterParent = async (formData) => {
+export const Register = async (data) => {
   try {
-    const response = await fetch(`${baseUrl}/api/Auth/register-parents`, {
+    const response = await fetch(`${baseUrl}/api/Auth/register`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        "Content-Type": "application/json",
+        //Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
-      body: formData,
+      body: JSON.stringify(data),
     });
     if (!response.ok) {
       console.error("There was a problem with API");
@@ -39,26 +40,7 @@ export const RegisterParent = async (formData) => {
   }
 };
 
-export const RegisterTutor = async (formData) => {
-  try {
-    const response = await fetch(`${baseUrl}/api/Auth/register-tutor`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-      body: formData,
-    });
-    if (!response.ok) {
-      console.error("There was a problem with API");
-    }
-    return response;
-  } catch (error) {
-    console.error("There was a problem with the fetch operation:", error);
-    throw error;
-  }
-};
-
-export const RefreshToken = (accessToken, refreshToken) => {
+export const RefreshToken = (refreshToken) => {
   const url = `${baseUrl}/api/Auth/refresh-token`;
   const request = {
     method: "POST",
@@ -66,7 +48,7 @@ export const RefreshToken = (accessToken, refreshToken) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
     },
-    body: JSON.stringify({ accessToken, refreshToken }),
+    body: JSON.stringify({ refreshToken }),
   };
 
   return fetch(url, request)
@@ -191,16 +173,16 @@ export const GetUserByToken = (refreshToken) => {
     });
 };
 
-export const ResetPassword = async (otp, password, confirmPassword, email) => {
+export const ResetPassword = async (otp, password, email) => {
   try {
     const url = `${baseUrl}/api/Auth/reset-password`;
     const request = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        //Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
-      body: JSON.stringify({ otp, password, confirmPassword, email }),
+      body: JSON.stringify({ email: email, token: otp, newPassword: password }),
     };
     const response = await fetch(url, request);
     return response;
