@@ -180,6 +180,13 @@ namespace BLL.Service
             // user is not existed
             if (user == null)
             {
+                if (string.IsNullOrEmpty(request.FullName)
+                    || string.IsNullOrEmpty(request.PhoneNumber)
+                    || string.IsNullOrEmpty(request.Gender))
+                {
+                    throw new BadRequestException(GeneralMessage.BadRequest);
+                }
+
                 user = _mapper.Map<ApplicationUser>(request);
                 user.Status = (int)UserStatusEnum.ACTIVE;
                 user.UserName = request.Email;
@@ -351,10 +358,10 @@ namespace BLL.Service
             // add role for user
             await _userManager.AddToRoleAsync(mappedUser, RoleEnum.CUSTOMER.ToString());
 
-            var responseUser = _mapper.Map<UserAuthDTO>(user);
-            responseUser.ImageLinked = !string.IsNullOrEmpty(user!.ImageLink);
-            responseUser.Avatar = !string.IsNullOrEmpty(user.Avatar) ? user.Avatar : user.ImageLink;
-            var roleList = await _userManager.GetRolesAsync(user);
+            var responseUser = _mapper.Map<UserAuthDTO>(mappedUser);
+            responseUser.ImageLinked = !string.IsNullOrEmpty(mappedUser!.ImageLink);
+            responseUser.Avatar = !string.IsNullOrEmpty(mappedUser.Avatar) ? mappedUser.Avatar : mappedUser.ImageLink;
+            var roleList = await _userManager.GetRolesAsync(mappedUser);
             responseUser.RoleName = roleList.Count == 0 ? Config.AdminName : roleList[0];
 
             return new ResponseDTO
