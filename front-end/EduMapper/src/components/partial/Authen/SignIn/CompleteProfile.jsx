@@ -19,10 +19,6 @@ import useAuth from "../../../../hooks/useAuth";
 // Define validation schema using Yup
 const validationSchema = Yup.object({
   gender: Yup.string().required("Vui lòng chọn giới tính"),
-  password: Yup.string()
-    .required("Vui lòng nhập mật khẩu")
-    .min(8, "Mật khẩu ít nhất là 8 ký tự")
-    .max(20, "Mật khẩu không được quá 20 ký tự"),
   address: Yup.string()
     .min(5, "Địa chỉ có ít nhất 5 ký tự")
     .max(70, "Địa chỉ nhiều nhất là 70 ký tự")
@@ -51,7 +47,6 @@ export default function CompleteProfile() {
       phoneNumber: "",
       address: "",
       gender: "",
-      password: "",
     },
     onSubmit: (values) => {
       submitForm(values);
@@ -63,9 +58,8 @@ export default function CompleteProfile() {
   const submitForm = async (values) => {
     // Combine user data with additional values
     const updatedUser = { ...initialUser, ...values };
-    console.log("Updated User Data:", updatedUser);
     // Navigate to another page if needed
-    await login_type(updatedUser);
+    await login_type(state?.type, updatedUser);
   };
 
   return (
@@ -150,22 +144,6 @@ export default function CompleteProfile() {
                 helperText={
                   formik.touched.phoneNumber && formik.errors.phoneNumber
                 }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                label="Mật khẩu"
-                type="password"
-                id="password"
-                autoComplete="new-password"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.password && !!formik.errors.password}
-                helperText={formik.touched.password && formik.errors.password}
-                sx={{ marginBottom: 2 }}
               />
             </Grid>
             <Grid item xs={12}>

@@ -229,4 +229,18 @@ export const Logout = async (refreshToken) => {
 
 export const LoginExternal = async (type, user) => {
   console.log(user);
+  try {
+    const url = `${baseUrl}/api/Auth/login-external?type=${type}`;
+    const request = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    };
+    const response = await fetch(url, request);
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
 };

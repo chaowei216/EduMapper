@@ -13,6 +13,7 @@ import TakeTestPage from "../pages/TakeTestPage/TakeTestPage";
 import TakeTestPrePage from "../pages/TakeTestPage/TakeTestPrePage";
 import CompleteProfile from "../components/partial/Authen/SignIn/CompleteProfile";
 import ListeningTestPage from "../pages/UserTest/ListeningTestPage";
+import GuestAuth from "../Guard/GuestAuth";
 
 export const router = createBrowserRouter([
   {
@@ -25,7 +26,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <LoginPage />,
+    element: (
+      <GuestAuth>
+        <LoginPage />
+      </GuestAuth>
+    ),
   },
   {
     path: "/register",

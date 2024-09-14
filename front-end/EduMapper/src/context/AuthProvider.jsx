@@ -157,13 +157,15 @@ function AuthProvider({ children }) {
       email: email,
       password: password,
     };
+    console.log(userInput);
+
     const response = await SignIn(userInput);
     if (!response.ok) {
       toast.error("Đăng nhập không thành công");
       return;
     }
     const responseJson = await response.json();
-    if (responseJson.statusCode == 400) {
+    if (responseJson.statusCode == 401) {
       toast.error(responseJson.message);
       return;
     }
@@ -174,11 +176,11 @@ function AuthProvider({ children }) {
       toast.error("Tài khoản của bạn đã bị cấm, xin vui lòng thử lại sau");
       return;
     }
-    const { token, user } = responseJson.data;
+    const { accessToken, refreshToken, user } = responseJson.metaData;
     //localStorage.setItem("accessToken", accessToken);
-    console.log(token.accessToken);
+    console.log(user);
     if (user.roleName == "Admin") {
-      window.localStorage.setItem("accessToken", token.accessToken);
+      window.localStorage.setItem("accessToken", accessToken);
       dispatch({
         type: "LOGIN",
         payload: {
@@ -187,7 +189,7 @@ function AuthProvider({ children }) {
       });
       return;
     }
-    setSession(token.accessToken, token.refreshToken);
+    setSession(accessToken, refreshToken);
     dispatch({
       type: "LOGIN",
       payload: {
@@ -196,31 +198,34 @@ function AuthProvider({ children }) {
     });
   };
 
-  const login_type = async (user) => {
+  const login_type = async (type, user) => {
     console.log(user);
-    // if (res) {
-    //   const response = await LoginExternal(type, {
-    //     fullName: res.user.displayName,
-    //     email: res.user.email,
-    //     avatar: res.user.photoURL,
-    //   });
-    // const response = await SignIn(userInput);
-    //   console.log(response);
-    //   if (response.status === 200) {
-    //     const { accessToken, user, refreshToken } = response.data.metaData;
-    //     await setSession(accessToken, refreshToken);
-    //     dispatch({
-    //       type: "LOGIN",
-    //       payload: {
-    //         user,
-    //       },
-    //     });
-    //     window.location.href = "/";
-    //     toast.success(response.message);
-    //   }
-    // } else {
-    //   toast.error("Fail to login external");
-    // }
+    const inputUser = {
+      fullName: user.fullName,
+      email: user.email,
+      gender: user.gender,
+      dateOfBirth: "2024-09-13T09:40:31.336Z",
+      phoneNumber: user.phoneNumber,
+      imageLink: user.avatar,
+    };
+    const response = await LoginExternal(type, inputUser);
+    const responseJson = await response.json();
+    console.log(responseJson.metaData);
+    if (responseJson.statusCode === 200) {
+      const { accessToken, user, refreshToken } = responseJson.metaData;
+      await setSession(accessToken, refreshToken);
+      dispatch({
+        type: "LOGIN",
+        payload: {
+          user,
+        },
+      });
+      toast.success(responseJson.message);
+      const timeout = setTimeout(() => {
+        window.location.replace("/");
+      }, 2000);
+      return () => clearTimeout(timeout);
+    }
     return;
   };
 

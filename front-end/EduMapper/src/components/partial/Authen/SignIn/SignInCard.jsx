@@ -11,10 +11,10 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import useAuth from "../../../../hooks/useAuth";
 import { styled } from "@mui/material/styles";
-
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from "../CustomIcons";
 import { Link, useNavigate } from "react-router-dom";
-
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -62,11 +62,8 @@ export default function SignInCard() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-    await login(data);
+
+    await login(data.get("email"), data.get("password"));
   };
 
   const handleGoogleSignIn = async () => {
@@ -78,7 +75,7 @@ export default function SignInCard() {
         email: res.user.email,
         avatar: res.user.photoURL,
       };
-      navigate("/complete-profile", { state: { user } });
+      navigate("/complete-profile", { state: { type: "Google", user } });
     } catch (err) {
       console.log(err);
     }
@@ -93,7 +90,7 @@ export default function SignInCard() {
         email: res.user.email,
         avatar: res.user.photoURL,
       };
-      navigate("/complete-profile", { state: { user } });
+      navigate("/complete-profile", { type: "Facebook" ,state: { user } });
     } catch (err) {
       console.log(err);
     }
@@ -107,7 +104,7 @@ export default function SignInCard() {
 
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
       setEmailError(true);
-      setEmailErrorMessage("Please enter a valid email address.");
+      setEmailErrorMessage("Vui lòng điền đúng format email.");
       isValid = false;
     } else {
       setEmailError(false);
@@ -116,7 +113,7 @@ export default function SignInCard() {
 
     if (!password.value || password.value.length < 6) {
       setPasswordError(true);
-      setPasswordErrorMessage("Password must be at least 6 characters long.");
+      setPasswordErrorMessage("Mật khẩu tối thiểu phải > 6 ký tự.");
       isValid = false;
     } else {
       setPasswordError(false);
@@ -127,7 +124,7 @@ export default function SignInCard() {
   };
 
   return (
-    <Card sx={{ boxShadow: "none", height: "38rem" }}>
+    <Card sx={{ boxShadow: "none", height: "44rem" }}>
       <Box sx={{ display: { xs: "flex", md: "none" } }}>
         <SitemarkIcon />
       </Box>
@@ -226,6 +223,9 @@ export default function SignInCard() {
             name="email"
             placeholder="Vui lòng điền email"
             autoComplete="email"
+            InputProps={{
+              startAdornment: <MailOutlineIcon />,
+            }}
             autoFocus
             required
             fullWidth
@@ -258,6 +258,9 @@ export default function SignInCard() {
             id="password"
             autoComplete="current-password"
             autoFocus
+            InputProps={{
+              startAdornment: <LockOutlinedIcon />,
+            }}
             required
             fullWidth
             variant="outlined"
