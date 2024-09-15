@@ -51,6 +51,7 @@ builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddUnitOfWork();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 // CORS
 builder.Services.AddCors(options =>
