@@ -28,7 +28,11 @@ namespace EXE201_EduMapper.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(new ResponseDTO
+                {
+                    StatusCode = StatusCodeEnum.BadRequest,
+                    Message = ModelState.ToString()!
+                });
             }
 
             var result = await _authService.LoginNormal(request);
@@ -44,7 +48,11 @@ namespace EXE201_EduMapper.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(new ResponseDTO
+                {
+                    StatusCode = StatusCodeEnum.BadRequest,
+                    Message = ModelState.ToString()!
+                });
             }
 
             var result = await _authService.LoginExternalParties(type, request);
