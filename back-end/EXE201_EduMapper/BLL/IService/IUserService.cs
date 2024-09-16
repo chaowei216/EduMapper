@@ -5,6 +5,6 @@ namespace BLL.IService
 {
     public interface IUserService
     {
-        
+        Task<ResponseDTO> GetUserByEmail(string email);
     }
 }
