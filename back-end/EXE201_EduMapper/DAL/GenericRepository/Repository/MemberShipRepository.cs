@@ -11,5 +11,12 @@ namespace DAL.GenericRepository.Repository
         public MemberShipRepository(DataContext context) : base(context)
         {
         }
+
+        public bool IsUniqueName(string name)
+        {
+            var membership = _context.MemberShips.Where(p => p.MemberShipName.ToLower() == name.ToLower()).FirstOrDefault();
+
+            return membership == null;
+        }
     }
 }
