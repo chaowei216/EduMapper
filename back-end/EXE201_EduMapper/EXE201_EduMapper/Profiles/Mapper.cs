@@ -14,6 +14,7 @@ namespace EXE201_EduMapper.Profiles
             CreateMap<ExternalLoginDTO, ApplicationUser>().ReverseMap();   
             CreateMap<MemberShip, MemberShipDTO>().ReverseMap();
             CreateMap<MemberShipCreateDTO, MemberShip>().ReverseMap();
+            CreateMap<MemberShipUpdateDTO, MemberShip>().ReverseMap();
         }
     }
 }

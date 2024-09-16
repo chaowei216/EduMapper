@@ -10,14 +10,14 @@ namespace BLL.IService
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        ResponseDTO GetAllMemberShips(QueryDTO request);
+        Task<ResponseDTO> GetAllMemberShips(QueryDTO request);
 
         /// <summary>
         /// Create new membership
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        ResponseDTO CreateMemberShip(MemberShipCreateDTO request);
+        MemberShipDTO CreateMemberShip(MemberShipCreateDTO request);
 
         /// <summary>
         /// Check if membership name is unique
@@ -25,5 +25,27 @@ namespace BLL.IService
         /// <param name="name"></param>
         /// <returns></returns>
         bool CheckUniqueMemberShipName(string name);
+
+        /// <summary>
+        /// Get membership by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<ResponseDTO> GetMemberShip(string id);
+
+        /// <summary>
+        /// Update membership
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task UpdateMemberShip(string id, MemberShipUpdateDTO request);
+
+        /// <summary>
+        /// Delete mebership
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task DeleteMemberShip(string id);
     }
 }

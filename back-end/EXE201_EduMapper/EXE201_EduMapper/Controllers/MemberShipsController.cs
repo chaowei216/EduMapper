@@ -1,8 +1,10 @@
 ﻿using BLL.IService;
+using Common.Constant.Message;
 using Common.Constant.Message.MemberShip;
 using Common.DTO;
 using Common.DTO.MemberShip;
 using Common.Enum;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EXE201_EduMapper.Controllers
@@ -20,14 +22,25 @@ namespace EXE201_EduMapper.Controllers
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(ResponseDTO))]
-        public IActionResult GetMemberships([FromQuery] QueryDTO request)
+        public async Task<IActionResult> GetMemberships([FromQuery] QueryDTO request)
         {
-            var result = _membershipService.GetAllMemberShips(request);
+            var result = await _membershipService.GetAllMemberShips(request);
 
             return Ok(result);
         }
 
+        [HttpGet("{id}")]
+        [ProducesResponseType(200, Type = typeof(ResponseDTO))]
+        [ProducesResponseType(404, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> GetMemberShip(string id)
+        {
+            var response = await _membershipService.GetMemberShip(id);
+
+            return Ok(response);
+        }
+
         [HttpPost]
+        //[Authorize]
         [ProducesResponseType(201, Type = typeof(ResponseDTO))]
         [ProducesResponseType(400, Type = typeof(ResponseDTO))]
         public IActionResult CreateMemberShip([FromBody] MemberShipCreateDTO request)
@@ -51,7 +64,46 @@ namespace EXE201_EduMapper.Controllers
             }
 
             var response = _membershipService.CreateMemberShip(request);
-            return Created(uri: string.Empty, value: response);
+
+            var location = Url.Action("GetMemberShip", new { id = response.MemberShipId });
+
+            return Created(uri: location, value: new ResponseDTO
+            {
+                StatusCode = StatusCodeEnum.Created,
+                IsSuccess = true,
+                Message = GeneralMessage.CreateSuccess,
+                MetaData = response
+            });
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> UpdateMemberShip(string id, [FromBody] MemberShipUpdateDTO request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO
+                {
+                    Message = ModelState.ToString()!,
+                    StatusCode = StatusCodeEnum.BadRequest
+                });
+            }
+
+            await _membershipService.UpdateMemberShip(id, request);
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> DeleteMemberShip(string id)
+        {
+            await _membershipService.DeleteMemberShip(id);
+
+            return NoContent();
         }
     }
 }
