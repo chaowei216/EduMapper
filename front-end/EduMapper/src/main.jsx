@@ -9,6 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { AuthProvider } from "./context/AuthProvider.jsx";
+
 const muiTheme = createTheme({
   breakpoints: {
     values: {
