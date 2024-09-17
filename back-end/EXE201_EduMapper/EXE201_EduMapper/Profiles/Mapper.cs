@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Common.DTO.Auth;
+using Common.DTO.MemberShip;
 using Common.DTO.Exam;
 using Common.DTO.Passage;
 using Common.DTO.Question;
@@ -14,6 +15,10 @@ namespace EXE201_EduMapper.Profiles
         {
             CreateMap<RegisterRequestDTO, ApplicationUser>().ReverseMap();
             CreateMap<UserAuthDTO, ApplicationUser>().ReverseMap();
+            CreateMap<ExternalLoginDTO, ApplicationUser>().ReverseMap();   
+            CreateMap<MemberShip, MemberShipDTO>().ReverseMap();
+            CreateMap<MemberShipCreateDTO, MemberShip>().ReverseMap();
+            CreateMap<MemberShipUpdateDTO, MemberShip>().ReverseMap();
             CreateMap<ExternalLoginDTO, ApplicationUser>().ReverseMap();    
             CreateMap<Question, QuestionDTO>().ReverseMap();
             CreateMap<QuestionChoiceDTO, QuestionChoice>().ReverseMap();
