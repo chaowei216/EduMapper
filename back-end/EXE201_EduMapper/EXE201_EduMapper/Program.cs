@@ -52,6 +52,9 @@ builder.Services.AddUnitOfWork();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<IPassageService, PassageService>();
+builder.Services.AddScoped<ITestService, TestService>();
 
 // CORS
 builder.Services.AddCors(options =>
