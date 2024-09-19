@@ -1,5 +1,6 @@
 ﻿using Common.DTO;
 using Common.DTO.MemberShip;
+using DAL.Models;
 
 namespace BLL.IService
 {
@@ -47,5 +48,20 @@ namespace BLL.IService
         /// <param name="id"></param>
         /// <returns></returns>
         Task DeleteMemberShip(string id);
+
+        /// <summary>
+        /// add memberShip to user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="memberShipId"></param>
+        /// <returns></returns>
+        Task AddMemberShipToUser(ApplicationUser user, string memberShipId);
+
+        /// <summary>
+        /// Get membership by name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        Task<MemberShip?> GetMemberShipByName(string name);
     }
 }
