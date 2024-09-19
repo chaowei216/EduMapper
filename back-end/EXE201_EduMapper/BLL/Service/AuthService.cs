@@ -22,18 +22,21 @@ namespace BLL.Service
         private readonly ITokenService _tokenService;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
+        private readonly IMembershipService _membershipService;
         private readonly IMapper _mapper;
 
         public AuthService(UserManager<ApplicationUser> userManager,
                            ITokenService tokenService,
                            IEmailService emailService,
                            IConfiguration configuration,
+                           IMembershipService membershipService,
                            IMapper mapper)
         {
             _userManager = userManager;
             _tokenService = tokenService;
             _emailService = emailService;
             _configuration = configuration;
+            _membershipService = membershipService;
             _mapper = mapper;
         }
 
@@ -201,7 +204,12 @@ namespace BLL.Service
                     throw new BadRequestException(errors);
                 }
 
-                // send email password
+                // add membership
+                var free = await _membershipService.GetMemberShipByName(Config.MEMBERSHIP_FREE);
+                if (free != null)
+                {
+                    await _membershipService.AddMemberShipToUser(user, free.MemberShipId!);
+                }
 
                 // if success
                 // add role for user
@@ -355,6 +363,13 @@ namespace BLL.Service
             }
 
             // if success
+            // add membership
+            var free = await _membershipService.GetMemberShipByName(Config.MEMBERSHIP_FREE);
+            if (free != null)
+            {
+                await _membershipService.AddMemberShipToUser(mappedUser, free.MemberShipId!);
+            }
+
             // add role for user
             await _userManager.AddToRoleAsync(mappedUser, RoleEnum.CUSTOMER.ToString());
 
