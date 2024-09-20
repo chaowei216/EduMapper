@@ -6,8 +6,8 @@ namespace Common.DTO.MemberShip
     {
         [Required]
         public string MemberShipName { get; set; } = null!;
-        [Required]
-        public string Description { get; set; } = null!;
+        public List<string>? Features { get; set; } = null!;
+        public List<string>? NoFeatures { get; set; } = null!;
         [DataType(DataType.Currency)]
         public double Price { get; set; }
     }
