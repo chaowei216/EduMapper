@@ -14,5 +14,6 @@ namespace DAL.Models
         [ForeignKey("ExamId")]
         public Exam Exam { get; set; } = null!;
         public ICollection<Question> SubQuestion { get; set; } = null!;
+        public ICollection<PassageSection> Sections { get; set; } = null!;
     }
 }

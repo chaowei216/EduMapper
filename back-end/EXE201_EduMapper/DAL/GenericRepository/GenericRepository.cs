@@ -15,7 +15,7 @@ namespace DAL.Repository
             _dbSet = context.Set<TEntity>();
         }
 
-        public virtual IEnumerable<TEntity> Get(
+        public virtual async Task<IEnumerable<TEntity>> Get(
            Expression<Func<TEntity, bool>>? filter,
            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
            int? pageIndex = null,
@@ -48,12 +48,12 @@ namespace DAL.Repository
                 query = query.Skip(validPageIndex * validPageSize).Take(validPageSize);
             }
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual TEntity? GetByID(object id)
+        public virtual async Task<TEntity?> GetByID(object id)
         {
-            return _dbSet.Find(id);
+            return await _dbSet.FindAsync(id);
         }
 
         public virtual void Insert(TEntity entity)
@@ -62,16 +62,16 @@ namespace DAL.Repository
             _dbSet.Add(entity);
         }
 
-        public virtual bool Delete(object id)
+        public virtual async Task<bool> Delete(object id)
         {
-            TEntity? entityToDelete = GetByID(id);
+            TEntity? entityToDelete = await GetByID(id);
             if (entityToDelete == null) return false;
             Delete(entityToDelete);
             return true;
         }
-        public virtual bool Update(object id, TEntity entityUpdate)
+        public virtual async Task<bool> Update(object id, TEntity entityUpdate)
         {
-            TEntity? entity = GetByID(id);
+            TEntity? entity = await GetByID(id);
             if (entity == null) return false;
             Update(entityUpdate);
             return true;

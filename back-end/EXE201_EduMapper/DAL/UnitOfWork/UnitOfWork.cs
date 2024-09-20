@@ -1,9 +1,7 @@
 ﻿using DAL.Data;
 using DAL.GenericRepository.IRepository;
 using DAL.GenericRepository.Repository;
-using DAL.Models;
-using DAL.Repository;
-using DAO.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace DAL.UnitOfWork
 {
@@ -37,7 +35,6 @@ namespace DAL.UnitOfWork
         public IMemberShipDetailRepository MemberShipDetailRepository => _memberShipDetailRepository ??= new MemberShipDetailRepository(_context);
 
         public ICenterRepository CenterRepository => _centerRepository ??= new CenterRepository(_context);
-
 
         public ICourseRepository CourseRepository => _courseRepository ??= new CourseRepository(_context);
 
@@ -74,14 +71,39 @@ namespace DAL.UnitOfWork
             _context = context;
         }
 
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
         public void Save()
         {
-            throw new NotImplementedException();
+            var validationErrors = _context.ChangeTracker.Entries<IValidatableObject>()
+                .SelectMany(e => e.Entity.Validate(null))
+                .Where(e => e != ValidationResult.Success)
+                .ToArray();
+            if (validationErrors.Any())
+            {
+                var exceptionMessage = string.Join(Environment.NewLine,
+                    validationErrors.Select(error => $"Properties {error.MemberNames} Error: {error.ErrorMessage}"));
+                throw new Exception(exceptionMessage);
+            }
+            _context.SaveChanges();
+        }
+
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+                disposed = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

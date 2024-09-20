@@ -7,12 +7,14 @@ namespace DAL.Models
     {
         [Key]
         public string QuestionId { get; set; } = null!;
+        public string QuestionText { get; set; } = null!;
         public string CorrectAnswer { get; set; } = string.Empty;
         public string QuestionType { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
-        public string PassageId { get; set; } = null!;
+        public string? PassageId { get; set; } = null!;
+        public int? WordsLimit { get; set; } = null!;
         [ForeignKey("PassageId")]
-        public Passage Passage { get; set; } = null!;
+        public Passage? Passage { get; set; } = null!;
         public ICollection<QuestionChoice> Choices { get; set; } = null!;
         public ICollection<UserAnswer> UserAnswers { get; set; } = null!;
         }

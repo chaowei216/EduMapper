@@ -5,5 +5,7 @@ namespace DAL.GenericRepository.IRepository
 {
     public interface IMemberShipRepository: IGenericRepository<MemberShip>
     {
+        bool IsUniqueName(string name);
+        Task<MemberShip?> GetMemberShipByName(string name);
     }
 }

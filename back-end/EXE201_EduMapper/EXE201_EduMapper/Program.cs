@@ -1,16 +1,10 @@
-using System.Text;
-using System.Text.Json.Serialization;
 using BLL.IService;
 using BLL.Service;
-using Common.Constant.Message;
-using Common.DTO;
-using Common.Enum;
 using EXE201_EduMapper.Extension;
 using EXE201_EduMapper.Middlewares;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,12 +22,16 @@ builder.Services.AddSwaggerGen(options =>
         Version = "v1"
     });
 
-    options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
+        Description =
+    "JWT Authorization header using the Bearer scheme. \r\n\r\n " +
+    "Enter 'Bearer' [space] and then your token in the text input below. \r\n\r\n" +
+    "Example: \"Bearer 12345abcdef\"",
         Name = "Authorization",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = JwtBearerDefaults.AuthenticationScheme
+        Scheme = "Bearer",
+        Type = SecuritySchemeType.ApiKey
     });
 
     options.OperationFilter<SecurityRequirementsOperationFilter>();
@@ -46,10 +44,18 @@ builder.Services.AddDatabase();
 builder.Services.ConfigIdentityServices();
 builder.Services.ConfigAuthentication(builder.Configuration);
 
+// Transient
+builder.Services.AddTransient<IEmailService, EmailService>();
+
 // Scoped
 builder.Services.AddUnitOfWork();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IMembershipService, MembershipService>();
+builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<IPassageService, PassageService>();
+builder.Services.AddScoped<ITestService, TestService>();
 
 // CORS
 builder.Services.AddCors(options =>
