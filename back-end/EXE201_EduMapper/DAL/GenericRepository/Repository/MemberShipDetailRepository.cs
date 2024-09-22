@@ -2,11 +2,7 @@
 using DAL.GenericRepository.IRepository;
 using DAL.Models;
 using DAL.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL.GenericRepository.Repository
 {
@@ -14,6 +10,16 @@ namespace DAL.GenericRepository.Repository
     {
         public MemberShipDetailRepository(DataContext context) : base(context)
         {
+        }
+
+        public async Task<MemberShipDetail?> GetMemberShipDetail(string userId, string memberShipId)
+        {
+            return await _context.MemberShipDetails.FirstOrDefaultAsync(p => p.UserId == userId && p.MemberShipId == memberShipId);
+        }
+
+        public async Task<IEnumerable<MemberShipDetail>> GetMemberShipOfUser(string userId)
+        {
+            return await _context.MemberShipDetails.Where(p => p.UserId == userId).ToListAsync();
         }
     }
 }

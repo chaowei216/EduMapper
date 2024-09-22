@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BLL.Exceptions;
 using BLL.IService;
+using Common.Constant;
 using Common.Constant.Message;
 using Common.Constant.Message.MemberShip;
 using Common.DTO;
@@ -23,6 +24,39 @@ namespace BLL.Service
             _mapper = mapper;
         }
 
+        public async Task AddMemberShipToUser(ApplicationUser user, string memberShipId)
+        {
+            // check exist
+            var membership = await _unitOfWork.MemberShipRepository.GetByID(memberShipId);
+
+            if (membership == null)
+                throw new NotFoundException(GeneralMessage.NotFound);
+
+            // check if user has already package
+            var userMemberShips = await _unitOfWork.MemberShipDetailRepository.GetMemberShipOfUser(user.Id);
+
+            // if had
+            if (userMemberShips.Any(p => p.MemberShipId == memberShipId && p.ExpiredDate <= DateTime.Now))
+            {
+                throw new BadRequestException(MemberShipMessage.NotExpired);
+            }
+
+            // if no membership is found, create new one
+            // add
+            _unitOfWork.MemberShipDetailRepository.Insert(new MemberShipDetail
+            {
+                MemberShipDetailId = Guid.NewGuid().ToString(),
+                MemberShipId = memberShipId,
+                UserId = user.Id,
+                ExpiredDate = DateTime.Now.AddDays(Config.PAID_PACKAGE_TIME),
+                RegistedDate = DateTime.Now
+            });
+
+            // save
+            _unitOfWork.Save();
+
+        }
+
         public bool CheckUniqueMemberShipName(string name)
         {
             return _unitOfWork.MemberShipRepository.IsUniqueName(name);
@@ -35,7 +69,7 @@ namespace BLL.Service
 
             // set id
             membership.MemberShipId = Guid.NewGuid().ToString();
-            
+
             // add 
             _unitOfWork.MemberShipRepository.Insert(membership);
 
@@ -63,7 +97,7 @@ namespace BLL.Service
         }
 
         public async Task<ResponseDTO> GetAllMemberShips(QueryDTO request)
-        {   
+        {
             var response = await _unitOfWork.MemberShipRepository.Get(filter: !string.IsNullOrEmpty(request.Search)
                                                                         ? p => p.MemberShipName.Contains(request.Search.Trim())
                                                                         : null,
@@ -98,6 +132,11 @@ namespace BLL.Service
             };
         }
 
+        public async Task<MemberShip?> GetMemberShipByName(string name)
+        {
+            return await _unitOfWork.MemberShipRepository.GetMemberShipByName(name);
+        }
+
         public async Task UpdateMemberShip(string id, MemberShipUpdateDTO request)
         {
             // check exist
@@ -107,7 +146,7 @@ namespace BLL.Service
                 throw new NotFoundException(GeneralMessage.NotFound);
 
             // check name
-            if (membership.MemberShipName != request.MemberShipName 
+            if (membership.MemberShipName != request.MemberShipName
                 && !CheckUniqueMemberShipName(request.MemberShipName))
             {
                 throw new BadRequestException(MemberShipMessage.ExistedName);

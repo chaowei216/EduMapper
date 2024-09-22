@@ -3,6 +3,7 @@ using DAL.GenericRepository.IRepository;
 using DAL.Models;
 using DAL.Repository;
 using DAO.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL.GenericRepository.Repository
 {
@@ -17,6 +18,11 @@ namespace DAL.GenericRepository.Repository
             var membership = _context.MemberShips.Where(p => p.MemberShipName.ToLower() == name.ToLower()).FirstOrDefault();
 
             return membership == null;
+        }
+
+        public async Task<MemberShip?> GetMemberShipByName(string name)
+        {
+            return await _context.MemberShips.FirstOrDefaultAsync(p => p.MemberShipName == name);
         }
     }
 }
