@@ -27,6 +27,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import ProfileMenu from "./ProfileMenu";
 const pages = [
   "Trang chủ",
   "Trung tâm tiếng anh",
@@ -35,11 +36,14 @@ const pages = [
   "Cộng đồng",
 ];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
+import NotifyBell from "../Notification/Notification";
+import useAuth from "../../../../hooks/useAuth";
+import styles from "./Navbar.module.css";
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-
+  const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
@@ -60,6 +64,7 @@ function ResponsiveAppBar() {
   const handleClick = () => {
     navigate("/login");
   };
+
   return (
     <AppBar
       position="static"
@@ -157,58 +162,39 @@ function ResponsiveAppBar() {
               <DesktopNav />
             </Flex>
           </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
-            <Stack
-              flex={{ base: 1, md: 0 }}
-              justify={"flex-end"}
-              direction={"row"}
-              spacing={6}
-              sx={{ margin: "8px 8px 0px 8px" }}
-            >
-              <Button
-                onClick={handleClick}
-                variant="contained"
-                sx={{
-                  borderRadius: "20px",
-                  background: "#1EA26E",
-                  fontSize: "17px",
-                }}
+          {!isAuthenticated && (
+            <Box sx={{ flexGrow: 0 }}>
+              <Stack
+                flex={{ base: 1, md: 0 }}
+                justify={"flex-end"}
+                direction={"row"}
+                spacing={6}
+                sx={{ margin: "8px 8px 0px 8px" }}
               >
-                Đăng nhập
-              </Button>
-            </Stack>
-          </Box>
-
-          {/* <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box> */}
+                <Button
+                  onClick={handleClick}
+                  variant="contained"
+                  sx={{
+                    borderRadius: "20px",
+                    background: "#1EA26E",
+                    fontSize: "17px",
+                  }}
+                >
+                  Đăng nhập
+                </Button>
+              </Stack>
+            </Box>
+          )}
+          {user && isAuthenticated && (
+            <Box sx={{ flexGrow: 0 }}>
+              <div className={styles.nav_info}>
+                <Stack sx={{ marginRight: "20px" }} spacing={2} direction="row">
+                  <NotifyBell />
+                </Stack>
+                <ProfileMenu />
+              </div>
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </AppBar>

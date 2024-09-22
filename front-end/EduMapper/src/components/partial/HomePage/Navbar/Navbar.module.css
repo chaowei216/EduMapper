@@ -294,10 +294,8 @@
   height: 95px;
   display: flex;
   z-index: 1;
-  margin-right: 20px;
   float: right !important;
   align-items: center;
-  gap: 10px;
 }
 .wallet{
   background-color: '#e8e8e8' !important;

@@ -14,6 +14,11 @@ import TakeTestPrePage from "../pages/TakeTestPage/TakeTestPrePage";
 import CompleteProfile from "../components/partial/Authen/SignIn/CompleteProfile";
 import ListeningTestPage from "../pages/UserTest/ListeningTestPage";
 import GuestAuth from "../Guard/GuestAuth";
+import WritingTestPage from "../pages/UserTest/WritingTestPage";
+import RoleBasedGuard from "../Guard/RoleBaseGuard";
+import UserProfilePage from "../pages/UserProfile/UserProfilePage";
+import CustomerPage from "../pages/CustomerPage/CustomerPage";
+import SendOtpPage from "../pages/Authen/SendOtpPage";
 
 export const router = createBrowserRouter([
   {
@@ -22,7 +27,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <HomePage />,
+    element: (
+      <RoleBasedGuard accessibleRoles={["Customer", "Admin"]}>
+        <HomePage />
+      </RoleBasedGuard>
+    ),
   },
   {
     path: "/login",
@@ -79,5 +88,29 @@ export const router = createBrowserRouter([
   {
     path: "/listening-test",
     element: <ListeningTestPage />,
+  },
+  {
+    path: "/writing-test",
+    element: <WritingTestPage />,
+  },
+  {
+    path: "personal-profile",
+    element: (
+      // <RoleBasedGuard
+      //   accessibleRoles={["Customer", "Admin", "Moderator"]}
+      //   status="Active"
+      // >
+      <CustomerPage />
+      // </RoleBasedGuard>
+    ),
+    //errorElement: <ErrorException />,
+  },
+  {
+    path: "send-otp/:email",
+    element: (
+      <GuestAuth>
+        <SendOtpPage />
+      </GuestAuth>
+    ),
   },
 ]);

@@ -43,11 +43,11 @@ const handleTokenExpired = (exp, refreshToken) => {
 
     RefreshToken(refreshToken)
       .then((response) => {
-        if (response.statusCode === 200) {
-          const { data } = response;
-          console.log(response);
-          localStorage.setItem("accessToken", data.accessToken);
-          localStorage.setItem("refreshToken", data.refreshToken);
+        if (response.statusCode === 201) {
+          const { accessToken, refreshToken } = response.metaData;
+          console.log(response.metaData);
+          localStorage.setItem("accessToken", accessToken);
+          localStorage.setItem("refreshToken", refreshToken);
           console.log("Token refreshed successfully");
           const nextRefreshTime = exp * 1000 - currentTime + refreshDelay;
           setTimeout(refreshAndScheduleNext, nextRefreshTime);

@@ -70,7 +70,7 @@ const FooterSection = ({ title, items, handleButtonClick }) => {
 const Footer = (pros) => {
   const { handleButtonClick } = pros;
   return (
-    <Box component="footer" sx={{ bgcolor: "#D9D9D9", py: 3, mt: "auto" }}>
+    <Box component="footer" sx={{ bgcolor: "#D9D9D9", pt: 2, mt: "auto" }}>
       <Container maxWidth="lg">
         <LikeShareButtons />
         <Grid container spacing={3}>

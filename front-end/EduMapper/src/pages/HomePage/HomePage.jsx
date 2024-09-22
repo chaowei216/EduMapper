@@ -11,28 +11,23 @@ import MainHero from "../../components/partial/HomePage/Hero/MainHero";
 import MainFeature from "../../components/partial/HomePage/Features/MainFeature";
 import MainPackage from "../../components/partial/HomePage/Growth/MainPackage";
 import MainCourseAndClip from "../../components/partial/HomePage/Programs/MainCourseAndClip";
-import { useRef, useState } from "react";
 
 const HomePage = () => {
   // Trạng thái lưu trữ id của phần tử cần cuộn đến
-  const [targetId, setTargetId] = useState(null);
-
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
-
   // Hàm để gọi khi nhấn nút
   const handleButtonClick = (id) => {
-    setTargetId(id);
     scrollToSection(id);
   };
 
   return (
     <div className="App">
-      <Navbar/>
+      <Navbar />
       <MainHero>
         <Hero />
       </MainHero>

@@ -1,0 +1,98 @@
+.profileBody{
+    margin: 0 0 0 100px;
+}
+.cropimgAvatar{
+     display: flex;
+}
+.brand{
+    width: 7%;
+    border: 1px solid #4dccda;
+    border-radius: 90px;
+    height: 100px;
+    max-width: 7%;
+    max-height: 100px;
+}
+
+.profile{
+    font-size: 30px;
+    font-family: Arial, Helvetica, sans-serif;;
+    color: #354052;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    font-weight: 400;
+}
+
+.profileBox{
+     display: flex;
+     flex-direction: column;
+}
+
+.notify{
+     display: flex;
+     flex-direction: row;
+     align-items: center;
+     margin-top: 6px;
+}
+
+.profileBoxNIput label{
+    color: #90959c;
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.profileButton{
+    background: black;
+    color: white;
+    width: 570px;
+    height: 40px;
+    margin-left: 35px;
+    border-radius: 5px;
+    transition: all 0.5s;
+    margin-bottom: 50px;
+}
+
+.input{
+    border: 1px solid rgb(144 149 156 / 33%);
+    width: 40%;
+    height: 40px;
+    border-radius: 6px;
+    padding-left: 10px;
+}
+
+.notify label{
+    color: #90959c;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.error{
+    margin-left: 10px;
+    margin-top: 20px;
+    font-size: 13px;
+    color: red;
+}
+
+.errorr{
+    margin-left: 10px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: red;
+}
+
+.errorImg{
+    margin-left: 15px;
+    margin-top: 40px;
+    font-size: 13px;
+    color: red;
+}
+
+.passwordInputContainer {
+    position: relative;
+  }
+  
+  .passwordIcon {
+    position: relative;
+    right: 30px;
+    cursor: pointer;
+  }

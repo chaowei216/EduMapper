@@ -2,13 +2,13 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDhhTR1lBloFUzoZ-e4Vrpc4XjZjT5KpxM",
-  authDomain: "edumapper-30f47.firebaseapp.com",
-  projectId: "edumapper-30f47",
-  storageBucket: "edumapper-30f47.appspot.com",
-  messagingSenderId: "382015922500",
-  appId: "1:382015922500:web:c8b0a4b098b53460f4f711",
-  measurementId: "G-EWQZF377W2",
+  apiKey: "AIzaSyBPw3eSlF89CZI52g1B7UaP5f3XsOm3QbU",
+  authDomain: "edummaper-94362.firebaseapp.com",
+  projectId: "edummaper-94362",
+  storageBucket: "edummaper-94362.appspot.com",
+  messagingSenderId: "458302312934",
+  appId: "1:458302312934:web:d8c9ec78e45d8abcc70627",
+  measurementId: "G-YX558HBL29",
 };
 
 // Initialize Firebase

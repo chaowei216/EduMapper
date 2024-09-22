@@ -23,6 +23,7 @@ import {
   FacebookAuthProvider,
 } from "firebase/auth";
 import { auth } from "/src/configs/firebase";
+import { GetUserByEmail } from "../../../../api/AuthenApi";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -50,10 +51,10 @@ export default function SignInCard() {
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
 
-  const { login } = useAuth();
+  const { login, login_type } = useAuth();
   const handleClickOpen = () => {
     setOpen(true);
-    navigate('/forgot-password')
+    navigate("/forgot-password");
   };
 
   const handleClose = () => {
@@ -63,8 +64,11 @@ export default function SignInCard() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
-    await login(data.get("email"), data.get("password"));
+    const inputData = {
+      email: data.get("email"),
+      password: data.get("password"),
+    };
+    await login(inputData.email, inputData.password);
   };
 
   const handleGoogleSignIn = async () => {
@@ -78,17 +82,20 @@ export default function SignInCard() {
       };
       //xu ly logic login sau khi dang nhap lan sau
 
-      // if (!user.isProfileUpdated) {
-      // Nếu chưa cập nhật thông tin, điều hướng tới trang cập nhật
-      //   window.location.href = "/update-profile";
-      // } else {
-      // Nếu đã cập nhật thông tin, điều hướng tới trang chính
-      //   window.location.href = "/dashboard";
-      // }
-
-      ///const response = await
-
-      navigate("/complete-profile", { state: { type: "Google", user } });
+      const response = await GetUserByEmail(user.email);
+      if (response.status != 404) {
+        const userLogin = {
+          fullName: "string",
+          email: res.user.email,
+          gender: "string",
+          dateOfBirth: "2024-09-16T13:15:07.087Z",
+          phoneNumber: "string",
+          imageLink: "string",
+        };
+        await login_type("Google", userLogin);
+      } else {
+        navigate("/complete-profile", { state: { type: "Google", user } });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -103,7 +110,21 @@ export default function SignInCard() {
         email: res.user.email,
         avatar: res.user.photoURL,
       };
-      navigate("/complete-profile", { type: "Facebook", state: { user } });
+
+      const response = await GetUserByEmail(user.email);
+      if (response.status != 404) {
+        const userLogin = {
+          fullName: "string",
+          email: res.user.email,
+          gender: "string",
+          dateOfBirth: "2024-09-16T13:15:07.087Z",
+          phoneNumber: "string",
+          imageLink: "string",
+        };
+        await login_type("Google", userLogin);
+      } else {
+        navigate("/complete-profile", { type: "Facebook", state: { user } });
+      }
     } catch (err) {
       console.log(err);
     }

@@ -11,11 +11,18 @@ import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { styled } from "@mui/material/styles";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { GoogleIcon, SitemarkIcon } from "../CustomIcons";
+import { GoogleIcon, SitemarkIcon, FacebookIcon } from "../CustomIcons";
 import useAuth from "../../../../hooks/useAuth";
+import {
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import { auth } from "../../../../configs/firebase";
+import { GetUserByEmail } from "../../../../api/AuthenApi";
 
 // Styled Card component
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -50,7 +57,8 @@ const validationSchema = Yup.object({
 });
 
 export default function SignUpCard() {
-  const { register } = useAuth();
+  const { register, login_type } = useAuth();
+  const navigate = useNavigate();
   const handleSubmit = async (values) => {
     const userRegister = {
       fullName: values.fullName,
@@ -78,7 +86,64 @@ export default function SignUpCard() {
       handleSubmit(values);
     },
   });
+  const handleGoogleSignIn = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const res = await signInWithPopup(auth, provider);
+      const user = {
+        fullName: res.user.displayName,
+        email: res.user.email,
+        avatar: res.user.photoURL,
+      };
+      //xu ly logic login sau khi dang nhap lan sau
 
+      const response = await GetUserByEmail(user.email);
+      if (response.status != 404) {
+        const userLogin = {
+          fullName: "string",
+          email: res.user.email,
+          gender: "string",
+          dateOfBirth: "2024-09-16T13:15:07.087Z",
+          phoneNumber: "string",
+          imageLink: "string",
+        };
+        await login_type("Google", userLogin);
+      } else {
+        navigate("/complete-profile", { state: { type: "Google", user } });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleFacebookSignIn = async () => {
+    try {
+      const provider = new FacebookAuthProvider();
+      const res = await signInWithPopup(auth, provider);
+      const user = {
+        fullName: res.user.displayName,
+        email: res.user.email,
+        avatar: res.user.photoURL,
+      };
+
+      const response = await GetUserByEmail(user.email);
+      if (response.status != 404) {
+        const userLogin = {
+          fullName: "string",
+          email: res.user.email,
+          gender: "string",
+          dateOfBirth: "2024-09-16T13:15:07.087Z",
+          phoneNumber: "string",
+          imageLink: "string",
+        };
+        await login_type("Google", userLogin);
+      } else {
+        navigate("/complete-profile", { type: "Facebook", state: { user } });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <Card>
       <Box sx={{ display: { xs: "flex", md: "none" } }}>
@@ -280,12 +345,25 @@ export default function SignUpCard() {
             border: "2px solid #E8E8E8",
             color: "#000",
           }}
-          onClick={() => alert("Sign in with Google")}
+          onClick={() => handleGoogleSignIn()}
           startIcon={<GoogleIcon />}
         >
           Đăng nhập với Google
         </Button>
-
+        <Button
+          type="submit"
+          fullWidth
+          variant="outlined"
+          sx={{
+            textTransform: "none",
+            border: "2px solid #E8E8E8",
+            color: "#000",
+          }}
+          onClick={() => handleFacebookSignIn()}
+          startIcon={<FacebookIcon />}
+        >
+          Tiếp tục với Facebook
+        </Button>
         <Typography mt={2} sx={{ textAlign: "center", color: "#828282" }}>
           Có tài khoản rồi?{" "}
           <span>

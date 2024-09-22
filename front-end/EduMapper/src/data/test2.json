@@ -292,6 +292,46 @@
               ]
             }
           ]
+        },
+        {
+          "ExamId": 103,
+          "ExamName": "Writing Test 1",
+          "NumOfQuestions": 2,
+          "TestID": 2,
+          "Passages": [
+            {
+              "PassageId": 2001,
+              "PassageTitle": "Task 1: Writing",
+              "PassageContent": {
+                "TaskDescription": "The chart below shows the percentage of households in owned and rented accommodation in England and Wales between 1918 and 2011."
+              },
+              "SubQuestions": [
+                {
+                  "QuestionId": 20001,
+                  "QuestionType": "writing_task_1",
+                  "QuestionText": "Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+                  "WordLimit": "150",
+                  "CorrectAnswer": ""
+                }
+              ]
+            },
+            {
+              "PassageId": 2002,
+              "PassageTitle": "Task 2: Writing",
+              "PassageContent": {
+                "TaskDescription": "Some people believe that the increasing use of technology in the workplace leads to a decrease in social interaction among employees."
+              },
+              "SubQuestions": [
+                {
+                  "QuestionId": 20002,
+                  "QuestionType": "writing_task_2",
+                  "QuestionText": "To what extent do you agree or disagree with this opinion? Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+                  "WordLimit": "250",
+                  "CorrectAnswer": ""
+                }
+              ]
+            }
+          ]
         }
       ]
     }

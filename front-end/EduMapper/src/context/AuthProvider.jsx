@@ -1,14 +1,15 @@
 import { createContext, useEffect, useReducer } from "react";
 import {
   GetUserByEmail,
+  GetUserByToken,
   LoginExternal,
   Register,
   SignIn,
+  VerifyUser,
 } from "../api/AuthenApi";
 import { isValidToken, setSession } from "../utils/jwtValid";
 import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
-import PropTypes from "prop-types";
 
 //---------------
 const initialState = {
@@ -16,12 +17,12 @@ const initialState = {
   isInitialized: false,
   user: null,
   isVerify: false,
-  tempUser: null,
 };
 
 const handlers = {
   INITIALIZE: (state, action) => {
     const { isAuthenticated, user } = action.payload;
+
     return {
       ...state,
       isAuthenticated,
@@ -36,7 +37,7 @@ const handlers = {
     return {
       ...state,
       isAuthenticated: true,
-      user,
+      user: user,
     };
   },
 
@@ -55,6 +56,17 @@ const handlers = {
       user,
     };
   },
+
+  SEND_OTP: (state, action) => {
+    const { user } = action.payload;
+
+    return {
+      ...state,
+      isAuthenticated: false,
+      user,
+      isVerify: true
+    };
+  },
 };
 
 const reducer = (state, action) =>
@@ -67,11 +79,9 @@ const AuthContext = createContext({
   login_type: () => Promise.resolve(),
   logout: () => Promise.resolve(),
   register: () => Promise.resolve(),
+  sendOtp: () => Promise.resolve,
 });
 
-AuthProvider.propTypes = {
-  children: PropTypes.node,
-};
 // ----------------------------------------------------------------------
 
 function AuthProvider({ children }) {
@@ -84,7 +94,9 @@ function AuthProvider({ children }) {
         const { email } = jwtDecode(accessToken);
         const response = await GetUserByEmail(email);
         const responseJson = await response.json();
-        const user = responseJson.data;
+        const user = responseJson.metaData;
+        console.log(responseJson.metaData);
+
         if (
           user.roleName == "Admin" &&
           accessToken &&
@@ -102,14 +114,24 @@ function AuthProvider({ children }) {
           const { email } = jwtDecode(accessToken);
           const response = await GetUserByEmail(email);
           const responseJson = await response.json();
-          const user = responseJson.data;
-          dispatch({
-            type: "INITIALIZE",
-            payload: {
-              isAuthenticated: true,
-              user: user,
-            },
-          });
+          const user = responseJson.metaData;
+          if (user.emailConfirmed == false && user.roleName != "Admin") {
+            console.log(user.emailConfirmed);
+            dispatch({
+              type: "SEND_OTP",
+              payload: {
+                user: user,
+              },
+            });
+          } else {
+            dispatch({
+              type: "INITIALIZE",
+              payload: {
+                isAuthenticated: true,
+                user: user,
+              },
+            });
+          }
           // ne gio sau cai else la se dung` api refresh token neu no tra ve status code 400 thi minh chay cai set
           // session(null) con ra true 200 thi set session la 2 cai responseJson la access va refresh
         } else {
@@ -145,7 +167,6 @@ function AuthProvider({ children }) {
       email: email,
       password: password,
     };
-    console.log(userInput);
 
     const response = await SignIn(userInput);
     if (!response.ok) {
@@ -172,22 +193,34 @@ function AuthProvider({ children }) {
       dispatch({
         type: "LOGIN",
         payload: {
-          user,
+          user: user,
         },
       });
+      return;
+    }
+    if (user.emailConfirmed == false) {
+      dispatch({
+        type: "SEND_OTP",
+        payload: {
+          user: user,
+        },
+      })
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      const encodedEmail = btoa(email);
+      window.location.replace(`/send-otp/${encodedEmail}`);
       return;
     }
     setSession(accessToken, refreshToken);
     dispatch({
       type: "LOGIN",
       payload: {
-        user,
+        user: user,
       },
     });
   };
 
   const login_type = async (type, user) => {
-    console.log(user);
     const inputUser = {
       fullName: user.fullName,
       email: user.email,
@@ -201,18 +234,20 @@ function AuthProvider({ children }) {
     console.log(responseJson.metaData);
     if (responseJson.statusCode === 200) {
       const { accessToken, user, refreshToken } = responseJson.metaData;
-      await setSession(accessToken, refreshToken);
+
+      setSession(accessToken, refreshToken);
       dispatch({
         type: "LOGIN",
         payload: {
-          user,
+          user: user,
         },
       });
       toast.success(responseJson.message);
-      const timeout = setTimeout(() => {
-        window.location.replace("/");
-      }, 2000);
-      return () => clearTimeout(timeout);
+
+      // const timeout = setTimeout(() => {
+      //   window.location.replace("/");
+      // }, 2000);
+      // return () => clearTimeout(timeout);
     }
     return;
   };
@@ -242,6 +277,42 @@ function AuthProvider({ children }) {
     }
   };
 
+  const sendOtp = (otp, email) => {
+    VerifyUser(otp, email).then(response => {
+      if (response.statusCode === 200) {
+        toast.success("Xác thực thành công");
+      } else {
+        toast.error("Xác thực không thành công vui lòng thử lại")
+        return;
+      }
+    }).catch(error => {
+      console.error("Error:", error.message);
+    }).finally(() => {
+      const accessToken = localStorage.getItem("accessToken");
+      const refreshToken = localStorage.getItem("refreshToken");
+      let user = null;
+      GetUserByToken().then(response => {
+        if (response.statusCode === 200) {
+          user = response.metaData
+        }
+      }).catch(error => {
+        console.error("Error:", error.message);
+        toast.error("Xác thực không thành công vui lòng thử lại")
+      }).finally(() => {
+        if (user == null) {
+          return;
+        }
+        setSession(accessToken, refreshToken);
+        dispatch({
+          type: "LOGIN",
+          payload: {
+            user: user,
+          },
+        });
+      })
+    })
+  };
+
   const logout = async () => {
     setSession(null);
     dispatch({ type: "LOGOUT" });
@@ -257,6 +328,7 @@ function AuthProvider({ children }) {
           login_type,
           logout,
           register,
+          sendOtp
         }}
       >
         {children}

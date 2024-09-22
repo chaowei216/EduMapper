@@ -15,6 +15,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import useAuth from "../../../../hooks/useAuth";
+import { useEffect } from "react";
 
 // Define validation schema using Yup
 const validationSchema = Yup.object({
@@ -35,6 +36,7 @@ const validationSchema = Yup.object({
 
 export default function CompleteProfile() {
   const { login_type } = useAuth();
+  const navigate = useNavigate();
   const location = useLocation();
   // const navigate = useNavigate();
 
@@ -61,7 +63,11 @@ export default function CompleteProfile() {
     // Navigate to another page if needed
     await login_type(state?.type, updatedUser);
   };
-
+  useEffect(() => {
+    if (state?.user == null) {
+      navigate("/login");
+    }
+  }, [state?.user, navigate]);
   return (
     <Container component="main" maxWidth="sm">
       <Box
