@@ -56,6 +56,7 @@
     border: 1px solid rgb(144 149 156 / 33%);
     width: 40%;
     height: 40px;
+    margin-top: 8px !important;
     border-radius: 6px;
     padding-left: 10px;
 }

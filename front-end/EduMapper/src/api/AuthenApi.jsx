@@ -84,6 +84,7 @@ export const GetUserByEmail = async (email) => {
     console.log(err);
   }
 };
+
 export const SendVerifyEmail = (email) => {
   const url = `${baseUrl}/api/Auth/verify-email`;
   const request = {

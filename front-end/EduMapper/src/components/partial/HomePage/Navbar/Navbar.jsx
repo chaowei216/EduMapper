@@ -72,6 +72,7 @@ function ResponsiveAppBar() {
         background: "#40C993",
         borderRadius: "0px 0px 18px 18px",
         marginBottom: "20px",
+        zIndex: "1"
       }}
     >
       <Container maxWidth="xl" id="Trang chủ">
@@ -210,14 +211,14 @@ const NAV_ITEMS = [
     label: "Trung tâm tiếng anh",
     children: [
       {
-        label: "Explore Design Work",
-        subLabel: "Trending Design to inspire you",
-        href: "#",
+        label: "Các Trung Tâm Tiếng Anh",
+        subLabel: "Giới thiệu trung tâm",
+        href: "/english-center",
       },
       {
-        label: "New & Noteworthy",
-        subLabel: "Up-and-coming Designers",
-        href: "#",
+        label: "Các khóa học",
+        subLabel: "Đăng ký khóa học",
+        href: "/course",
       },
     ],
   },
@@ -225,14 +226,14 @@ const NAV_ITEMS = [
     label: "Thi thử",
     children: [
       {
-        label: "Job Board",
-        subLabel: "Find your dream design job",
-        href: "#",
+        label: "Thi thử miễn phí",
+        subLabel: "Listening và Reading",
+        href: "/take-test",
       },
       {
-        label: "Freelance Projects",
-        subLabel: "An exclusive list for contract work",
-        href: "#",
+        label: "Thi thử premium",
+        subLabel: "Mua gói để làm được full tính năng",
+        href: "/package",
       },
     ],
   },
@@ -251,7 +252,7 @@ const DesktopNav = () => {
   const popoverContentBgColor = useColorModeValue("white", "gray.800");
 
   return (
-    <Stack direction={"row"} spacing={4}>
+    <Stack direction={"row"} spacing={4} zIndex={1}>
       {NAV_ITEMS.map((navItem) => (
         <Box key={navItem.label}>
           <Popover trigger={"hover"} placement={"bottom-start"}>

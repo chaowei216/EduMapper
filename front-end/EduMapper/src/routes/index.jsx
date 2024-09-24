@@ -19,6 +19,9 @@ import RoleBasedGuard from "../Guard/RoleBaseGuard";
 import UserProfilePage from "../pages/UserProfile/UserProfilePage";
 import CustomerPage from "../pages/CustomerPage/CustomerPage";
 import SendOtpPage from "../pages/Authen/SendOtpPage";
+import MemberShipPage from "../pages/MemberShipPage/MemberShipPage";
+import CustomerTransactionPage from "../pages/CustomerPage/CustomerTransactionPage";
+import CoursePage from "../pages/Course/CoursePage";
 
 export const router = createBrowserRouter([
   {
@@ -83,7 +86,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/complete-profile",
-    element: <CompleteProfile />,
+    element: (
+      <GuestAuth>
+        <CompleteProfile />
+      </GuestAuth>
+    ),
   },
   {
     path: "/listening-test",
@@ -112,5 +119,17 @@ export const router = createBrowserRouter([
         <SendOtpPage />
       </GuestAuth>
     ),
+  },
+  {
+    path: "/membership",
+    element: <MemberShipPage />,
+  },
+  {
+    path: "/customer-transaction",
+    element: <CustomerTransactionPage />,
+  },
+  {
+    path: "/course",
+    element: <CoursePage />,
   },
 ]);

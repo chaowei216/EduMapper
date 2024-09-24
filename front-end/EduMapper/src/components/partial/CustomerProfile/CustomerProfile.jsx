@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Formik, Form as FormikForm, Field, ErrorMessage } from "formik";
+import { TextField } from "@mui/material"; // Import TextField từ MUI
 import styles from "./CustomerProfile.module.css";
 import { validationSchema } from "./ValidationCustomerProfile";
 import { UpdatePassword } from "../../../api/AuthenApi";
@@ -15,9 +16,12 @@ const CustomerProfile = () => {
 
   const handleSubmit = async (values) => {
     console.log(values);
-    
+
     try {
-      const response = await UpdatePassword(values.currentPassword, values.password);
+      const response = await UpdatePassword(
+        values.currentPassword,
+        values.password
+      );
       if (response.ok) {
         toast.success("Cập nhật thành công");
       } else {
@@ -39,7 +43,7 @@ const CustomerProfile = () => {
       onSubmit={handleSubmit}
     >
       <FormikForm>
-        <div className="container">
+        <div>
           <div
             className={styles.profileBody}
             style={{ marginLeft: "20px", marginTop: "25px" }}
@@ -51,27 +55,45 @@ const CustomerProfile = () => {
               <div className={styles.notify}>
                 <label>Họ và tên</label>
               </div>
-              <div className={styles.notify}>{user?.fullName}</div>
+              <TextField
+                value={user?.fullName}
+                disabled
+                variant="standard"                                
+                className={styles.input}
+              />
             </div>
             <div className={styles.profileBoxNIput}>
               <div className={styles.notify}>
                 <label>Email</label>
               </div>
-              <div className={styles.notify}>{user?.email}</div>
+              <TextField
+                value={user?.email}
+                disabled
+                variant="standard"
+                className={styles.input}
+              />
             </div>
             <div className={styles.profileBoxNIput}>
               <div className={styles.notify}>
                 <label>Giới tính</label>
               </div>
-              <div className={styles.notify}>
-                {user?.gender == "male" ? "Nam" : "Nữ"}
-              </div>
+              <TextField
+                value={user?.gender === "male" ? "Nam" : "Nữ"}
+                disabled
+                variant="standard"
+                className={styles.input}
+              />
             </div>
             <div className={styles.profileBoxNIput}>
               <div className={styles.notify}>
-                <label className={styles.label}>Số điện thoại</label>
+                <label>Số điện thoại</label>
               </div>
-              <div className={styles.notify}>{user?.phoneNumber}</div>
+              <TextField
+                value={user?.phoneNumber}
+                disabled
+                className={styles.input}
+                variant="standard"
+              />
             </div>
             <div className={styles.profileBoxNIput}>
               <div className={styles.notify}>

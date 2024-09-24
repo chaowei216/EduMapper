@@ -17,7 +17,7 @@ const Features = () => {
           }}
         >
           Về chúng tôi <br />
-          Edummaper
+          EduMapper
         </h1>
       </div>
       <img

@@ -1,6 +1,5 @@
 import {
   Box,
-  Divider,
   Grid,
   List,
   ListItem,
@@ -12,66 +11,35 @@ import {
 import styles from "./Growth.module.css";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-const packageData = [
-  {
-    name: "Free",
-    features: [
-      "Miễn phí test Reading",
-      "Miễn phí test Listening",
-      "Công đồng chat",
-    ],
-    no_features: [
-      "Làm test kĩ năng Writing",
-      "Làm test kĩ năng Speaking",
-      "Sửa lỗi phát âm và vốn từ vựng",
-      "Meeting online chấm speaking",
-      "Sửa lỗi",
-    ],
-    price: "Free",
-  },
-  {
-    name: "Premium Package",
-    features: [
-      "Được chấm bài gợi ý điểm",
-      "Luyện tập từ vựng Writing",
-      "Luyện tập từ vựng Speaking",
-      "Bài chấm Writing chưa là và sau khi",
-      "Meeting online cùng Speaking",
-      "Sửa lỗi phát âm và văn từ vựng",
-      "Nhận bản mẫu điểm cũng như tin tức trên 2 kỳ thi Writing and Speaking",
-    ],
-    no_features: ["Làm test kỹ năng Reading ", "Làm test kỹ năng Writing "],
-    price: "399.000 vnd/lần",
-  },
-  {
-    name: "Premium Plus Package",
-    features: [
-      "Test 4 kỹ năng Listening, Reading, Writing, Speaking",
-      "Biết được điểm mạnh và điểm yếu trong phần làm bài của mình",
-      "Bài chấm Writing chưa là và sau khi",
-      "Meeting online cùng Speaking",
-      "Sửa lỗi phát âm và văn từ vựng trong Speaking",
-      "Biết được lỗi sai và cách gỡi lỗi của Listening và Reading",
-      "Nhận bản điểm của mình dựa trên 4 kỳ thi",
-    ],
-    price: "649.000 vnd/lần",
-  },
-  {
-    name: "Children Package",
-    features: [
-      "Test 4 kỹ năng Listening, Reading, Writing, Speaking",
-      "Biết được điểm mạnh và điểm yếu trong phần làm bài của mình",
-      "Bài chấm Writing chưa là và sau khi",
-      "Meeting online cùng Speaking",
-      "Sửa lỗi phát âm và văn từ vựng trong Speaking",
-      "Biết được lỗi sai và cách gỡi lỗi của Listening và Reading",
-      "Nhận bản điểm của mình dựa trên 4 kỳ thi",
-    ],
-    price: "149.000 vnd/lần",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { GetAllMemberShip } from "../../../../api/MemberShipApi";
+import { formatPrice } from "../../../../utils/FormatPrice";
 
 const Growth = () => {
+  // Sử dụng useQuery để gọi API và quản lý cache
+  const { data: memberShip, error, isLoading } = useQuery({
+    queryKey: ["allMemberships"], // Key để quản lý cache
+    queryFn: () => GetAllMemberShip("", "").then(res => {
+      if (!res.ok) {
+        throw new Error("Error getting membership");
+      }
+      return res.json();
+    }),
+    staleTime: 300000, // Cache dữ liệu trong 5 phút
+    onError: () => {
+      toast.error("Error getting membership data");
+    }
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading data</div>;
+  }
+
   return (
     <div className={styles.package_container}>
       <div className={styles.package_content}>
@@ -80,11 +48,11 @@ const Growth = () => {
             container
             sx={{
               "@media (max-width: 1654px)": {
-                gridTemplateColumns: "repeat(2, 1fr)", // 2 cột khi màn hình <= 1654px
+                gridTemplateColumns: "repeat(2, 1fr)",
               },
             }}
           >
-            {packageData.map((plan, index) => (
+            {memberShip?.metaData.map((plan, index) => (
               <Grid item xs={12} sm={6} md={6} custom={3} key={index}>
                 <Paper
                   elevation={3}
@@ -104,16 +72,14 @@ const Growth = () => {
                       color: "#0A5839",
                       fontFamily: "Inter",
                       fontSize: "24px",
-                      fontStyle: "normal",
                       fontWeight: 800,
-                      lineHeight: "normal",
                       marginBottom: "40px",
                     }}
                     variant="h5"
                     gutterBottom
                     textAlign={"center"}
                   >
-                    {plan.name}
+                    {plan.memberShipName}
                   </Typography>
                   <hr style={{ border: "6px solid #57B791" }}></hr>
                   <List>
@@ -127,9 +93,9 @@ const Growth = () => {
                         </ListItemText>
                       </ListItem>
                     ))}
-                    {plan.no_features &&
-                      plan.no_features.length > 0 &&
-                      plan.no_features.map((item, index) => (
+                    {plan.noFeatures &&
+                      plan.noFeatures.length > 0 &&
+                      plan.noFeatures.map((item, index) => (
                         <ListItem key={index}>
                           <ListItemIcon>
                             <HighlightOffIcon color="#818181" />
@@ -160,10 +126,9 @@ const Growth = () => {
                       fontFamily: "Inter",
                       fontSize: "24px",
                       fontWeight: 800,
-                      lineHeight: "normal",
                     }}
                   >
-                    {plan.price}
+                    {formatPrice(plan.price + "000")}
                   </Typography>
                 </Paper>
               </Grid>

@@ -7,6 +7,10 @@ import "slick-carousel/slick/slick-theme.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { AuthProvider } from "./context/AuthProvider.jsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+// Tạo instance của QueryClient
+const queryClient = new QueryClient();
 
 const muiTheme = createTheme({
   breakpoints: {
@@ -25,9 +29,11 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ChakraProvider>
       <ThemeProvider theme={muiTheme}>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </QueryClientProvider>
       </ThemeProvider>
     </ChakraProvider>
   </StrictMode>

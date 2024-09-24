@@ -23,18 +23,20 @@ const SideBarCustomer = () => {
               <span className={styles.nav_name}>TÀI KHOẢN</span>
             </div>
             <div className={styles.dropdown_menu}>
-              <Link className={getNavLinkClass("/ParentPage")} to="/ParentPage">
+              <Link
+                className={getNavLinkClass("/personal-profile")}
+                to="/personal-profile"
+              >
                 Thông tin cá nhân
               </Link>
               <Link
-                className={getNavLinkClass("/ParentHistoryTransaction")}
-                to="/ParentHistoryTransaction"
+                className={getNavLinkClass("/customer-transaction")}
+                to="/customer-transaction"
               >
                 Lịch sử giao dịch
               </Link>
             </div>
           </div>
-          <hr style={{ width: "95%", color: "#000000b5" }} />
           <hr style={{ width: "90%", color: "#000000b5" }} />
         </div>
       </nav>

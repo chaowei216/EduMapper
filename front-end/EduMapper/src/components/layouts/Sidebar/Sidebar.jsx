@@ -94,8 +94,8 @@ export default function Sidebar() {
     <>
       <div className={styles.sidebar}>
         <div className={styles.header_container}>
-          <img src="/img/logoEdu" alt="avatar logo" width={75} />
-          <div className={styles.header_sidebar}>Gia sư học tập</div>
+          <img src="/img/logoEdu.png" alt="avatar logo" width={75} />
+          <div className={styles.header_sidebar}>Edummaper</div>
         </div>
         <hr style={{ border: "1px solid white" }} />
         <ul className={styles['sidebar-nav']}>

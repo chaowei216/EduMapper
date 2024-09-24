@@ -3,9 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SideBarCustomer from "../../components/layouts/Sidebar/SidebarCustomer/SideBarCustomer";
-import CustomerProfile from "../../components/partial/CustomerProfile/CustomerProfile";
-import FlowAccount from "../../components/partial/FlowAccount/FlowAccount";
-export default function CustomerPage() {
+import HistoryTransaction from "../../components/partial/HistoryTransaction/HistoryTransaction";
+export default function CustomerTransactionPage() {
   const navigate = useNavigate();
   const handleClick = () => {
     navigate("/");
@@ -62,19 +61,18 @@ export default function CustomerPage() {
         </div>
         <div
           style={{
-            overflowY: "hidden",
+            overflow: "hidden",
+            overflowAnchor: "none",
             float: "right",
             position: "relative",
             width: "calc(100% - 260px)",
             height: "100%",
             maxHeight: "100%",
-            marginTop: "69px",
-            background: "#f2f2f2"
+            marginTop: "80px",
           }}
           className="p-4 overflow-y-auto"
         >
-          <FlowAccount />
-          <CustomerProfile />
+          <HistoryTransaction />
         </div>
       </div>
     </div>

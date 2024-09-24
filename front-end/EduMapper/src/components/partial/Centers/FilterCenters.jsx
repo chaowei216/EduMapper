@@ -18,7 +18,7 @@ export default function FilterCenters(pros) {
         justifyContent="center"
         sx={{ marginBottom: "20px" }}
       >
-        <Grid item xs={12} sm={4} md={3}>
+        <Grid item xs={12} sm={4} md={3} style={{ zIndex: "0" }}>
           <FormControl fullWidth>
             <InputLabel>Hình thức học</InputLabel>
             <Select
@@ -32,7 +32,7 @@ export default function FilterCenters(pros) {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={4} md={3}>
+        <Grid item xs={12} sm={4} md={3} style={{ zIndex: "0" }}>
           <FormControl fullWidth>
             <InputLabel>Khu vực</InputLabel>
             <Select
@@ -47,7 +47,7 @@ export default function FilterCenters(pros) {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={4} md={3}>
+        <Grid item xs={12} sm={4} md={3} style={{ zIndex: "0" }}>
           <FormControl fullWidth>
             <InputLabel>Chương trình học</InputLabel>
             <Select
@@ -62,8 +62,22 @@ export default function FilterCenters(pros) {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={4} md={3} container alignItems="center">
-          <Button variant="contained" color="success" fullWidth>
+        <Grid item xs={12} sm={6} md={3} display="flex" alignItems="center">
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{
+              backgroundColor: "#4CAF50",
+              "&:hover": {
+                backgroundColor: "#45a049",
+              },
+              fontWeight: "bold",
+              padding: "12px 16px",
+              borderRadius: "8px",
+              textTransform: "none",
+            }}
+          >
             Lọc
           </Button>
         </Grid>
