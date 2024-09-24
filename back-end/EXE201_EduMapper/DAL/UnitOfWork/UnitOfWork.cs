@@ -27,6 +27,7 @@ namespace DAL.UnitOfWork
         private UserAnswerRepository _userAnswerRepository ;
         private UserNotificationRepository _userNotificationRepository ;
         private UserReferenceRepository _userReferenceRepository ;
+        private SectionRepository _sectionRepository;
 
         public IUserRepository UserRepository => _userRepository ??= new UserRepository(_context);
 
@@ -65,6 +66,7 @@ namespace DAL.UnitOfWork
         public IUserNotificationRepository UserNotificationRepository => _userNotificationRepository ??= new UserNotificationRepository(_context);
 
         public IUserReferenceRepository UserReferenceRepository => _userReferenceRepository ??= new UserReferenceRepository(_context);
+        public ISectionRepository SectionRepository => _sectionRepository ??= new SectionRepository(_context);
 
         public UnitOfWork(DataContext context)
         {
