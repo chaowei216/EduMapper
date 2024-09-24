@@ -10,9 +10,9 @@ namespace DAL.Models
         public string? PassageTitle { get; set; } = string.Empty;
         public string? PassageContent {  get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
-        public string ExamId { get; set; } = null!;
+        public string? ExamId { get; set; }
         [ForeignKey("ExamId")]
-        public Exam Exam { get; set; } = null!;
+        public Exam? Exam { get; set; }
         public ICollection<Question> SubQuestion { get; set; } = null!;
         public ICollection<PassageSection> Sections { get; set; } = null!;
     }

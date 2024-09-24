@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace Common.DTO.Passage
 {
-    public class CreatePassageDTO
+    public class PassageCreateDTO
     {
-        public string PassageId { get; set; } = null!;
         public string? PassageTitle { get; set; } = string.Empty;
         public string? PassageContent { get; set; } = string.Empty;
-        public ICollection<QuestionDTO> SubQuestion { get; set; } = null!;
-        public ICollection<PassageSectionDTO> Sections { get; set; } = null!;
+        public ICollection<QuestionCreateDTO> SubQuestion { get; set; } = null!;
+        public ICollection<PassageSectionCreateDTO> Sections { get; set; } = null!;
     }
 }

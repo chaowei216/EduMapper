@@ -17,7 +17,7 @@ namespace EXE201_EduMapper.Controllers
             _testService = testService;
         }
 
-        [HttpGet("tests/{id}/reading")]
+        [HttpGet("{id}/reading")]
         [ProducesResponseType(200, Type = typeof(ResponseDTO))]
         [ProducesResponseType(404, Type = typeof(ResponseDTO))]
         public async Task<IActionResult> GetReadingTestByTestId(string id)
@@ -36,7 +36,7 @@ namespace EXE201_EduMapper.Controllers
             return Ok(tests);
         }
 
-        [HttpGet("tests/{id}/listening")]
+        [HttpGet("{id}/listening")]
         [ProducesResponseType(200, Type = typeof(ResponseDTO))]
         [ProducesResponseType(404, Type = typeof(ResponseDTO))]
         public async Task<IActionResult> GetListeningTestById(string id)
@@ -55,7 +55,7 @@ namespace EXE201_EduMapper.Controllers
             return Ok(tests);
         }
 
-        [HttpGet("tests/{id}/writing")]
+        [HttpGet("{id}/writing")]
         [ProducesResponseType(200, Type = typeof(ResponseDTO))]
         [ProducesResponseType(404, Type = typeof(ResponseDTO))]
         public async Task<IActionResult> GetWritingTestById(string id)

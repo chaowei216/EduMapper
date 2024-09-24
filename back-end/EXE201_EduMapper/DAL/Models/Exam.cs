@@ -9,9 +9,9 @@ namespace DAL.Models
         public string ExamId { get; set; } = null!;
         public string ExamName { get; set; } = string.Empty;
         public int NumOfQuestions { get; set; }
-        public string TestId { get; set; } = null!;
+        public string? TestId { get; set; } = null!;
         [ForeignKey("TestId")]
-        public Test Test { get; set; } = null!;
+        public Test? Test { get; set; } = null!;
         public ICollection<Passage> Passages { get; set; } = null!;
     }
 }

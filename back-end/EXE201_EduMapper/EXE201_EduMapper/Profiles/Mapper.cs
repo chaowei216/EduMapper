@@ -6,6 +6,10 @@ using Common.DTO.Passage;
 using Common.DTO.Question;
 using Common.DTO.Test;
 using DAL.Models;
+using Common.DTO.Center;
+using DAO.Models;
+using Common.DTO.Feedback;
+using Common.DTO.ProgramTraining;
 
 namespace EXE201_EduMapper.Profiles
 {
@@ -26,7 +30,13 @@ namespace EXE201_EduMapper.Profiles
             CreateMap<Exam, ExamDTO>().ReverseMap();
             CreateMap<PassageSection, PassageSectionDTO>().ReverseMap();
             CreateMap<Test, TestDTO>().ReverseMap();
-            CreateMap<Question, CreateQuestionDTO>().ReverseMap();
+            CreateMap<Question, QuestionCreateDTO>().ReverseMap();
+            CreateMap<Passage, PassageCreateDTO>().ReverseMap();
+            CreateMap<PassageSectionCreateDTO, PassageSection>().ReverseMap();
+            CreateMap<Exam, ExamCreateDTO>().ReverseMap();
+            CreateMap<Center, CenterDTO>().ReverseMap();
+            CreateMap<Feedback, FeedbackDTO>().ReverseMap();
+            CreateMap<ProgramTraining, ProgramTrainingDTO>().ReverseMap();
         }
     }
 }
