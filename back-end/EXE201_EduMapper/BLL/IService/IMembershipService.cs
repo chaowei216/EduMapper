@@ -63,5 +63,19 @@ namespace BLL.IService
         /// <param name="name"></param>
         /// <returns></returns>
         Task<MemberShip?> GetMemberShipByName(string name);
+
+        /// <summary>
+        /// Get membership by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<MemberShip?> GetMemberShipById(string id);
+
+        /// <summary>
+        /// Revoke membership detail
+        /// </summary>
+        /// <param name="memberShipDetail"></param>
+        /// <returns></returns>
+        Task<bool> RevokeUserMemberShip(MemberShipDetail memberShipDetail);
     }
 }

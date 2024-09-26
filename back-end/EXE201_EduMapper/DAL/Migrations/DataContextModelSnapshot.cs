@@ -195,12 +195,14 @@ namespace DAL.Migrations
                     b.Property<string>("MemberShipId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
+                    b.Property<string>("Features")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MemberShipName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NoFeatures")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Price")
@@ -213,21 +215,31 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Models.MemberShipDetail", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("MemberShipId")
+                    b.Property<string>("MemberShipDetailId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("ExpiredDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsFinished")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MemberShipId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("RegistedDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("UserId", "MemberShipId");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("MemberShipDetailId");
 
                     b.HasIndex("MemberShipId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("MemberShipDetails");
                 });
@@ -606,6 +618,10 @@ namespace DAL.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
+                    b.Property<string>("MemberShipId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("PaymentMethod")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -631,6 +647,8 @@ namespace DAL.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("TransactionId");
+
+                    b.HasIndex("MemberShipId");
 
                     b.HasIndex("UserId");
 
@@ -982,11 +1000,19 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAO.Models.Transaction", b =>
                 {
+                    b.HasOne("DAL.Models.MemberShip", "MemberShip")
+                        .WithMany()
+                        .HasForeignKey("MemberShipId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DAL.Models.ApplicationUser", "User")
                         .WithMany("Transactions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("MemberShip");
 
                     b.Navigation("User");
                 });

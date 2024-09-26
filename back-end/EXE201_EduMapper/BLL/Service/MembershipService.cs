@@ -32,15 +32,6 @@ namespace BLL.Service
             if (membership == null)
                 throw new NotFoundException(GeneralMessage.NotFound);
 
-            // check if user has already package
-            var userMemberShips = await _unitOfWork.MemberShipDetailRepository.GetMemberShipOfUser(user.Id);
-
-            // if had
-            if (userMemberShips.Any(p => p.MemberShipId == memberShipId && p.ExpiredDate <= DateTime.Now))
-            {
-                throw new BadRequestException(MemberShipMessage.NotExpired);
-            }
-
             // if no membership is found, create new one
             // add
             _unitOfWork.MemberShipDetailRepository.Insert(new MemberShipDetail
@@ -51,10 +42,6 @@ namespace BLL.Service
                 ExpiredDate = DateTime.Now.AddDays(Config.PAID_PACKAGE_TIME),
                 RegistedDate = DateTime.Now
             });
-
-            // save
-            _unitOfWork.Save();
-
         }
 
         public bool CheckUniqueMemberShipName(string name)
@@ -132,9 +119,20 @@ namespace BLL.Service
             };
         }
 
+        public async Task<MemberShip?> GetMemberShipById(string id)
+        {
+            return await _unitOfWork.MemberShipRepository.GetByID(id);
+        }
+
         public async Task<MemberShip?> GetMemberShipByName(string name)
         {
             return await _unitOfWork.MemberShipRepository.GetMemberShipByName(name);
+        }
+
+        public async Task<bool> RevokeUserMemberShip(MemberShipDetail memberShipDetail)
+        {
+            memberShipDetail.IsFinished = true;
+            return await _unitOfWork.MemberShipDetailRepository.Update(memberShipDetail.MemberShipDetailId, memberShipDetail);
         }
 
         public async Task UpdateMemberShip(string id, MemberShipUpdateDTO request)
