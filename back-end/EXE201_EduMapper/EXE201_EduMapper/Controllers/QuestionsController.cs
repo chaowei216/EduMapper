@@ -31,6 +31,15 @@ namespace EXE201_EduMapper.Controllers
             return Ok(result);
         }
 
+        [HttpGet("free-question")]
+        [ProducesResponseType(200, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> GetAllFreeQuestions([FromQuery] QueryDTO request)
+        {
+            var result = await _questionService.GetFreeQuestions(request);
+
+            return Ok(result);
+        }
+
         [HttpGet("id/{id}")]
         [ProducesResponseType(200, Type = typeof(ResponseDTO))]
         [ProducesResponseType(404, Type = typeof(ResponseDTO))]

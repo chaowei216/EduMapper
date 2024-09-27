@@ -2,6 +2,7 @@
 using BLL.Exceptions;
 using BLL.IService;
 using Common.Constant.Message;
+using Common.Constant.Message.Question;
 using Common.DTO;
 using Common.DTO.MemberShip;
 using Common.DTO.Passage;
@@ -27,13 +28,59 @@ namespace BLL.Service
             _mapper = mapper;
         }
 
-        public ResponseDTO CreatePassage(PassageCreateDTO passage)
+        public async Task<ResponseDTO> AddQuestionToPassage(AddQuestionDTO passage)
+        {
+            var thisPassage = await _unitOfWork.PassageRepository.GetByID(passage.PassageId);
+
+            if (thisPassage == null)
+            {
+                throw new NotFoundException(GeneralMessage.NotFound);
+            }
+
+            if(passage.QuestionIds == null)
+            {
+                throw new NotFoundException(GeneralMessage.NotFound);
+            }
+
+            foreach(var question in passage.QuestionIds)
+            {
+                var thisQuestion = await _unitOfWork.QuestionRepository.GetByID(question);
+
+                if (thisQuestion == null)
+                {
+                    throw new NotFoundException(GeneralMessage.NotFound);
+                }
+
+                if (thisQuestion.PassageId != null)
+                {
+                    return new ResponseDTO
+                    {
+                        IsSuccess = false,
+                        Message = QuestionMessage.DuplicateQuestion,
+                        StatusCode = StatusCodeEnum.BadRequest,
+                    };
+                }
+
+                thisQuestion.PassageId = passage.PassageId;
+                _unitOfWork.QuestionRepository.Update(thisQuestion);
+                _unitOfWork.Save();
+            }
+
+            return new ResponseDTO
+            {
+                IsSuccess = true,
+                Message = QuestionMessage.AddQuestionSuccess,
+                StatusCode = StatusCodeEnum.NoContent,
+            };
+        }
+
+        public ResponseDTO CreateIELTSPassage(PassageIELTSCreateDTO passage)
         {
             var mapPassage = _mapper.Map<Passage>(passage);
             mapPassage.PassageId = Guid.NewGuid().ToString();
             mapPassage.CreatedAt = DateTime.Now;
 
-            if (mapPassage.SubQuestion != null)
+            if (passage.SubQuestion != null)
             {
                 foreach (var question in mapPassage.SubQuestion)
                 {
@@ -58,6 +105,25 @@ namespace BLL.Service
 
                 _unitOfWork.SectionRepository.Insert(section);
             }
+
+            _unitOfWork.PassageRepository.Insert(mapPassage);
+
+            _unitOfWork.Save();
+
+            return new ResponseDTO
+            {
+                IsSuccess = true,
+                Message = GeneralMessage.CreateSuccess,
+                StatusCode = StatusCodeEnum.Created,
+                MetaData = mapPassage
+            };
+        }
+
+        public ResponseDTO CreatePassage(PassageCreateDTO passage)
+        {
+            var mapPassage = _mapper.Map<Passage>(passage);
+            mapPassage.PassageId = Guid.NewGuid().ToString();
+            mapPassage.CreatedAt = DateTime.Now;
 
             _unitOfWork.PassageRepository.Insert(mapPassage);
 
