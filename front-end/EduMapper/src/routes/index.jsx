@@ -22,12 +22,11 @@ import SendOtpPage from "../pages/Authen/SendOtpPage";
 import MemberShipPage from "../pages/MemberShipPage/MemberShipPage";
 import CustomerTransactionPage from "../pages/CustomerPage/CustomerTransactionPage";
 import CoursePage from "../pages/Course/CoursePage";
+import QuestionPage from "../pages/QuestionPage/QuestionPage";
+import PassagePage from "../pages/PassagePage/PassagePage";
+import ContactPage from "../pages/ContactPage/ContactPage";
 
 export const router = createBrowserRouter([
-  {
-    path: "/test",
-    element: <UserTestPage />,
-  },
   {
     path: "/",
     element: (
@@ -81,7 +80,7 @@ export const router = createBrowserRouter([
     element: <TakeTestPrePage />,
   },
   {
-    path: "/doing-test",
+    path: "/reading-test",
     element: <UserTestPage />,
   },
   {
@@ -131,5 +130,21 @@ export const router = createBrowserRouter([
   {
     path: "/course",
     element: <CoursePage />,
+  },
+  {
+    path: "/question-management",
+    element: <QuestionPage />,
+  },
+  {
+    path: "/passage-management",
+    element: <PassagePage />,
+  },
+  {
+    path: "/user-profile",
+    element: <UserProfilePage />,
+  },
+  {
+    path: "/contact",
+    element: <ContactPage />,
   },
 ]);

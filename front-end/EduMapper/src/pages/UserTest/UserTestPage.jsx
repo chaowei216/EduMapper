@@ -4,7 +4,7 @@ import TestProgress from "../../components/partial/UserTesting/PartQuestion";
 import ReadingTest from "../../components/partial/UserTesting/ReadingTest";
 function UserTestPage() {
   const [passages, setPassages] = useState([]);
-  const [selectedAnswers, setSelectedAnswers] = useState({});
+  const [selectedAnswers, setSelectedAnswers] = useState([]);
   const [currentPassage, setCurrentPassage] = useState(0);
 
   useEffect(() => {
@@ -29,17 +29,46 @@ function UserTestPage() {
   };
 
   const getAnsweredCount = (passageIndex) => {
-    return (
-      passages[passageIndex]?.SubQuestions.filter(
-        (q) => selectedAnswers[q.QuestionId]
-      ).length || 0
-    );
+    // Lấy danh sách câu hỏi từ đoạn văn cụ thể
+    const questions = passages[passageIndex]?.SubQuestions || [];
+    
+    // Đếm số câu hỏi đã trả lời dựa vào selectedAnswers
+    return questions.reduce((count, question) => {
+      // Kiểm tra xem câu hỏi có tồn tại trong selectedAnswers và có giá trị không
+      return selectedAnswers.find(answer => answer.questionId === question.QuestionId) ? count + 1 : count;
+    }, 0);
+  };
+  // const handleAnswerChange = (questionId, answer) => {
+  //   setSelectedAnswers({ ...selectedAnswers, [questionId]: answer });
+  // };
+
+  const handleAnswerChange = (questionId, choiceId, userChoice) => {
+    setSelectedAnswers((prevAnswers) => {
+      // Tìm câu trả lời đã tồn tại cho câu hỏi này
+      const existingAnswerIndex = prevAnswers.findIndex(
+        (answer) => answer.questionId === questionId
+      );
+
+      const newAnswer = {
+        userId: "test",
+        questionId: questionId,
+        choiceId: choiceId || null, // Nếu không có lựa chọn (cho điền trống)
+        userChoice: userChoice || null,
+        description: "", // Có thể thêm mô tả tùy theo tình huống
+      };
+
+      // Nếu đã có câu trả lời cho câu hỏi này, cập nhật nó
+      if (existingAnswerIndex !== -1) {
+        const updatedAnswers = [...prevAnswers];
+        updatedAnswers[existingAnswerIndex] = newAnswer;
+        return updatedAnswers;
+      }
+
+      // Nếu chưa có, thêm mới
+      return [...prevAnswers, newAnswer];
+    });
   };
 
-  const handleAnswerChange = (questionId, answer) => {
-    setSelectedAnswers({ ...selectedAnswers, [questionId]: answer });
-  };
-  
   return (
     <div className="flex flex-col h-screen overflow-hidden">
       <div

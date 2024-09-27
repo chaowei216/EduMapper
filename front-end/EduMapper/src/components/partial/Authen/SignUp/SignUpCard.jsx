@@ -136,9 +136,9 @@ export default function SignUpCard() {
           phoneNumber: "string",
           imageLink: "string",
         };
-        await login_type("Google", userLogin);
+        await login_type("Facebook", userLogin);
       } else {
-        navigate("/complete-profile", { type: "Facebook", state: { user } });
+        navigate("/complete-profile", { state: { type: "Facebook", user } });
       }
     } catch (err) {
       console.log(err);

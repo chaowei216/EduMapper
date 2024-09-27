@@ -11,16 +11,40 @@ import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import ReportIcon from '@mui/icons-material/Report';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
+import CardMembershipIcon from '@mui/icons-material/CardMembership';
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 export default function Sidebar() {
   const { user } = useAuth();
   const Menus = [
     {
       title: "Trang cá nhân",
-      path: "/personal-profile",
+      path: "/user-profile",
       icon: <PersonIcon />,
       id: 1,
-      src: "/personal-profile",
+      src: "/user-profile",
+    },
+    {
+      title: "MemberShip",
+      path: "/membership",
+      icon: <CardMembershipIcon />,
+      id: 99,
+      src: "/membership",
+    },
+    {
+      title: "Tạo câu hỏi",
+      path: "/question-management",
+      icon: <QuestionAnswerIcon />,
+      id: 98,
+      src: "/question-management",
+    },
+    {
+      title: "Tạo đoạn văn",
+      path: "/passage-management",
+      icon: <AutoStoriesIcon />,
+      id: 96,
+      src: "/passage-management",
     },
   ];
   if (user?.roleName === 'Moderator') {

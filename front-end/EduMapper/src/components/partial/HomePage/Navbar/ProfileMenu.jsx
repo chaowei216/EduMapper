@@ -33,16 +33,16 @@ export default function ProfileMenu() {
   };
 
   const handleNavigate = () => {
-    // if (user?.roleName == "Admin" || user?.roleName == "Moderator") {
-    //     setAnchorEl(null);
-    //     navigate('/dashboard')
-    // } else if (user?.roleName == "Tutor") {
-    //     setAnchorEl(null);
-    //     navigate('/home-tutor')
-    // } else {
-    //     setAnchorEl(null);
-    //     navigate('/ParentHistory')
-    // }
+    if (user?.roleName == "Admin") {
+        setAnchorEl(null);
+        navigate('/dashboard')
+    } else if (user?.roleName == "Tutor") {
+        setAnchorEl(null);
+        navigate('/home-tutor')
+    } else {
+        setAnchorEl(null);
+        navigate('/personal-profile')
+    }
   };
 
   const handleClickLogout = async () => {
@@ -58,11 +58,11 @@ export default function ProfileMenu() {
     }
   };
   const handleMove = () => {
-    // if (user?.roleName == "Parents") {
-    //     navigate('/ParentHistoryTransaction')
-    // } else {
-    //     setAnchorEl(null);
-    // }
+    if (user?.roleName == "Customer") {
+        navigate('/customer-transaction')
+    } else {
+        setAnchorEl(null);
+    }
   };
   return (
     <div>

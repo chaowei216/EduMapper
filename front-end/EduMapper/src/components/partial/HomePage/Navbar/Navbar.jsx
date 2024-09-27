@@ -239,7 +239,7 @@ const NAV_ITEMS = [
   },
   {
     label: "Liên hệ",
-    href: "#",
+    href: "/contact",
   },
   {
     label: "Cộng đồng",

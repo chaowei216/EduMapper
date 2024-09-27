@@ -4,7 +4,7 @@ import TestProgress from "../../components/partial/UserTesting/PartQuestion";
 import ListeningTest from "../../components/partial/UserTesting/ListeningTest";
 function ListeningTestPage() {
   const [passages, setPassages] = useState([]);
-  const [selectedAnswers, setSelectedAnswers] = useState({});
+  const [selectedAnswers, setSelectedAnswers] = useState([]);
   const [currentPassage, setCurrentPassage] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   useEffect(() => {
@@ -36,9 +36,36 @@ function ListeningTestPage() {
     );
   };
 
-  const handleAnswerChange = (questionId, answer) => {
-    setSelectedAnswers({ ...selectedAnswers, [questionId]: answer });
+  const handleAnswerChange = (questionId, choiceId, userChoice) => {
+    setSelectedAnswers((prevAnswers) => {
+      // Tìm câu trả lời đã tồn tại cho câu hỏi này
+      const existingAnswerIndex = prevAnswers.findIndex(
+        (answer) => answer.questionId === questionId
+      );
+
+      const newAnswer = {
+        userId: "test",
+        questionId: questionId,
+        choiceId: choiceId || null, // Nếu không có lựa chọn (cho điền trống)
+        userChoice: userChoice || null,
+        description: "", // Có thể thêm mô tả tùy theo tình huống
+      };
+
+      // Nếu đã có câu trả lời cho câu hỏi này, cập nhật nó
+      if (existingAnswerIndex !== -1) {
+        const updatedAnswers = [...prevAnswers];
+        updatedAnswers[existingAnswerIndex] = newAnswer;
+        return updatedAnswers;
+      }
+
+      // Nếu chưa có, thêm mới
+      return [...prevAnswers, newAnswer];
+    });
   };
+
+  // const handleAnswerChange = (questionId, answer) => {
+  //   setSelectedAnswers({ ...selectedAnswers, [questionId]: answer });
+  // };
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">

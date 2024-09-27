@@ -36,24 +36,24 @@ const FlowAccount = () => {
       <div className="col-sm-4">
         <div className={styles.flowItem}>
           <div className={styles.flowBoder}>
-            <h3>SỐ GIỜ ĐÃ THUÊ</h3>
-            <h1>13</h1>
+            <h3>SỐ PHẢN HỒI</h3>
+            <h1>5 lượt</h1>
           </div>
         </div>
       </div>
       <div className="col-sm-4">
         <div className={styles.flowItem}>
           <div className={styles.flowBoder}>
-            <h3>TỔNG SỐ LẦN ĐÃ THUÊ GIA SƯ</h3>
-            <h1>14 lần</h1>
+            <h3>TỔNG SỐ LẦN LÀM BÀI</h3>
+            <h1>5 lần</h1>
           </div>
         </div>
       </div>
       <div className="col-sm-4">
         <div className={styles.flowItem}>
           <div className={styles.flowBoder}>
-            <h3>TỔNG SỐ XU ĐÃ NẠP</h3>
-            <h1>15 Xu</h1>
+            <h3>TỔNG SỐ TIỀN ĐÃ NẠP</h3>
+            <h1>100.000 VND</h1>
           </div>
         </div>
       </div>

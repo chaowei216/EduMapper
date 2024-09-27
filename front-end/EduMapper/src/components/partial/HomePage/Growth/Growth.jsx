@@ -15,29 +15,59 @@ import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { GetAllMemberShip } from "../../../../api/MemberShipApi";
 import { formatPrice } from "../../../../utils/FormatPrice";
+import InventoryIcon from "@mui/icons-material/Inventory";
 
 const Growth = () => {
   // Sử dụng useQuery để gọi API và quản lý cache
-  const { data: memberShip, error, isLoading } = useQuery({
+  const {
+    data: memberShip,
+    error,
+    isLoading,
+  } = useQuery({
     queryKey: ["allMemberships"], // Key để quản lý cache
-    queryFn: () => GetAllMemberShip("", "").then(res => {
-      if (!res.ok) {
-        throw new Error("Error getting membership");
-      }
-      return res.json();
-    }),
+    queryFn: () =>
+      GetAllMemberShip("", "").then((res) => {
+        if (!res.ok) {
+          throw new Error("Error getting membership");
+        }
+        return res.json();
+      }),
     staleTime: 300000, // Cache dữ liệu trong 5 phút
     onError: () => {
       toast.error("Error getting membership data");
-    }
+    },
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+        }}
+      >
+        <InventoryIcon />
+        Không có dữ liệu
+      </div>
+    );
   }
 
   if (error) {
-    return <div>Error loading data</div>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+        }}
+      >
+        <InventoryIcon />
+        Lỗi
+      </div>
+    );
   }
 
   return (

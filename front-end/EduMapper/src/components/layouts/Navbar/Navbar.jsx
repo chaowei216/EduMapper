@@ -30,7 +30,7 @@ export default function Navbar() {
               handleClose={handleClose}
             >
               <img
-                src="/img/logoEdu.png"
+                src="/img/avatar.png"
                 alt="avatar"
                 style={{
                   borderRadius: "50%",

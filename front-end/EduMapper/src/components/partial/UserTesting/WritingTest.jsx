@@ -1,26 +1,14 @@
-import {
-  Box,
-  Paper,
-  TextField,
-  Typography,
-  Button,
-  AppBar,
-  Toolbar,
-  Grid,
-} from "@mui/material";
+import { Box, Paper, TextField, Typography, Button, Grid } from "@mui/material";
 import SplitPane from "react-split-pane";
 import styles from "./ReadingTest.module.css";
 import { Scrollbars } from "react-custom-scrollbars";
 import { useState } from "react";
 
 export default function WritingTest(prop) {
-  const {
-    passages,
-    currentPassage,
-    selectedAnswers,
-    handleAnswerChange,
-  } = prop;
+  const { passages, currentPassage, selectedAnswers, handleAnswerChange } =
+    prop;
   const [wordCounts, setWordCounts] = useState({});
+
   // Hàm để đếm số từ
   const countWords = (text) => {
     return text ? text.trim().split(/\s+/).length : 0;
@@ -28,11 +16,12 @@ export default function WritingTest(prop) {
 
   // Hàm xử lý khi bấm nút "Count Words"
   const handleCountWords = (questionId, text) => {
-    setWordCounts({
-      ...wordCounts,
+    setWordCounts((prevCounts) => ({
+      ...prevCounts,
       [questionId]: countWords(text),
-    });
+    }));
   };
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column", minHeight: "77.5vh" }}>
       <SplitPane
@@ -85,22 +74,29 @@ export default function WritingTest(prop) {
                     multiline
                     rows={18}
                     placeholder={`Your answer (minimum ${question.WordLimit} words)`}
-                    value={selectedAnswers[question.QuestionId] || ""}
-                    onChange={(e) =>
-                      handleAnswerChange(question.QuestionId, e.target.value)
+                    value={
+                      selectedAnswers.find(
+                        (answer) => answer.questionId === question.QuestionId
+                      )?.userChoice || ""
                     }
+                    onChange={(e) => {
+                      const text = e.target.value; // Giữ cả chuỗi có xuống dòng
+                      handleAnswerChange(question.QuestionId, text);
+                    }}
                   />
 
                   <Grid container spacing={2} sx={{ mt: 1 }}>
                     <Grid item xs={6}>
                       <Button
                         variant="outlined"
-                        onClick={() =>
-                          handleCountWords(
-                            question.QuestionId,
-                            selectedAnswers[question.QuestionId] || ""
-                          )
-                        }
+                        onClick={() => {
+                          const text =
+                            selectedAnswers.find(
+                              (answer) =>
+                                answer.questionId === question.QuestionId
+                            )?.userChoice || "";
+                          handleCountWords(question.QuestionId, text);
+                        }}
                       >
                         Count Words
                       </Button>

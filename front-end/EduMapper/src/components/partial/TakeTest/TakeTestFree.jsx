@@ -10,14 +10,16 @@ import {
 import { MenuBook, Create, Mic } from "@mui/icons-material"; // Import icons từ MUI
 import HeadphonesIcon from "@mui/icons-material/Headphones";
 import styles from "./TakeTest.module.css"; // Import CSS Module
+import { useNavigate } from "react-router-dom";
 
 export default function TakeTestFree() {
+  const navigate = useNavigate();
   return (
     <Box className={styles.root}>
       {/* Breadcrumb */}
       <Box className={styles.breadcrumb}>
         <Typography variant="body2">
-          <a href="/">Trang chủ</a> / <a href="/test">Thi thử</a> / Thi thử miễn
+          <a href="/">Trang chủ</a> / <a href="/take-test">Thi thử</a> / Thi thử miễn
           phí
         </Typography>
       </Box>
@@ -33,13 +35,19 @@ export default function TakeTestFree() {
           <Typography variant="h5" color="primary" className={styles.title}>
             Thi Thử
           </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec
-            odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla
-            quis sem at nibh elementum imperdiet. Duis Lorem ipsum dolor sit
-            amet, consectetur adipiscing elit. Integer nec odio. Praesent
-            libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at
-            nibh elementum imperdiet.
+          <Typography
+            mt={2}
+            variant="body2"
+            color="textSecondary"
+            sx={{ fontSize: "large", textAlign: "justify" }}
+          >
+            Chào mừng bạn đến với phần Thi Thử! Đây là nơi bạn có thể kiểm tra
+            kiến thức của mình một cách thú vị và hiệu quả. Với các bài thi được
+            thiết kế chuyên nghiệp, bạn sẽ có cơ hội trải nghiệm cảm giác như
+            trong một kỳ thi thật sự. Chúng tôi cung cấp nhiều chủ đề khác nhau,
+            từ ngữ pháp, từ vựng đến các kỹ năng nghe, nói, đọc, viết. Đừng lo
+            lắng nếu bạn chưa hoàn hảo, vì đây là một cơ hội tuyệt vời để học
+            hỏi và cải thiện bản thân!
           </Typography>
         </Box>
       </Box>
@@ -69,6 +77,7 @@ export default function TakeTestFree() {
               variant="contained"
               style={{ background: "#73fbfd" }}
               className={styles.testButton}
+              onClick={() => navigate('/listening-test')}
             >
               Take Test
             </Button>
@@ -89,6 +98,7 @@ export default function TakeTestFree() {
               color="secondary"
               style={{ background: "#73fd91" }}
               className={styles.testButton}
+              onClick={() => navigate('/reading-test')}
             >
               Take Test
             </Button>
@@ -109,6 +119,7 @@ export default function TakeTestFree() {
               color="secondary"
               style={{ background: "#f29d38" }}
               className={styles.testButton}
+              onClick={() => navigate('/writing-test')}
             >
               Take Test
             </Button>
@@ -129,6 +140,7 @@ export default function TakeTestFree() {
               color="secondary"
               style={{ background: "#ea3ef7" }}
               className={styles.testButton}
+              onClick={() => alert('Đã đặt lịch vui lòng chờ Email')}
             >
               Take Test
             </Button>
@@ -156,6 +168,7 @@ export default function TakeTestFree() {
           variant="contained"
           color="success"
           className={styles.upgradeButton}
+          onClick={() => navigate('/package')}
         >
           Nâng cấp ngay
         </Button>

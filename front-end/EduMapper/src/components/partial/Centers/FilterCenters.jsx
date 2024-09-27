@@ -47,21 +47,6 @@ export default function FilterCenters(pros) {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={4} md={3} style={{ zIndex: "0" }}>
-          <FormControl fullWidth>
-            <InputLabel>Chương trình học</InputLabel>
-            <Select
-              label="Chương trình học"
-              value={filter.programing || ""}
-              onChange={(e) => handleChangeFilter("programing", e.target.value)}
-            >
-              <MenuItem value="All">Tất cả</MenuItem>
-              <MenuItem value="General">Chương trình tổng quát</MenuItem>
-              <MenuItem value="IELTS">IELTS</MenuItem>
-              <MenuItem value="TOEIC">TOEIC</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
         <Grid item xs={12} sm={6} md={3} display="flex" alignItems="center">
           <Button
             variant="contained"

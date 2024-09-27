@@ -7,9 +7,14 @@ import {
   Button,
   Box,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function EnglishCenters(pros) {
+  const navigate = useNavigate();
   const { centers } = pros;
+  const handleNavigate = () => {
+    navigate("/english-center-detail")
+  }
   return (
     <Grid container spacing={3}>
       {centers.map((center, index) => (
@@ -36,11 +41,12 @@ export default function EnglishCenters(pros) {
                 <Button
                   variant="contained"
                   color="success"
+                  onClick={handleNavigate}
                   sx={{ marginRight: 1 }}
                 >
                   Thông tin chi tiết
                 </Button>
-                <Button variant="outlined" color="success">
+                <Button variant="outlined" color="success" onClick={() => navigate('/rating')}>
                   Xem đánh giá
                 </Button>
               </Box>

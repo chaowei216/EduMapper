@@ -7,7 +7,7 @@ const Questions = () => {
         <div className={styles.videoWrapper}>
           <iframe
             className={styles.video}
-            src="https://www.youtube.com/embed/yDQ22O7iz6w"
+            src="https://www.youtube.com/embed/xVuyS6I9CSs"
             title="YouTube Video"
             allowFullScreen
           ></iframe>

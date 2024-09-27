@@ -10,6 +10,7 @@ import {
 import { isValidToken, setSession } from "../utils/jwtValid";
 import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
+import Messages from "../utils/Message";
 
 //---------------
 const initialState = {
@@ -242,7 +243,7 @@ function AuthProvider({ children }) {
           user: user,
         },
       });
-      toast.success(responseJson.message);
+      toast.success(Messages.SUCCESS.LOGIN);
 
       // const timeout = setTimeout(() => {
       //   window.location.replace("/");
@@ -258,7 +259,7 @@ function AuthProvider({ children }) {
     const responseJson = await response.json();
     console.log(responseJson.statusCode);
     if (responseJson.statusCode == 400) {
-      toast.error(responseJson.message);
+      toast.error(Messages.ERROR.BAD_REQUEST);
       return;
     }
     const user = responseJson.metaData;

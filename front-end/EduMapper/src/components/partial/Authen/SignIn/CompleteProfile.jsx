@@ -69,16 +69,16 @@ export default function CompleteProfile() {
     }
   }, [state?.user, navigate]);
   return (
+    <div style={{height: "100vh", display: "flex", background: "aliceblue", alignItems: "center"}}>
     <Container component="main" maxWidth="sm">
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          marginTop: 8,
           padding: 3,
-          boxShadow: 3,
-          borderRadius: 2,
+          boxShadow: 9,
+          borderRadius: 3,
           backgroundColor: "#f9f9f9",
         }}
       >
@@ -175,5 +175,6 @@ export default function CompleteProfile() {
         </Box>
       </Box>
     </Container>
+    </div>
   );
 }
