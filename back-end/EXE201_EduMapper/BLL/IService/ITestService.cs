@@ -1,4 +1,5 @@
 ﻿using Common.DTO;
+using Common.DTO.Test;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,6 @@ namespace BLL.IService
         Task<ResponseDTO> GetReadingTestById(string id);
         Task<ResponseDTO> GetWritingTestById(string id);
         Task<ResponseDTO> GetListeningTestById(string id);
+        
     }
 }

@@ -7,6 +7,7 @@ using Common.Constant.Message.Auth;
 using Common.DTO;
 using Common.DTO.Test;
 using Common.Enum;
+using DAL.Models;
 using DAL.UnitOfWork;
 using System;
 using System.Collections.Generic;

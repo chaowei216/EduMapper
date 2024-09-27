@@ -19,6 +19,13 @@ namespace BLL.IService
         Task<ResponseDTO> GetAllQuestions(QueryDTO request);
 
         /// <summary>
+        /// Get free questions
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<ResponseDTO> GetFreeQuestions(QueryDTO request);
+
+        /// <summary>
         /// Get question of test by id
         /// </summary>
         /// <param name="id"></param>

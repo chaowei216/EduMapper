@@ -12,5 +12,6 @@ namespace DAL.Models
         public string QuestionId { get; set; } = null!;
         [ForeignKey("QuestionId")]
         public Question Questions { get; set; } = null!;
+        public ICollection<UserAnswer> Answers { get; set; } = null!;
     }
 }

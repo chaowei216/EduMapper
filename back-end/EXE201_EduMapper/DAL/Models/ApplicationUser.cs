@@ -19,5 +19,6 @@ namespace DAL.Models
         public ICollection<Feedback> FromFeedbacks { get; set; } = null!;
         public ICollection<Progress> Progress { get; set; } = null!;
         public ICollection<UserAnswer> UserAnswers { get; set; } = null!;
+        public ICollection<TestResult> Results { get; set; }
     }
 }

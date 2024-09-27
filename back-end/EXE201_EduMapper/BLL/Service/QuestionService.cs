@@ -84,6 +84,25 @@ namespace BLL.Service
             };
         }
 
+        public async Task<ResponseDTO> GetFreeQuestions(QueryDTO request)
+        {
+            var response = await _unitOfWork.QuestionRepository.Get(filter: c => (c.PassageId == null) && (string.IsNullOrEmpty(request.Search)
+                                                                || c.QuestionText.Contains(request.Search.Trim())),
+                                                                pageIndex: request.PageIndex,
+                                                                pageSize: request.PageSize,
+                                                                includeProperties: "Choices");
+
+            var mapQuestion = _mapper.Map<List<QuestionDTO>>(response);
+
+            return new ResponseDTO
+            {
+                StatusCode = StatusCodeEnum.OK,
+                IsSuccess = true,
+                Message = GeneralMessage.GetSuccess,
+                MetaData = mapQuestion
+            };
+        }
+
         public async Task<ResponseDTO> GetQuestionById(string id)
         {
             var question = await _unitOfWork.QuestionRepository.Get(filter: c => c.QuestionId == id, includeProperties: "Choices");

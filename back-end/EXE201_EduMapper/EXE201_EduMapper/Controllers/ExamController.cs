@@ -1,6 +1,8 @@
 ﻿using BLL.IService;
 using Common.DTO;
 using Common.DTO.Exam;
+using Common.DTO.Progress;
+using Common.DTO.Test;
 using Common.Enum;
 using Microsoft.AspNetCore.Mvc;
 
@@ -51,6 +53,58 @@ namespace EXE201_EduMapper.Controllers
             }
 
             var result = await _examService.CreateExam(examDTO);
+
+            if (result.IsSuccess)
+            {
+                return Created(uri: "", value: result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
+        [HttpPost("answer")]
+        [ProducesResponseType(201, Type = typeof(ResponseDTO))]
+        [ProducesResponseType(400, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> AnswerQuestion([FromBody] AnswerDTO examDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO
+                {
+                    StatusCode = StatusCodeEnum.BadRequest,
+                    Message = ModelState.ToString()!
+                });
+            }
+
+            var result = await _examService.AnswerQuestion(examDTO);
+
+            if (result.IsSuccess)
+            {
+                return Created(uri: "", value: result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
+        [HttpPost("start-exam")]
+        [ProducesResponseType(201, Type = typeof(ResponseDTO))]
+        [ProducesResponseType(400, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> StartExam([FromBody] ProgressCreateDTO progressDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO
+                {
+                    StatusCode = StatusCodeEnum.BadRequest,
+                    Message = ModelState.ToString()!
+                });
+            }
+
+            var result = await _examService.StartExam(progressDTO);
 
             if (result.IsSuccess)
             {
