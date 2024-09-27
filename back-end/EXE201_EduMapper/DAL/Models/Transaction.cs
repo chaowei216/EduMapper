@@ -23,5 +23,7 @@ namespace DAO.Models
         public string UserId { get; set; } = null!;
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; } = null!;
+        public string MemberShipId { get; set; } = null!;
+        public MemberShip MemberShip { get; set; } = null!;
     }
 }

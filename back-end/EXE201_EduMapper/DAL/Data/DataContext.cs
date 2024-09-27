@@ -73,7 +73,7 @@ namespace DAL.Data
                 .HasForeignKey(uc => uc.QuestionId);
 
             modelBuilder.Entity<MemberShipDetail>()
-                .HasKey(uc => new { uc.UserId, uc.MemberShipId });
+                .HasKey(uc => uc.MemberShipDetailId);
             modelBuilder.Entity<MemberShipDetail>()
                 .HasOne(uc => uc.User)
                 .WithMany(uc => uc.MemberShipDetails)
