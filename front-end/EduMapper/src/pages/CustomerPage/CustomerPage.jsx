@@ -45,7 +45,7 @@ export default function CustomerPage() {
                 </IconButton>
               </Link>
               <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                Gia Sư Học Tập
+                EduMapper
               </Typography>
               <Box sx={{ display: "flex", gap: "15px" }}>
                 <Link
@@ -54,7 +54,7 @@ export default function CustomerPage() {
                   underline="none"
                   sx={{ display: "flex", alignItems: "center" }}
                 >
-                  <HomeIcon sx={{ mr: 0.5 }} /> Home
+                  <HomeIcon sx={{ mr: 0.5 }} /> Trang chủ
                 </Link>
               </Box>
             </Toolbar>

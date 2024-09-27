@@ -25,6 +25,8 @@ import CoursePage from "../pages/Course/CoursePage";
 import QuestionPage from "../pages/QuestionPage/QuestionPage";
 import PassagePage from "../pages/PassagePage/PassagePage";
 import ContactPage from "../pages/ContactPage/ContactPage";
+import Checkout from "../pages/PaymentPage/CheckOut";
+import WaitingCheckout from "../pages/PaymentPage/WaitingCheckOut";
 
 export const router = createBrowserRouter([
   {
@@ -146,5 +148,10 @@ export const router = createBrowserRouter([
   {
     path: "/contact",
     element: <ContactPage />,
+  },
+  { path: "/payment", element: <Checkout /> },
+  {
+    path: "/waiting-checkout",
+    element: <WaitingCheckout />,
   },
 ]);

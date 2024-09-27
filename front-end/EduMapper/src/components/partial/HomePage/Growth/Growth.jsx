@@ -16,9 +16,11 @@ import { toast } from "react-toastify";
 import { GetAllMemberShip } from "../../../../api/MemberShipApi";
 import { formatPrice } from "../../../../utils/FormatPrice";
 import InventoryIcon from "@mui/icons-material/Inventory";
+import { useNavigate } from "react-router-dom";
 
 const Growth = () => {
   // Sử dụng useQuery để gọi API và quản lý cache
+  const navigate = useNavigate();
   const {
     data: memberShip,
     error,
@@ -69,6 +71,11 @@ const Growth = () => {
       </div>
     );
   }
+
+  const handleBuyMemberShip = (item) => {
+    const memberShip = item;
+    navigate("/payment", { state: memberShip });
+  };
 
   return (
     <div className={styles.package_container}>
@@ -137,30 +144,32 @@ const Growth = () => {
                       ))}
                   </List>
                 </Paper>
-                <Paper
-                  sx={{
-                    p: 4,
-                    height: "100px",
-                    margin: "0 auto",
-                    width: "380px",
-                    marginTop: "10px",
-                    borderRadius: "20px",
-                    background: "#CEFFEC",
-                    boxShadow: "20px 15px 28.4px -1px rgba(0, 0, 0, 0.25)",
-                  }}
-                >
-                  <Typography
+                <div style={{ cursor: "pointer" }} onClick={() => handleBuyMemberShip(plan)}>
+                  <Paper
                     sx={{
-                      color: "#0A5839",
-                      textAlign: "center",
-                      fontFamily: "Inter",
-                      fontSize: "24px",
-                      fontWeight: 800,
+                      p: 4,
+                      height: "100px",
+                      margin: "0 auto",
+                      width: "380px",
+                      marginTop: "10px",
+                      borderRadius: "20px",
+                      background: "#CEFFEC",
+                      boxShadow: "20px 15px 28.4px -1px rgba(0, 0, 0, 0.25)",
                     }}
                   >
-                    {formatPrice(plan.price + "000")}
-                  </Typography>
-                </Paper>
+                    <Typography
+                      sx={{
+                        color: "#0A5839",
+                        textAlign: "center",
+                        fontFamily: "Inter",
+                        fontSize: "24px",
+                        fontWeight: 800,
+                      }}
+                    >
+                      {formatPrice(plan.price)}
+                    </Typography>
+                  </Paper>
+                </div>
               </Grid>
             ))}
           </Grid>

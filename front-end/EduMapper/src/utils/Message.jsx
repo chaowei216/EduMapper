@@ -10,6 +10,7 @@ const Messages = {
     SEND_EMAIL: "Gửi email thành công!",
     CHANGE_PASSWORD: "Đổi mật khẩu thành công!",
     UPLOAD: "Tải lên thành công!",
+    PAYMENT: "Thành toán thành công"
   },
   ERROR: {
     NOT_FOUND: "Không tìm thấy tài nguyên!",
@@ -25,6 +26,9 @@ const Messages = {
     PASSWORD_TOO_SHORT: "Mật khẩu phải dài ít nhất 6 ký tự!",
     REQUIRED_FIELD: "Trường này là bắt buộc!",
     INVALID_FORMAT: "Định dạng không hợp lệ!",
+    PAYMENT: "Thanh toán thất bại",
+    CHOOSE_PAYMENT: "Làm ơn chọn phương thức thành toán",
+    CAPTCHA: "Mã Captcha không được trùng khớp. Hãy thử lại!"
   },
 };
 export default Messages;
