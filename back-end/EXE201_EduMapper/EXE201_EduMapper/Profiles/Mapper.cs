@@ -10,6 +10,9 @@ using Common.DTO.Center;
 using DAO.Models;
 using Common.DTO.Feedback;
 using Common.DTO.ProgramTraining;
+using Common.DTO;
+using Common.DTO.Transaction;
+using Common.DTO.Notification;
 using Common.DTO.Progress;
 
 namespace EXE201_EduMapper.Profiles
@@ -40,6 +43,12 @@ namespace EXE201_EduMapper.Profiles
             CreateMap<Feedback, FeedbackDTO>().ReverseMap();
             CreateMap<Progress, ProgressCreateDTO>().ReverseMap();
             CreateMap<ProgramTraining, ProgramTrainingDTO>().ReverseMap();
+            CreateMap<PagedList<Transaction>, PaginationResponseDTO<TransactionDTO>>().ReverseMap();
+            CreateMap<Transaction, TransactionDTO>().ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email))
+                                                    .ForMember(dest => dest.MemberShipName, opt => opt.MapFrom(src => src.MemberShip.MemberShipName))
+                                                    .ReverseMap();
+            CreateMap<PagedList<Notification>, PaginationResponseDTO<NotificationDTO>>().ReverseMap();
+            CreateMap<Notification, NotificationDTO>().ReverseMap();
             CreateMap<UserAnswer, UserAnswerDTO>().ReverseMap();
         }
     }

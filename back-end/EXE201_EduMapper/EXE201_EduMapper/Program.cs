@@ -18,7 +18,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Authentication API",
+        Title = "Edumapper API",
         Version = "v1"
     });
 
@@ -58,6 +58,10 @@ builder.Services.AddScoped<IPassageService, PassageService>();
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<IExamService, ExamService>();
 builder.Services.AddScoped<ICenterService, CenterService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IVnPayService, VnPayService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 // CORS
 builder.Services.AddCors(options =>

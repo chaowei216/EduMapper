@@ -63,7 +63,7 @@ namespace DAL.Data
 
             #region M_M relationship
             modelBuilder.Entity<MemberShipDetail>()
-                .HasKey(uc => new { uc.UserId, uc.MemberShipId });
+                .HasKey(uc => uc.MemberShipDetailId);
             modelBuilder.Entity<MemberShipDetail>()
                 .HasOne(uc => uc.User)
                 .WithMany(uc => uc.MemberShipDetails)
