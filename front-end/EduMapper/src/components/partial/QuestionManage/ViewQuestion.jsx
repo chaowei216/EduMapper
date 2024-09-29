@@ -3,8 +3,6 @@ import { toast } from "react-toastify";
 import {
   Button,
   FormControl,
-  FormHelperText,
-  InputLabel,
   MenuItem,
   Select,
 } from "@mui/material";
@@ -16,7 +14,7 @@ import Inventory2Icon from "@mui/icons-material/Inventory2";
 import QuestionTable from "./QuestionTable";
 import CreateQuestionModal from "./CreateQuestionModal";
 import AddQuestionPassage from "./AddQuestionPassage";
-import { GetAllQuestion } from "../../../api/QuestionApi";
+import { GetAllQuestion } from "../../../api/QuestionManageApi";
 export default function ViewQuestion() {
   const [totalPages, setTotalPages] = useState();
   const [page, setPage] = React.useState(1);

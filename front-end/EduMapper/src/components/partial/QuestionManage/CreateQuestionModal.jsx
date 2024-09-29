@@ -10,18 +10,16 @@ import {
   MDBRow,
   MDBCol,
   MDBCardText,
-  MDBTextArea,
   MDBInput,
 } from "mdb-react-ui-kit";
 import { Button, IconButton } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import { Formik, Field, ErrorMessage, Form } from "formik";
-import * as Yup from "yup";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import StatusCode from "../../../utils/StautsCode";
 import Messages from "../../../utils/Message";
-import { CreateQuestion } from "../../../api/QuestionApi";
+import { CreateQuestion } from "../../../api/QuestionManageApi";
 
 export default function CreateQuestionModal({ centredModal, setCentredModal, setIsCreated }) {
   const [choices, setChoices] = useState([{ ChoiceId: 1, ChoiceContent: "" }]);
