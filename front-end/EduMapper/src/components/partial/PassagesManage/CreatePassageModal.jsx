@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 import StatusCode from "../../../utils/StautsCode";
 import Messages from "../../../utils/Message";
 import { CreateQuestion } from "../../../api/QuestionApi";
+import { CreatePassage } from "../../../api/PassageApi";
 
 export default function CreatePassageModal({
   centredModal,
@@ -67,18 +68,17 @@ export default function CreatePassageModal({
 
   const handleSubmit = async (values) => {
     console.log(values);
-
-    // const response = await CreateQuestion(values);
-    // if (response.status !== StatusCode.CREATED) {
-    //   toast.error(Messages.ERROR.BAD_REQUEST);
-    //   return;
-    // }
-    // const responseJson = await response.json();
-    // if (responseJson.statusCode === StatusCode.CREATED) {
-    //   setIsCreated((prevIsCreated) => !prevIsCreated);
-    //   toast.success(Messages.SUCCESS.CREATE);
-    //   setCentredModal(false);
-    // }
+    const response = await CreatePassage(values);
+    if (response.status !== StatusCode.CREATED) {
+      toast.error(Messages.ERROR.BAD_REQUEST);
+      return;
+    }
+    const responseJson = await response.json();
+    if (responseJson.statusCode === StatusCode.CREATED) {
+      setIsCreated((prevIsCreated) => !prevIsCreated);
+      toast.success(Messages.SUCCESS.CREATE);
+      setCentredModal(false);
+    }
   };
 
   return (
@@ -105,9 +105,9 @@ export default function CreatePassageModal({
                 {
                   questionText: "",
                   correctAnswer: "",
-                  questionType: "multiple_choice",
+                  questionType: "fill_in_blank",
                   wordsLimit: 0,
-                  choices: [{ choiceContent: "" }],
+                  choices: [],
                 },
               ],
               sections: [{ sectionLabel: "", sectionContent: "" }],
@@ -223,7 +223,12 @@ export default function CreatePassageModal({
 
                             {/* Correct Answer Field */}
                             {subQuestion.questionType !== "writing_task_1" && (
-                              <MDBRow style={{ marginTop: "20px", marginBottom: "20px" }}>
+                              <MDBRow
+                                style={{
+                                  marginTop: "20px",
+                                  marginBottom: "20px",
+                                }}
+                              >
                                 <MDBCol sm="4">
                                   <MDBCardText>Correct Answer:</MDBCardText>
                                 </MDBCol>

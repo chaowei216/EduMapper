@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Button } from "@mui/material";
+import { Button, Divider, Menu, MenuItem } from "@mui/material";
 import PageNavigation from "../../global/PageNavigation";
 import PageSize from "../../global/PageSize";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
@@ -9,6 +9,7 @@ import { GetAllPassage } from "../../../api/PassageApi";
 import CreatePassageModal from "./CreatePassageModal";
 import UpdateModal from "../MembershipManagement/UpdateModal";
 import DeleteModal from "../MembershipManagement/DeleteModal";
+import CreatePassage2 from "./CreatePassage2";
 export default function ViewPassage() {
   const [totalPages, setTotalPages] = useState();
   const [page, setPage] = React.useState(1);
@@ -19,6 +20,7 @@ export default function ViewPassage() {
   const [dataDetail, setDataDetail] = useState();
   const [openDetail, setOpenDetail] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const [openCreatePassage2, setOpenCreatePassage2] = useState(false);
   useEffect(() => {
     const getAllPassage = async () => {
       const response = await GetAllPassage(page, pageSize);
@@ -45,6 +47,15 @@ export default function ViewPassage() {
   const handleClose = () => {
     setOpenDelete(false);
   };
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose2 = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <div
       style={{
@@ -60,13 +71,44 @@ export default function ViewPassage() {
       </div>
       <div style={{ marginBottom: "20px" }}>
         <Button
+          id="basic-button"
           variant="contained"
           style={{ fontWeight: "bold" }}
-          onClick={() => setCentredModal(true)}
+          aria-controls={open ? "basic-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+          onClick={handleClick}
         >
           <Inventory2Icon />
           Tạo đoạn văn
         </Button>
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose2}
+          MenuListProps={{
+            "aria-labelledby": "basic-button",
+          }}
+        >
+          <MenuItem
+            onClick={() => {
+              setCentredModal(true);
+              setAnchorEl(null);
+            }}
+          >
+            Tạo đoạn văn ielts
+          </MenuItem>
+          <Divider />
+          <MenuItem
+            onClick={() => {
+              setOpenCreatePassage2(true);
+              setAnchorEl(null);
+            }}
+          >
+            Tạo đoạn văn khác
+          </MenuItem>
+        </Menu>
       </div>
       <PassageTable
         data={data}
@@ -117,6 +159,11 @@ export default function ViewPassage() {
         show={openDelete}
         handleClose={handleClose}
         data={dataDetail}
+        setIsCreated={setIsCreated}
+      />
+      <CreatePassage2
+        centredModal={openCreatePassage2}
+        setCentredModal={setOpenCreatePassage2}
         setIsCreated={setIsCreated}
       />
     </div>

@@ -1,27 +1,38 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Button } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import UpdateModal from "./UpdateModal";
 import DeleteModal from "./DeleteModal";
 import PageNavigation from "../../global/PageNavigation";
 import PageSize from "../../global/PageSize";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import QuestionTable from "./QuestionTable";
-import { GetAllQuestion } from "../../../api/QuestionAPI";
 import CreateQuestionModal from "./CreateQuestionModal";
+import AddQuestionPassage from "./AddQuestionPassage";
+import { GetAllQuestion } from "../../../api/QuestionApi";
 export default function ViewQuestion() {
   const [totalPages, setTotalPages] = useState();
   const [page, setPage] = React.useState(1);
   const [pageSize, setPageSize] = React.useState(5);
   const [data, setData] = useState([]);
   const [centredModal, setCentredModal] = useState(false);
+  const [passageModal, setPassageModal] = useState(false);
   const [isCreated, setIsCreated] = useState(false);
   const [dataDetail, setDataDetail] = useState();
   const [openDetail, setOpenDetail] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const [questionId, setQuestionId] = useState([]);
+  const [filter, setFilter] = useState("");
   useEffect(() => {
     const getAllMemberShip = async () => {
-      const response = await GetAllQuestion(page, pageSize);
+      const response = await GetAllQuestion(page, pageSize, filter);
       if (response.ok) {
         const responseJson = await response.json();
         const data = responseJson.metaData;
@@ -32,7 +43,7 @@ export default function ViewQuestion() {
       }
     };
     getAllMemberShip();
-  }, [page, totalPages, pageSize, isCreated]);
+  }, [page, totalPages, pageSize, isCreated, filter]);
 
   const handleClickUpdate = (data) => {
     setDataDetail(data);
@@ -44,6 +55,9 @@ export default function ViewQuestion() {
   };
   const handleClose = () => {
     setOpenDelete(false);
+  };
+  const handleChangeFilter = (data) => {
+    setFilter(data);
   };
   return (
     <div
@@ -58,7 +72,7 @@ export default function ViewQuestion() {
       >
         Các câu hỏi
       </div>
-      <div style={{ marginBottom: "20px" }}>
+      <div style={{ marginBottom: "20px", display: "flex", gap: "20px" }}>
         <Button
           variant="contained"
           style={{ fontWeight: "bold" }}
@@ -67,11 +81,27 @@ export default function ViewQuestion() {
           <Inventory2Icon />
           Tạo câu hỏi
         </Button>
+        <div>
+          <FormControl sx={{ width: "200px" }}>
+            <Select
+              displayEmpty
+              defaultValue=""
+              inputProps={{ 'aria-label': 'Without label' }}
+              onChange={(e) => handleChangeFilter(e.target.value)}
+            >
+              <MenuItem value="">Tất cả</MenuItem>
+              <MenuItem value="free-question">Câu hỏi còn trống</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
       </div>
       <QuestionTable
         data={data}
         handleClickUpdate={handleClickUpdate}
         handleClickDelete={handleClickDelete}
+        setQuestionId={setQuestionId}
+        setPassageModal={setPassageModal}
+        filter={filter}
       />
       {data && data.length > 0 && (
         <>
@@ -118,6 +148,12 @@ export default function ViewQuestion() {
         handleClose={handleClose}
         data={dataDetail}
         setIsCreated={setIsCreated}
+      />
+      <AddQuestionPassage
+        passageModal={passageModal}
+        setPassageModal={setPassageModal}
+        setIsCreated={setIsCreated}
+        questionId={questionId}
       />
     </div>
   );

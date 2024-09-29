@@ -9,57 +9,40 @@ import {
   faCircleInfo,
 } from "@fortawesome/free-solid-svg-icons";
 import styles from "./Notification.module.css";
-
-// Dữ liệu thông báo mẫu
-const mockNotifications = [
-  {
-    notificationId: 1,
-    notificationType: "Info",
-    description: "Đây là thông báo thông tin.",
-    createdTime: new Date().toISOString(),
-  },
-  {
-    notificationId: 2,
-    notificationType: "Warning",
-    description: "Cảnh báo quan trọng!",
-    createdTime: new Date(Date.now() - 3600000).toISOString(), // 1 giờ trước
-  },
-  {
-    notificationId: 3,
-    notificationType: "Error",
-    description: "Đã xảy ra lỗi.",
-    createdTime: new Date(Date.now() - 7200000).toISOString(), // 2 giờ trước
-  },
-  {
-    notificationId: 4,
-    notificationType: "System",
-    description: "Thông báo hệ thống.",
-    createdTime: new Date(Date.now() - 10800000).toISOString(), // 3 giờ trước
-  },
-];
-
+import useAuth from "../../../../hooks/useAuth";
+import { GetNotificationByUser } from "../../../../api/NotificationApi";
 const Notification = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const { user } = useAuth();
 
   useEffect(() => {
-    // Sử dụng dữ liệu thông báo mẫu
-    const fetchNotifications = () => {
-      const sortedNotifications = [...mockNotifications].sort(
-        (a, b) => new Date(b.createdTime) - new Date(a.createdTime)
-      );
-      setNotifications(sortedNotifications);
+    const fetchNotifications = async () => {
+      if (user?.id) {
+        try {
+          const data = await GetNotificationByUser("", "", user.id);
+          const dataJson = await data.json();
+          console.log(dataJson);
+          
+          const sortedNotifications = dataJson.metaData.data.sort(
+            (a, b) => new Date(b.createdTime) - new Date(a.createdTime)
+          );
+          setNotifications(sortedNotifications);
 
-      // Cập nhật số lượng thông báo chưa đọc từ localStorage
-      const storedViewedNotifications = JSON.parse(
-        localStorage.getItem("viewedNotifications") || "[]"
-      );
-      const unreadCount = sortedNotifications.filter(
-        (notification) =>
-          !storedViewedNotifications.includes(notification.notificationId)
-      ).length;
-      setUnreadCount(unreadCount);
+          // Cập nhật số lượng thông báo chưa đọc từ localStorage
+          const storedViewedNotifications = JSON.parse(
+            localStorage.getItem("viewedNotifications") || "[]"
+          );
+          const unreadCount = sortedNotifications.filter(
+            (notification) =>
+              !storedViewedNotifications.includes(notification.notificationId)
+          ).length;
+          setUnreadCount(unreadCount);
+        } catch (err) {
+          console.error("Failed to fetch notifications:", err);
+        }
+      }
     };
 
     fetchNotifications();
@@ -67,10 +50,10 @@ const Notification = () => {
     // Thiết lập một interval để kiểm tra thông báo mới mỗi phút
     const intervalId = setInterval(() => {
       fetchNotifications();
-    }, 10000); // 10000ms = 10 giây
+    }, 60000); // 60000ms = 1 phút
 
     return () => clearInterval(intervalId); // Clear interval khi component bị unmount
-  }, []);
+  }, [user?.id]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -98,7 +81,7 @@ const Notification = () => {
     switch (type) {
       case "System":
         return faCircleInfo; // Icon cho System
-      case "Info":
+      case "Information":
         return faCircleCheck; // Icon cho Info
       case "Warning":
         return faTriangleExclamation; // Icon cho Warning
@@ -113,7 +96,7 @@ const Notification = () => {
     switch (type) {
       case "System":
         return `${styles.info}`; // Class cho System
-      case "Info":
+      case "Information":
         return `${styles.check} ${styles.shine2}`; // Class cho Info
       case "Warning":
         return `${styles.warning}`; // Class cho Warning
@@ -128,7 +111,7 @@ const Notification = () => {
     switch (type) {
       case "System":
         return "#4DA8DA"; // Màu xanh cho System
-      case "Info":
+      case "Information":
         return "#008000"; // Màu xanh lá cho Info
       case "Warning":
         return "#ffc107"; // Màu vàng cho Warning

@@ -13,10 +13,8 @@ import Paper from "@mui/material/Paper";
 import { useState } from "react";
 import { styled } from "@mui/material/styles";
 import NoDataPage from "../../global/NoDataPage";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ExpandContent from "../../global/ExpandContent";
-
+import VisibilityIcon from '@mui/icons-material/Visibility';
 export default function PassageTable({
   data,
   handleClickUpdate,
@@ -56,7 +54,7 @@ export default function PassageTable({
       border: 0,
     },
   }));
-  const TableHeader = ["Tên câu hỏi", "Loại", "Đáp án", "Hành động"];
+  const TableHeader = ["Id", "Tên", "Mô tả", "Hành động"];
 
   return (
     <div>
@@ -96,22 +94,28 @@ export default function PassageTable({
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <StyledTableCell
-                      style={{ fontWeight: "600", width: "250px", textAlign: "justify" }}
+                      style={{ fontWeight: "600", textAlign: "justify", width: "500px" }}
                       component="th"
                       scope="row"
                     >
-                      {row.questionText}
+                      {row.passageId}
                     </StyledTableCell>
                     <StyledTableCell
-                      style={{ fontWeight: "600", alignItems: "center" }}
+                      style={{ fontWeight: "600" }}
+                      align="justify"
+                    >
+                      {row.passageTitle}
+                    </StyledTableCell>
+                    <StyledTableCell
+                      style={{ fontWeight: "600", alignItems: "justify" }}
                       align="left"
                     >
-                      {row.questionType}
+                      {row.passageContent}
                     </StyledTableCell>
-                    <StyledTableCell style={{ fontWeight: "600" }} align="left">
-                      {row.correctAnswer}
-                    </StyledTableCell>
-                    <StyledTableCell style={{ fontWeight: "600" }} align="left">
+                    <StyledTableCell
+                      style={{ fontWeight: "600" }}
+                      align="justify"
+                    >
                       <Button
                         variant="text"
                         sx={{ color: "black" }}
@@ -119,11 +123,13 @@ export default function PassageTable({
                       >
                         <DeleteIcon />
                       </Button>
-                      <Checkbox
-                        key={index + 1}
-                        checked={selectedIds.includes(index)}
-                        onChange={() => handleCheckboxChange(index)}
-                      />
+                      <Button
+                        variant="text"
+                        sx={{ color: "black" }}
+                        onClick={() => handleClickDelete(row)}
+                      >
+                        <VisibilityIcon />
+                      </Button>
                     </StyledTableCell>
                   </StyledTableRow>
                 );
@@ -131,16 +137,6 @@ export default function PassageTable({
           </TableBody>
         </Table>
       </TableContainer>
-      <div style={{display: "flex", justifyContent: "end", marginTop: "20px"}}>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={handleAddToTest}
-          sx={{ marginTop: "10px"}}
-        >
-          Thêm vào đề
-        </Button>
-      </div>
     </div>
   );
 }

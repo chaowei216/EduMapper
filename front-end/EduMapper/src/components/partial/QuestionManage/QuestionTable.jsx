@@ -21,6 +21,9 @@ export default function QuestionTable({
   data,
   handleClickUpdate,
   handleClickDelete,
+  setQuestionId,
+  setPassageModal,
+  filter,
 }) {
   const [selectedIds, setSelectedIds] = useState([]);
 
@@ -35,7 +38,10 @@ export default function QuestionTable({
 
   // Xử lý khi nhấn nút thêm vào đề
   const handleAddToTest = () => {
-    alert(`Các khóa học được chọn: ${selectedIds.join(", ")}`);
+    const questionIdsAsStrings = selectedIds.map((id) => id.toString());
+    console.log(questionIdsAsStrings);
+    setQuestionId(questionIdsAsStrings);
+    setPassageModal(true);
   };
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -96,7 +102,11 @@ export default function QuestionTable({
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <StyledTableCell
-                      style={{ fontWeight: "600", width: "250px", textAlign: "justify" }}
+                      style={{
+                        fontWeight: "600",
+                        width: "250px",
+                        textAlign: "justify",
+                      }}
                       component="th"
                       scope="row"
                     >
@@ -119,11 +129,13 @@ export default function QuestionTable({
                       >
                         <DeleteIcon />
                       </Button>
-                      <Checkbox
-                        key={index + 1}
-                        checked={selectedIds.includes(index)}
-                        onChange={() => handleCheckboxChange(index)}
-                      />
+                      {filter != "" && (
+                        <Checkbox
+                          key={index + 1}
+                          checked={selectedIds.includes(row.questionId)}
+                          onChange={() => handleCheckboxChange(row.questionId)}
+                        />
+                      )}
                     </StyledTableCell>
                   </StyledTableRow>
                 );
@@ -131,12 +143,14 @@ export default function QuestionTable({
           </TableBody>
         </Table>
       </TableContainer>
-      <div style={{display: "flex", justifyContent: "end", marginTop: "20px"}}>
+      <div
+        style={{ display: "flex", justifyContent: "end", marginTop: "20px" }}
+      >
         <Button
           variant="contained"
           color="secondary"
           onClick={handleAddToTest}
-          sx={{ marginTop: "10px"}}
+          sx={{ marginTop: "10px" }}
         >
           Thêm vào đề
         </Button>

@@ -1,8 +1,8 @@
 // Base Url for API
 const baseUrl = import.meta.env.VITE_API_HOST;
-export const GetAllQuestion = async (page, pageSize) => {
+export const GetAllQuestion = async (page, pageSize,filter) => {
   try {
-    const url = `${baseUrl}/api/Questions?PageSize=${pageSize}&PageIndex=${page}`;
+    const url = `${baseUrl}/api/Questions/${filter}?PageSize=${pageSize}&PageIndex=${page}`;
     const request = {
       method: "GET",
       headers: {
