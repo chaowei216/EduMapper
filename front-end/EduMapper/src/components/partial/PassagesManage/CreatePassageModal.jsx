@@ -20,7 +20,6 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import StatusCode from "../../../utils/StautsCode";
 import Messages from "../../../utils/Message";
-import { CreateQuestion } from "../../../api/QuestionApi";
 import { CreatePassage } from "../../../api/PassageApi";
 
 export default function CreatePassageModal({
