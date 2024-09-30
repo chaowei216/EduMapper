@@ -20,5 +20,6 @@ namespace DAL.Models
         public ICollection<Progress> Progress { get; set; } = null!;
         public ICollection<UserAnswer> UserAnswers { get; set; } = null!;
         public ICollection<TestResult> Results { get; set; }
+        public ICollection<Message> Messages { get; set; } = null!;
     }
 }
