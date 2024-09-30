@@ -27,10 +27,24 @@ namespace BLL.IService
         Task<ResponseDTO> GetPassageById(string id);
 
         /// <summary>
-        /// Create passage of test 
+        /// Create ielts passage of test 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="passage"></param>
+        /// <returns></returns>
+        ResponseDTO CreateIELTSPassage(PassageIELTSCreateDTO passage);
+
+        /// <summary>
+        /// Create passage except ielts of test 
+        /// </summary>
+        /// <param name="passage"></param>
         /// <returns></returns>
         ResponseDTO CreatePassage(PassageCreateDTO passage);
+
+        /// <summary>
+        /// Add question to passage
+        /// </summary>
+        /// <param name="passage"></param>
+        /// <returns></returns>
+        Task<ResponseDTO> AddQuestionToPassage(AddQuestionDTO passage);
     }
 }

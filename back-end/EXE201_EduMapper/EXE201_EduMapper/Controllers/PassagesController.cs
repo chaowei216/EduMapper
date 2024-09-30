@@ -39,10 +39,36 @@ namespace EXE201_EduMapper.Controllers
             return Ok(passages);
         }
 
-        [HttpPost]
+        [HttpPost("ielts")]
         [ProducesResponseType(201, Type = typeof(ResponseDTO))]
         [ProducesResponseType(400, Type = typeof(ResponseDTO))]
-        public IActionResult CreateNewQuestion([FromBody] PassageCreateDTO passageDTO)
+        public IActionResult CreateNewIELTSPassage([FromBody] PassageIELTSCreateDTO passageDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO
+                {
+                    StatusCode = StatusCodeEnum.BadRequest,
+                    Message = ModelState.ToString()!
+                });
+            }
+
+            var result = _passageService.CreateIELTSPassage(passageDTO);
+
+            if (result.IsSuccess)
+            {
+                return Created(uri: "", value: result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
+        [HttpPost("except-ielts")]
+        [ProducesResponseType(201, Type = typeof(ResponseDTO))]
+        [ProducesResponseType(400, Type = typeof(ResponseDTO))]
+        public IActionResult CreateNewPassage([FromBody] PassageCreateDTO passageDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -63,6 +89,31 @@ namespace EXE201_EduMapper.Controllers
             {
                 return BadRequest(result);
             }
+        }
+
+        [HttpPut("add-to-passage")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> AddQuestionToPassage([FromBody] AddQuestionDTO question)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO
+                {
+                    Message = ModelState.ToString()!,
+                    StatusCode = StatusCodeEnum.BadRequest
+                });
+            }
+
+            var result = await _passageService.AddQuestionToPassage(question);
+
+            if(!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+
+            return NoContent();
         }
     }
 }
