@@ -27,6 +27,7 @@ namespace DAL.UnitOfWork
         IUserNotificationRepository UserNotificationRepository { get; }
         IUserReferenceRepository UserReferenceRepository { get; }
         ISectionRepository SectionRepository { get; }
+        IMessageRepository MessageRepository { get; }
         void Save();
     }
 }
