@@ -33,6 +33,7 @@ namespace DAL.Data
         public DbSet<PassageSection> PassageSections { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<TestResult> TestResults { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         #endregion
 

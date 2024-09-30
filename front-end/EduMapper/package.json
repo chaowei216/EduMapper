@@ -28,6 +28,7 @@
     "@tanstack/react-query": "^5.56.2",
     "debounce": "^2.1.0",
     "firebase": "^10.13.1",
+    "edumapper": "file:",
     "formik": "^2.4.6",
     "framer-motion": "^11.3.29",
     "jwt-decode": "^4.0.0",
