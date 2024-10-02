@@ -1,6 +1,7 @@
 ﻿
 using Common.DTO;
 using Common.DTO.Passage;
+using Common.DTO.Query;
 using Common.DTO.Question;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace BLL.IService
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task<ResponseDTO> GetAllPassages(QueryDTO request);
+        Task<ResponseDTO> GetAllPassages(PassageParameters request);
 
         /// <summary>
         /// Get passage of test by id
@@ -39,6 +40,20 @@ namespace BLL.IService
         /// <param name="passage"></param>
         /// <returns></returns>
         ResponseDTO CreatePassage(PassageCreateDTO passage);
+
+        /// <summary>
+        /// Get passage except ielts
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<ResponseDTO> GetExceptIELTSPassage(PassageParameters request);
+
+        /// <summary>
+        /// Get ielts passage 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<ResponseDTO> GetIELTSPassage(PassageParameters request);
 
         /// <summary>
         /// Add question to passage

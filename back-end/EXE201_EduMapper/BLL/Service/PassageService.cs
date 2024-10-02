@@ -4,8 +4,10 @@ using BLL.IService;
 using Common.Constant.Message;
 using Common.Constant.Message.Question;
 using Common.DTO;
+using Common.DTO.Exam;
 using Common.DTO.MemberShip;
 using Common.DTO.Passage;
+using Common.DTO.Query;
 using Common.Enum;
 using DAL.Models;
 using DAL.UnitOfWork;
@@ -14,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BLL.Service
 {
@@ -138,24 +141,81 @@ namespace BLL.Service
             };
         }
 
-        public async Task<ResponseDTO> GetAllPassages(QueryDTO request)
+        public async Task<ResponseDTO> GetAllPassages(PassageParameters request)
         {
             var response = await _unitOfWork.PassageRepository.Get(filter: !string.IsNullOrEmpty(request.Search)
                                                                         ? p => p.PassageTitle.Contains(request.Search.Trim())
                                                                         : null,
                                                                 orderBy: null,
-                                                                pageIndex: request.PageIndex,
+                                                                pageIndex: request.PageNumber,
                                                                 pageSize: request.PageSize,
                                                                 includeProperties: "SubQuestion,Sections,SubQuestion.Choices,SubQuestion.UserAnswers");
 
-            var mapPassage = _mapper.Map<List<PassageDTO>>(response);
+            var totalCount = response.Count(); // Make sure to use CountAsync to get the total count
+            var items = response.ToList(); // Use ToListAsync to fetch items asynchronously
+
+            // Create the PagedList and map the results
+            var pageList = new PagedList<Passage>(items, totalCount, request.PageNumber, request.PageSize);
+            var mappedResponse = _mapper.Map<PaginationResponseDTO<PassageDTO>>(pageList);
+            mappedResponse.Data = _mapper.Map<List<PassageDTO>>(items);
+
 
             return new ResponseDTO
             {
                 StatusCode = StatusCodeEnum.OK,
                 IsSuccess = true,
                 Message = GeneralMessage.GetSuccess,
-                MetaData = mapPassage
+                MetaData = mappedResponse
+            };
+        }
+
+        public async Task<ResponseDTO> GetExceptIELTSPassage(PassageParameters request)
+        {
+            var response = await _unitOfWork.PassageRepository.Get(includeProperties: "SubQuestion,Sections,SubQuestion.Choices,SubQuestion.UserAnswers",
+                                                                filter: c => !c.Sections.Any() && (string.IsNullOrEmpty(request.Search)
+                                                                || c.PassageTitle.Contains(request.Search.Trim())),
+                                                                orderBy: null,
+                                                                pageIndex: request.PageNumber,
+                                                                pageSize: request.PageSize);
+
+            var totalCount = response.Count(); // Make sure to use CountAsync to get the total count
+            var items = response.ToList(); // Use ToListAsync to fetch items asynchronously
+
+            // Create the PagedList and map the results
+            var pageList = new PagedList<Passage>(items, totalCount, request.PageNumber, request.PageSize);
+            var mappedResponse = _mapper.Map<PaginationResponseDTO<PassageDTO>>(pageList);
+            mappedResponse.Data = _mapper.Map<List<PassageDTO>>(items);
+            return new ResponseDTO
+            {
+                StatusCode = StatusCodeEnum.OK,
+                IsSuccess = true,
+                Message = GeneralMessage.GetSuccess,
+                MetaData = mappedResponse
+            };
+        }
+
+        public async Task<ResponseDTO> GetIELTSPassage(PassageParameters request)
+        {
+            var response = await _unitOfWork.PassageRepository.Get(includeProperties: "SubQuestion,Sections,SubQuestion.Choices,SubQuestion.UserAnswers",
+                                                                filter: c => c.Sections.Any() && (string.IsNullOrEmpty(request.Search)
+                                                                || c.PassageTitle.Contains(request.Search.Trim())),
+                                                                orderBy: null,
+                                                                pageIndex: request.PageNumber,
+                                                                pageSize: request.PageSize);
+
+            var totalCount = response.Count(); // Make sure to use CountAsync to get the total count
+            var items = response.ToList(); // Use ToListAsync to fetch items asynchronously
+
+            // Create the PagedList and map the results
+            var pageList = new PagedList<Passage>(items, totalCount, request.PageNumber, request.PageSize);
+            var mappedResponse = _mapper.Map<PaginationResponseDTO<PassageDTO>>(pageList);
+            mappedResponse.Data = _mapper.Map<List<PassageDTO>>(items);
+            return new ResponseDTO
+            {
+                StatusCode = StatusCodeEnum.OK,
+                IsSuccess = true,
+                Message = GeneralMessage.GetSuccess,
+                MetaData = mappedResponse
             };
         }
 

@@ -2,6 +2,7 @@
 using Common.DTO;
 using Common.DTO.Exam;
 using Common.DTO.Progress;
+using Common.DTO.Query;
 using Common.DTO.Test;
 using Common.Enum;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +22,7 @@ namespace EXE201_EduMapper.Controllers
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(ResponseDTO))]
-        public async Task<IActionResult> GetAllExams([FromQuery] QueryDTO request)
+        public async Task<IActionResult> GetAllExams([FromQuery] ExamParameters request)
         {
             var result = await _examService.GetAllExams(request);
 

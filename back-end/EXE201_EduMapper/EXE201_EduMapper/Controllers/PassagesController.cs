@@ -2,6 +2,7 @@
 using BLL.Service;
 using Common.DTO;
 using Common.DTO.Passage;
+using Common.DTO.Query;
 using Common.DTO.Question;
 using Common.Enum;
 using Microsoft.AspNetCore.Http;
@@ -22,10 +23,28 @@ namespace EXE201_EduMapper.Controllers
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(ResponseDTO))]
-        public async Task<IActionResult> GetAllPassages([FromQuery] QueryDTO request)
+        public async Task<IActionResult> GetAllPassages([FromQuery] PassageParameters request)
         {
             var result = await _passageService.GetAllPassages(request);
             
+            return Ok(result);
+        }
+
+        [HttpGet("ielts")]
+        [ProducesResponseType(200, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> GetAllIELTSPassages([FromQuery] PassageParameters request)
+        {
+            var result = await _passageService.GetIELTSPassage(request);
+
+            return Ok(result);
+        }
+
+        [HttpGet("except-ielts")]
+        [ProducesResponseType(200, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> GetExceptIELTSPassages([FromQuery] PassageParameters request)
+        {
+            var result = await _passageService.GetExceptIELTSPassage(request);
+
             return Ok(result);
         }
 

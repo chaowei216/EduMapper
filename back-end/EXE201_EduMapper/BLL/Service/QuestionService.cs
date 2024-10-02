@@ -4,6 +4,8 @@ using BLL.Exceptions;
 using BLL.IService;
 using Common.Constant.Message;
 using Common.DTO;
+using Common.DTO.Exam;
+using Common.DTO.Query;
 using Common.DTO.Question;
 using Common.Enum;
 using DAL.Models;
@@ -63,43 +65,55 @@ namespace BLL.Service
             _unitOfWork.Save();
         }
 
-        public async Task<ResponseDTO> GetAllQuestions(QueryDTO request)
+        public async Task<ResponseDTO> GetAllQuestions(QuestionParameters request)
         {
             var response = await _unitOfWork.QuestionRepository.Get(filter: !string.IsNullOrEmpty(request.Search)
                                                                 ? p => p.QuestionText.Contains(request.Search.Trim())
                                                                 : null,
                                                                 orderBy: null,
-                                                                pageIndex: request.PageIndex,
+                                                                pageIndex: request.PageNumber,
                                                                 pageSize: request.PageSize,
                                                                 includeProperties: "Choices");
 
-            var mapQuestion = _mapper.Map<List<QuestionDTO>>(response);
+            var totalCount = response.Count(); // Make sure to use CountAsync to get the total count
+            var items = response.ToList(); // Use ToListAsync to fetch items asynchronously
+
+            // Create the PagedList and map the results
+            var pageList = new PagedList<Question>(items, totalCount, request.PageNumber, request.PageSize);
+            var mappedResponse = _mapper.Map<PaginationResponseDTO<QuestionDTO>>(pageList);
+            mappedResponse.Data = _mapper.Map<List<QuestionDTO>>(items);
 
             return new ResponseDTO
             {
                 StatusCode = StatusCodeEnum.OK,
                 IsSuccess = true,
                 Message = GeneralMessage.GetSuccess,
-                MetaData = mapQuestion
+                MetaData = mappedResponse
             };
         }
 
-        public async Task<ResponseDTO> GetFreeQuestions(QueryDTO request)
+        public async Task<ResponseDTO> GetFreeQuestions(QuestionParameters request)
         {
             var response = await _unitOfWork.QuestionRepository.Get(filter: c => (c.PassageId == null) && (string.IsNullOrEmpty(request.Search)
                                                                 || c.QuestionText.Contains(request.Search.Trim())),
-                                                                pageIndex: request.PageIndex,
+                                                                pageIndex: request.PageNumber,
                                                                 pageSize: request.PageSize,
                                                                 includeProperties: "Choices");
 
-            var mapQuestion = _mapper.Map<List<QuestionDTO>>(response);
+            var totalCount = response.Count(); // Make sure to use CountAsync to get the total count
+            var items = response.ToList(); // Use ToListAsync to fetch items asynchronously
+
+            // Create the PagedList and map the results
+            var pageList = new PagedList<Question>(items, totalCount, request.PageNumber, request.PageSize);
+            var mappedResponse = _mapper.Map<PaginationResponseDTO<QuestionDTO>>(pageList);
+            mappedResponse.Data = _mapper.Map<List<QuestionDTO>>(items);
 
             return new ResponseDTO
             {
                 StatusCode = StatusCodeEnum.OK,
                 IsSuccess = true,
                 Message = GeneralMessage.GetSuccess,
-                MetaData = mapQuestion
+                MetaData = mappedResponse
             };
         }
 
