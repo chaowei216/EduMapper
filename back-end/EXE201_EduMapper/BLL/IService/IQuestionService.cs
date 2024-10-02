@@ -1,5 +1,6 @@
 ﻿using Common.DTO;
 using Common.DTO.MemberShip;
+using Common.DTO.Query;
 using Common.DTO.Question;
 using System;
 using System.Collections.Generic;
@@ -16,14 +17,14 @@ namespace BLL.IService
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task<ResponseDTO> GetAllQuestions(QueryDTO request);
+        Task<ResponseDTO> GetAllQuestions(QuestionParameters request);
 
         /// <summary>
         /// Get free questions
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task<ResponseDTO> GetFreeQuestions(QueryDTO request);
+        Task<ResponseDTO> GetFreeQuestions(QuestionParameters request);
 
         /// <summary>
         /// Get question of test by id
