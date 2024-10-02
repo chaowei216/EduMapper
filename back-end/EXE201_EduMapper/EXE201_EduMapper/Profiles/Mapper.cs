@@ -14,6 +14,7 @@ using Common.DTO;
 using Common.DTO.Transaction;
 using Common.DTO.Notification;
 using Common.DTO.Progress;
+using Common.DTO.Message;
 
 namespace EXE201_EduMapper.Profiles
 {
@@ -50,6 +51,7 @@ namespace EXE201_EduMapper.Profiles
             CreateMap<PagedList<Notification>, PaginationResponseDTO<NotificationDTO>>().ReverseMap();
             CreateMap<Notification, NotificationDTO>().ReverseMap();
             CreateMap<UserAnswer, UserAnswerDTO>().ReverseMap();
+            CreateMap<Message, MessageDTO>().ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User.FullName)).ReverseMap();
             CreateMap<PagedList<Exam>, ExamDTO>().ReverseMap();
             CreateMap<PagedList<Exam>, PaginationResponseDTO<ExamDTO>>().ReverseMap();
             CreateMap<PagedList<Passage>, PassageDTO>().ReverseMap();
