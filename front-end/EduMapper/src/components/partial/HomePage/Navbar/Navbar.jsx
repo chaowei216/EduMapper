@@ -243,7 +243,7 @@ const NAV_ITEMS = [
   },
   {
     label: "Cộng đồng",
-    href: "#",
+    href: "/chat",
   },
 ];
 const DesktopNav = () => {

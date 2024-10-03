@@ -28,6 +28,7 @@ import ContactPage from "../pages/ContactPage/ContactPage";
 import Checkout from "../pages/PaymentPage/CheckOut";
 import WaitingCheckout from "../pages/PaymentPage/WaitingCheckOut";
 import ExamPage from "../pages/ExamPage/ExamPage";
+import ChatPage from "../pages/ChatPage/ChatPage";
 
 export const router = createBrowserRouter([
   {
@@ -158,5 +159,9 @@ export const router = createBrowserRouter([
   {
     path: "/exam-management",
     element: <ExamPage />,
+  },
+  {
+    path: "/chat",
+    element: <ChatPage />,
   },
 ]);

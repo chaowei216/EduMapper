@@ -51,7 +51,7 @@ namespace EXE201_EduMapper.Profiles
             CreateMap<PagedList<Notification>, PaginationResponseDTO<NotificationDTO>>().ReverseMap();
             CreateMap<Notification, NotificationDTO>().ReverseMap();
             CreateMap<UserAnswer, UserAnswerDTO>().ReverseMap();
-            CreateMap<Message, MessageDTO>().ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User.FullName)).ReverseMap();
+            CreateMap<Message, MessageDTO>().ForMember(dest => dest.userName, opt => opt.MapFrom(src => src.User.FullName)).ReverseMap();
         }
     }
 }
