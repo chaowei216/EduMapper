@@ -1,5 +1,6 @@
 ﻿using BLL.IService;
 using Common.DTO;
+using Common.DTO.Query;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +18,7 @@ namespace EXE201_EduMapper.Controllers
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(ResponseDTO))]
-        public async Task<IActionResult> GetAllCenters([FromQuery] QueryDTO request)
+        public async Task<IActionResult> GetAllCenters([FromQuery] CenterParameters request)
         {
             var result = await _centerService.GetAllCenters(request);
 

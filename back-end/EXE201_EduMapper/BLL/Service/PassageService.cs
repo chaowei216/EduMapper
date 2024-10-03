@@ -1,34 +1,49 @@
 ﻿using AutoMapper;
 using BLL.Exceptions;
 using BLL.IService;
+using Common.Constant.Firebase;
 using Common.Constant.Message;
 using Common.Constant.Message.Question;
 using Common.DTO;
-using Common.DTO.Exam;
-using Common.DTO.MemberShip;
 using Common.DTO.Passage;
 using Common.DTO.Query;
 using Common.Enum;
 using DAL.Models;
 using DAL.UnitOfWork;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Google.Apis.Auth.OAuth2;
+using Google.Cloud.Storage.V1;
+using Microsoft.Extensions.Configuration;
 
 namespace BLL.Service
 {
     public class PassageService : IPassageService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly StorageClient _storageClient;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
-        public PassageService(IUnitOfWork unitOfWork, IMapper mapper)
+        public PassageService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+
+            string pathToJsonFile = "firebase.json";
+
+            try
+            {
+                // Create GoogleCredential from the JSON file
+                GoogleCredential credential = GoogleCredential.FromFile(pathToJsonFile)
+                    .CreateScoped(FirebaseLink.LinkFirebase);
+
+                // Create StorageClient with the provided credential
+                _storageClient = StorageClient.Create(credential);
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions related to credential creation
+                throw new Exception(FirebaseLink.FailToCreatCer + ex.Message);
+            }
         }
 
         public async Task<ResponseDTO> AddQuestionToPassage(AddQuestionDTO passage)
