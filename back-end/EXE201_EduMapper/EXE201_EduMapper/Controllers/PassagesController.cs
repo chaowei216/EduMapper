@@ -1,5 +1,6 @@
 ﻿using BLL.IService;
 using BLL.Service;
+using Common.Constant.Message;
 using Common.DTO;
 using Common.DTO.Passage;
 using Common.DTO.Query;
@@ -87,7 +88,7 @@ namespace EXE201_EduMapper.Controllers
         [HttpPost("except-ielts")]
         [ProducesResponseType(201, Type = typeof(ResponseDTO))]
         [ProducesResponseType(400, Type = typeof(ResponseDTO))]
-        public IActionResult CreateNewPassage([FromBody] PassageCreateDTO passageDTO)
+        public async Task<IActionResult> CreateNewPassage([FromForm] PassageCreateDTO passageDTO, IFormFile? file)
         {
             if (!ModelState.IsValid)
             {
@@ -98,7 +99,7 @@ namespace EXE201_EduMapper.Controllers
                 });
             }
 
-            var result = _passageService.CreatePassage(passageDTO);
+            var result = await _passageService.CreatePassage(passageDTO, file);
 
             if (result.IsSuccess)
             {
@@ -109,6 +110,59 @@ namespace EXE201_EduMapper.Controllers
                 return BadRequest(result);
             }
         }
+
+        [HttpGet("files")]
+        public async Task<IActionResult> GetFile(string fileName)
+        {
+            try
+            {
+                var fileStream = await _passageService.RetrieveItemAsync(fileName);
+                var fileExtension = Path.GetExtension(fileName);
+                string mimeType;
+                switch (fileExtension.ToLower())
+                {
+                    case ".jpg":
+                    case ".jpeg":
+                        mimeType = "image/jpeg";
+                        break;
+                    case ".png":
+                        mimeType = "image/png";
+                        break;
+                    case ".gif":
+                        mimeType = "image/gif";
+                        break;
+                    case ".bmp":
+                        mimeType = "image/bmp";
+                        break;
+                    case ".mp3":
+                        mimeType = "audio/mpeg"; // MIME type cho tệp MP3
+                        break;
+                    default:
+                        mimeType = "application/octet-stream"; // Fallback to a generic MIME type
+                        break;
+                }
+                if (fileStream == null)
+                {
+                    return BadRequest(new ResponseDTO()
+                    {
+                        StatusCode = StatusCodeEnum.NotFound,
+                        Message = GeneralMessage.NotFound,
+                    });
+                }
+
+                return File(fileStream, mimeType);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseDTO
+                {
+                    StatusCode = StatusCodeEnum.InteralServerError,
+                    Message = ex.Message,
+                    MetaData = null
+                });
+            }
+        }
+
 
         [HttpPut("add-to-passage")]
         [ProducesResponseType(204)]
