@@ -8,7 +8,7 @@ namespace Common.Enum.Center
 {
     public enum LearningTypeEnum
     {
-        Online = 0,
-        Offline = 1,
+        Online,
+        Offline,
     }
 }

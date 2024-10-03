@@ -1,4 +1,5 @@
 ﻿using Common.DTO;
+using Common.DTO.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace BLL.IService
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task<ResponseDTO> GetAllCenters(QueryDTO request);
+        Task<ResponseDTO> GetAllCenters(CenterParameters request);
 
         /// <summary>
         /// Get all passages

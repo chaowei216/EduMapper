@@ -16,5 +16,7 @@ namespace Common.DTO.Query
         [Column(TypeName = "nvarchar(24)")]
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public LearningTypeEnum? LearningTypes { get; set; } 
+        public string? Location { get; set; }
+        
     }
 }

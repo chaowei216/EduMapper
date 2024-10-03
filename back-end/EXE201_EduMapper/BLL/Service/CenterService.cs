@@ -5,8 +5,10 @@ using Common.Constant.Message;
 using Common.DTO;
 using Common.DTO.Center;
 using Common.DTO.Exam;
+using Common.DTO.Query;
 using Common.DTO.Test;
 using Common.Enum;
+using DAL.Models;
 using DAL.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -26,24 +28,33 @@ namespace BLL.Service
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ResponseDTO> GetAllCenters(QueryDTO request)
+        public async Task<ResponseDTO> GetAllCenters(CenterParameters request)
         {
-            var response = await _unitOfWork.CenterRepository.Get(filter: !string.IsNullOrEmpty(request.Search)
-                                                            ? p => p.CentersName.Contains(request.Search.Trim())
-                                                            : null,
-                                                    orderBy: null,
-                                                    pageIndex: request.PageIndex,
-                                                    pageSize: request.PageSize,
-                                                    includeProperties: "Feedbacks,ProgramTrainings");
+            var response = await _unitOfWork.CenterRepository.Get(filter: c => (string.IsNullOrEmpty(request.Search)
+                                                                || c.CentersName.Contains(request.Search.Trim()))
+                                                                && (string.IsNullOrEmpty(request.Location)
+                                                                || c.Location.Contains(request.Location.ToString()))
+                                                                && (string.IsNullOrEmpty(request.LearningTypes.ToString())
+                                                                || c.Location.Contains(request.LearningTypes.ToString())),
+                                                                orderBy: null,
+                                                                pageIndex: request.PageNumber,
+                                                                pageSize: request.PageSize,
+                                                                includeProperties: "Feedbacks,ProgramTrainings");
 
-            var mapList = _mapper.Map<List<CenterDTO>>(response);
+            var totalCount = response.Count(); // Make sure to use CountAsync to get the total count
+            var items = response.ToList(); // Use ToListAsync to fetch items asynchronously
+
+            // Create the PagedList and map the results
+            var pageList = new PagedList<Center>(items, totalCount, request.PageNumber, request.PageSize);
+            var mappedResponse = _mapper.Map<PaginationResponseDTO<CenterDTO>>(pageList);
+            mappedResponse.Data = _mapper.Map<List<CenterDTO>>(items);
 
             return new ResponseDTO
             {
                 StatusCode = StatusCodeEnum.OK,
                 IsSuccess = true,
                 Message = GeneralMessage.GetSuccess,
-                MetaData = mapList
+                MetaData = mappedResponse
             };
         }
 
