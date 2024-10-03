@@ -3,6 +3,7 @@ using BLL.IService;
 using BLL.Service;
 using Common.DTO;
 using Common.DTO.MemberShip;
+using Common.DTO.Query;
 using Common.DTO.Question;
 using Common.Enum;
 using Microsoft.AspNetCore.Http;
@@ -24,7 +25,7 @@ namespace EXE201_EduMapper.Controllers
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(ResponseDTO))]
-        public async Task<IActionResult> GetAllQuestions([FromQuery] QueryDTO request)
+        public async Task<IActionResult> GetAllQuestions([FromQuery] QuestionParameters request)
         {
             var result = await _questionService.GetAllQuestions(request);
 
@@ -33,7 +34,7 @@ namespace EXE201_EduMapper.Controllers
 
         [HttpGet("free-question")]
         [ProducesResponseType(200, Type = typeof(ResponseDTO))]
-        public async Task<IActionResult> GetAllFreeQuestions([FromQuery] QueryDTO request)
+        public async Task<IActionResult> GetAllFreeQuestions([FromQuery] QuestionParameters request)
         {
             var result = await _questionService.GetFreeQuestions(request);
 

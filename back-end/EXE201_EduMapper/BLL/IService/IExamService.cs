@@ -2,6 +2,7 @@
 using Common.DTO.Exam;
 using Common.DTO.Passage;
 using Common.DTO.Progress;
+using Common.DTO.Query;
 using Common.DTO.Test;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace BLL.IService
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task<ResponseDTO> GetAllExams(QueryDTO request);
+        Task<ResponseDTO> GetAllExams(ExamParameters request);
 
         /// <summary>
         /// Get exam by id

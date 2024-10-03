@@ -3,14 +3,20 @@ using BLL.Exceptions;
 using BLL.IService;
 using Common.Constant.Exam;
 using Common.Constant.Message;
+using Common.Constant.Notification;
 using Common.Constant.Progress;
 using Common.DTO;
 using Common.DTO.Exam;
+using Common.DTO.Notification;
 using Common.DTO.Progress;
+using Common.DTO.Query;
 using Common.DTO.Test;
 using Common.Enum;
 using DAL.Models;
 using DAL.UnitOfWork;
+using DAO.Models;
+using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BLL.Service
 {
@@ -51,7 +57,7 @@ namespace BLL.Service
                             var questionCount = request.Answers.Count();
                             if(thisProgress != null)
                             {
-                                var percent = (questionCount / exam.NumOfQuestions) * 100;
+                                var percent = ((double) questionCount / exam.NumOfQuestions) * 100;
                                 thisProgress.Percent = percent;
                                 thisProgress.ProgressId = thisProgress.ProgressId;
                                 thisProgress.UpdatedDate = DateTime.Now;
@@ -59,12 +65,20 @@ namespace BLL.Service
                                 thisProgress.Score = thisProgress.Score;
                                 _unitOfWork.ProgressRepository.Update(thisProgress);
                             }
-
                         }
                     }
                 }
 
-                _unitOfWork.UserAnswerRepository.Insert(mapAnswer);
+                var thisAnswer = await _unitOfWork.UserAnswerRepository.Get(filter: c => c.UserId == answer.UserId && c.QuestionId == answer.QuestionId);
+                var first = thisAnswer.FirstOrDefault();
+
+                if(first != null)
+                {
+                    _unitOfWork.UserAnswerRepository.Update(mapAnswer);
+                } else
+                {
+                    _unitOfWork.UserAnswerRepository.Insert(mapAnswer);
+                }
 
                 _unitOfWork.Save();
             }
@@ -125,25 +139,32 @@ namespace BLL.Service
             };
         }
 
-        public async Task<ResponseDTO> GetAllExams(QueryDTO request)
+        public async Task<ResponseDTO> GetAllExams(ExamParameters request)
         {
             var response = await _unitOfWork.ExamRepository.Get(filter: !string.IsNullOrEmpty(request.Search)
                                                                         ? p => p.ExamName.Contains(request.Search.Trim())
                                                                         : null,
                                                                 orderBy: null,
-                                                                pageIndex: request.PageIndex,
+                                                                pageIndex: request.PageNumber,
                                                                 pageSize: request.PageSize,
                                                                 includeProperties: "Passages,Passages.SubQuestion," +
                                                                                    "Passages.Sections,Passages.SubQuestion.Choices");
 
-            var mapPassage = _mapper.Map<List<ExamDTO>>(response);
+
+            var totalCount = response.Count(); // Make sure to use CountAsync to get the total count
+            var items = response.ToList(); // Use ToListAsync to fetch items asynchronously
+
+            // Create the PagedList and map the results
+            var pageList = new PagedList<Exam>(items, totalCount, request.PageNumber, request.PageSize);
+            var mappedResponse = _mapper.Map<PaginationResponseDTO<ExamDTO>>(pageList);
+            mappedResponse.Data = _mapper.Map<List<ExamDTO>>(items);
 
             return new ResponseDTO
             {
                 StatusCode = StatusCodeEnum.OK,
                 IsSuccess = true,
                 Message = GeneralMessage.GetSuccess,
-                MetaData = mapPassage
+                MetaData = mappedResponse
             };
         }
 
