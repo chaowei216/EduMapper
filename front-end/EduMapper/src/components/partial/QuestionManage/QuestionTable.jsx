@@ -15,8 +15,7 @@ import { styled } from "@mui/material/styles";
 import NoDataPage from "../../global/NoDataPage";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ExpandContent from "../../global/ExpandContent";
-
+import DoNotTouchIcon from '@mui/icons-material/DoNotTouch';
 export default function QuestionTable({
   data,
   handleClickUpdate,
@@ -39,7 +38,6 @@ export default function QuestionTable({
   // Xử lý khi nhấn nút thêm vào đề
   const handleAddToTest = () => {
     const questionIdsAsStrings = selectedIds.map((id) => id.toString());
-    console.log(questionIdsAsStrings);
     setQuestionId(questionIdsAsStrings);
     setPassageModal(true);
   };
@@ -62,7 +60,13 @@ export default function QuestionTable({
       border: 0,
     },
   }));
-  const TableHeader = ["Tên câu hỏi", "Loại", "Đáp án", "Hành động"];
+  const TableHeader = [
+    "ID câu hỏi",
+    "Tên câu hỏi",
+    "Loại",
+    "Đáp án",
+    "Hành động",
+  ];
 
   return (
     <div>
@@ -82,7 +86,7 @@ export default function QuestionTable({
                       textAlign: "center",
                     },
                   }}
-                  align="left"
+                  align="center"
                   key={index}
                 >
                   <span style={{ fontSize: "larger" }}>{row}</span>
@@ -92,8 +96,11 @@ export default function QuestionTable({
           </TableHead>
           <TableBody>
             {!data && <NoDataPage />}
-            {data && data.length === 0 && <NoDataPage />}
+            {data && (data.length == 0 || data.length == undefined) && (
+              <NoDataPage />
+            )}
             {data &&
+              data.length > 0 &&
               data.map((row, index) => {
                 return (
                   <StyledTableRow
@@ -104,38 +111,48 @@ export default function QuestionTable({
                     <StyledTableCell
                       style={{
                         fontWeight: "600",
-                        width: "250px",
-                        textAlign: "justify",
+                        width: "350px",
+                        textAlign: "center",
                       }}
                       component="th"
                       scope="row"
+                    >
+                      {row.questionId}
+                    </StyledTableCell>
+                    <StyledTableCell
+                      style={{ fontWeight: "600", alignItems: "center" }}
+                      align="center"
                     >
                       {row.questionText}
                     </StyledTableCell>
                     <StyledTableCell
                       style={{ fontWeight: "600", alignItems: "center" }}
-                      align="left"
+                      align="center"
                     >
                       {row.questionType}
                     </StyledTableCell>
-                    <StyledTableCell style={{ fontWeight: "600" }} align="left">
+                    <StyledTableCell style={{ fontWeight: "600" }} align="center">
                       {row.correctAnswer}
                     </StyledTableCell>
-                    <StyledTableCell style={{ fontWeight: "600" }} align="left">
-                      <Button
-                        variant="text"
-                        sx={{ color: "black" }}
-                        onClick={() => handleClickDelete(row)}
-                      >
-                        <DeleteIcon />
-                      </Button>
-                      {filter != "" && (
-                        <Checkbox
-                          key={index + 1}
-                          checked={selectedIds.includes(row.questionId)}
-                          onChange={() => handleCheckboxChange(row.questionId)}
-                        />
-                      )}
+                    <StyledTableCell style={{ fontWeight: "600" }} align="center">
+                      {filter != "" ? (
+                        <>
+                          <Button
+                            variant="text"
+                            sx={{ color: "black" }}
+                            onClick={() => handleClickDelete(row)}
+                          >
+                            <DeleteIcon />
+                          </Button>
+                          <Checkbox
+                            key={index + 1}
+                            checked={selectedIds.includes(row.questionId)}
+                            onChange={() =>
+                              handleCheckboxChange(row.questionId)
+                            }
+                          />
+                        </>
+                      ) : <><DoNotTouchIcon/></>}
                     </StyledTableCell>
                   </StyledTableRow>
                 );

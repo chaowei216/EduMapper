@@ -67,8 +67,8 @@ export default function ExamTable({
           </TableHead>
           <TableBody>
             {!data && <NoDataPage />}
-            {data && data.length === 0 && <NoDataPage />}
-            {data &&
+            {data && (data.length == 0 || data.length == undefined) && <NoDataPage />}
+            {data && data.length > 0 &&
               data.map((row, index) => {
                 return (
                   <StyledTableRow

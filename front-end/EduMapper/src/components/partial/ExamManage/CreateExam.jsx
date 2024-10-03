@@ -34,7 +34,7 @@ export default function CreateExam({
       try {
         const response = await GetAllPassage();
         const dataJson = await response.json();
-        setPassagesList(dataJson.metaData);
+        setPassagesList(dataJson.metaData.data);
       } catch (err) {
         console.error("Failed to fetch notifications:", err);
       }
@@ -117,7 +117,7 @@ export default function CreateExam({
                     <MDBCol sm="8">
                       <Autocomplete
                         multiple
-                        options={passagesList || []} // List passages
+                        options={(passagesList && passagesList.length != undefined) ? (passagesList) : []} // List passages
                         getOptionLabel={(option) => option.passageTitle}
                         onChange={(event, newValue) =>
                           setFieldValue(

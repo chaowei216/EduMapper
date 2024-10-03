@@ -27,7 +27,7 @@ export default function AddQuestionPassage(pros) {
       try {
         const data = await GetAllPassage();
         const dataJson = await data.json();
-        setPassages(dataJson.metaData);
+        setPassages(dataJson.metaData.data);
         console.log(dataJson);
       } catch (err) {
         console.error("Failed to fetch notifications:", err);
@@ -49,8 +49,7 @@ export default function AddQuestionPassage(pros) {
       toast.error(Messages.ERROR.BAD_REQUEST);
       return;
     }
-    const responseJson = await response.json();
-    if (responseJson.statusCode === StatusCode.UPDATED) {
+    if (response.status === StatusCode.UPDATED) {
       setIsCreated((prevIsCreated) => !prevIsCreated);
       toast.success(Messages.SUCCESS.CREATE);
       setPassageModal(false);
@@ -98,7 +97,7 @@ export default function AddQuestionPassage(pros) {
                         }
                       >
                         <option value="">Chọn Passage</option>
-                        {passages &&
+                        {passages && passages.length > 0 &&
                           passages.map((passage, index) => (
                             <option key={index + 1} value={passage.passageId}>
                               {passage.passageTitle}

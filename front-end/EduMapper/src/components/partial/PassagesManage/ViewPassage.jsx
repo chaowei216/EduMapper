@@ -26,7 +26,7 @@ export default function ViewPassage() {
       const response = await GetAllPassage(page, pageSize);
       if (response.ok) {
         const responseJson = await response.json();
-        const data = responseJson.metaData;
+        const data = responseJson.metaData.data;
         setData(data);
         // setTotalPages(responseJson.data.totalPages);
       } else {

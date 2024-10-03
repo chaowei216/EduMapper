@@ -33,7 +33,7 @@ export default function ViewQuestion() {
       const response = await GetAllQuestion(page, pageSize, filter);
       if (response.ok) {
         const responseJson = await response.json();
-        const data = responseJson.metaData;
+        const data = responseJson.metaData.data;
         setData(data);
         // setTotalPages(responseJson.data.totalPages);
       } else {
