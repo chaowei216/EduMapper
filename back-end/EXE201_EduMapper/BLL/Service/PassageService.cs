@@ -27,6 +27,7 @@ namespace BLL.Service
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _configuration = configuration;
 
             string pathToJsonFile = "firebase.json";
 
