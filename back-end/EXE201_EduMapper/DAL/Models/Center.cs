@@ -13,7 +13,7 @@ namespace DAL.Models
         public string? Description {  get; set; } = string.Empty;
         public string? ReviewText {  get; set; } = string.Empty;
         public double Rating { get; set; } 
-        public DateTime ReviewDate { get; set; }
+        public DateTime? ReviewDate { get; set; }
         public ICollection<Feedback> Feedbacks { get; set; } = null!;
         public ICollection<ProgramTraining> ProgramTrainings { get; set; } = null!;
     }
