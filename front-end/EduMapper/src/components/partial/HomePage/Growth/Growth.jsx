@@ -17,6 +17,7 @@ import { GetAllMemberShip } from "../../../../api/MemberShipApi";
 import { formatPrice } from "../../../../utils/FormatPrice";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import { useNavigate } from "react-router-dom";
+import Messages from "../../../../utils/Message";
 
 const Growth = () => {
   // Sử dụng useQuery để gọi API và quản lý cache
@@ -73,6 +74,10 @@ const Growth = () => {
   }
 
   const handleBuyMemberShip = (item) => {
+    if (item.price == 0) {
+      toast.error(Messages.ERROR.PACKAGE);
+      return;
+    }
     const memberShip = item;
     navigate("/payment", { state: memberShip });
   };
@@ -144,7 +149,10 @@ const Growth = () => {
                       ))}
                   </List>
                 </Paper>
-                <div style={{ cursor: "pointer" }} onClick={() => handleBuyMemberShip(plan)}>
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleBuyMemberShip(plan)}
+                >
                   <Paper
                     sx={{
                       p: 4,

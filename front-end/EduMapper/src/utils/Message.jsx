@@ -28,7 +28,8 @@ const Messages = {
     INVALID_FORMAT: "Định dạng không hợp lệ!",
     PAYMENT: "Thanh toán thất bại",
     CHOOSE_PAYMENT: "Làm ơn chọn phương thức thành toán",
-    CAPTCHA: "Mã Captcha không được trùng khớp. Hãy thử lại!"
+    CAPTCHA: "Mã Captcha không được trùng khớp. Hãy thử lại!",
+    PACKAGE: "Gói này đã được tích hợp sẵn vào tài khoản bạn rồi!"
   },
 };
 export default Messages;

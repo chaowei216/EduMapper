@@ -37,7 +37,7 @@ export default function ExamTable({
       border: 0,
     },
   }));
-  const TableHeader = ["Id", "Tên đề", "Số câu hỏi", "Hành động"];
+  const TableHeader = ["ID đề thi", "Tên đề", "Số câu hỏi", "Hành động"];
 
   return (
     <div>
@@ -57,7 +57,7 @@ export default function ExamTable({
                       textAlign: "center",
                     },
                   }}
-                  align="left"
+                  align="center"
                   key={index}
                 >
                   <span style={{ fontSize: "larger" }}>{row}</span>
@@ -79,7 +79,7 @@ export default function ExamTable({
                     <StyledTableCell
                       style={{
                         fontWeight: "600",
-                        textAlign: "justify",
+                        textAlign: "center",
                       }}
                       component="th"
                       scope="row"
@@ -88,14 +88,14 @@ export default function ExamTable({
                     </StyledTableCell>
                     <StyledTableCell
                       style={{ fontWeight: "600", alignItems: "center" }}
-                      align="left"
+                      align="center"
                     >
                       {row.examName}
                     </StyledTableCell>
-                    <StyledTableCell style={{ fontWeight: "600" }} align="left">
+                    <StyledTableCell style={{ fontWeight: "600" }} align="center">
                       {row.numOfQuestions}
                     </StyledTableCell>
-                    <StyledTableCell style={{ fontWeight: "600" }} align="left">
+                    <StyledTableCell style={{ fontWeight: "600" }} align="center">
                       <Button
                         variant="text"
                         sx={{ color: "black" }}

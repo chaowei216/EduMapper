@@ -17,7 +17,7 @@ import AddQuestionPassage from "./AddQuestionPassage";
 import { GetAllQuestion } from "../../../api/QuestionManageApi";
 export default function ViewQuestion() {
   const [totalPages, setTotalPages] = useState();
-  const [page, setPage] = React.useState(1);
+  const [page, setPage] = React.useState();
   const [pageSize, setPageSize] = React.useState(5);
   const [data, setData] = useState([]);
   const [centredModal, setCentredModal] = useState(false);
@@ -35,7 +35,7 @@ export default function ViewQuestion() {
         const responseJson = await response.json();
         const data = responseJson.metaData.data;
         setData(data);
-        // setTotalPages(responseJson.data.totalPages);
+        setTotalPages(responseJson.metaData.totalPages);
       } else {
         toast.error("Error getting data");
       }

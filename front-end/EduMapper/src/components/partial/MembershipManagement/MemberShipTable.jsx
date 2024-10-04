@@ -73,7 +73,7 @@ export default function MemberShipTable({
                       textAlign: "center",
                     },
                   }}
-                  align="left"
+                  align="center"
                   key={index}
                 >
                   <span style={{ fontSize: "larger" }}>{row}</span>
@@ -93,7 +93,7 @@ export default function MemberShipTable({
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <StyledTableCell
-                      style={{ fontWeight: "600" }}
+                      style={{ fontWeight: "600", textAlign: "center" }}
                       component="th"
                       scope="row"
                     >
@@ -101,7 +101,7 @@ export default function MemberShipTable({
                     </StyledTableCell>
                     <StyledTableCell
                       style={{ fontWeight: "600", alignItems: "center"}}
-                      align="left"
+                      align="center"
                     >
                       <ExpandContent
                         features={row.features}
@@ -110,17 +110,17 @@ export default function MemberShipTable({
                     </StyledTableCell>
                     <StyledTableCell
                       style={{ fontWeight: "600" }}
-                      align="left"
+                      align="center"
                     >
                       <ExpandContent
                         features={row.noFeatures}
                         numberLines={3}
                       />
                     </StyledTableCell>
-                    <StyledTableCell style={{ fontWeight: "600" }} align="left">
+                    <StyledTableCell style={{ fontWeight: "600" }} align="center">
                       {row.price}
                     </StyledTableCell>
-                    <StyledTableCell style={{ fontWeight: "600" }} align="left">
+                    <StyledTableCell style={{ fontWeight: "600" }} align="center">
                       <Button
                         variant="text"
                         sx={{ color: "black" }}

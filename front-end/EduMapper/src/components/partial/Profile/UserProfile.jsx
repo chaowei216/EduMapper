@@ -41,7 +41,7 @@ export default function ProfilePage() {
                   <b>Vai trò:</b> {user?.roleName || "Không có dữ liệu"}
                 </p>
                 <p className="text-muted mb-4">
-                  <b>Họ và tên:</b> {user?.fullname || "Không có dữ liệu"}
+                  <b>Họ và tên:</b> {user?.fullName || "Không có dữ liệu"}
                 </p>
               </MDBCardBody>
             </MDBCard>
@@ -125,7 +125,7 @@ export default function ProfilePage() {
                 <hr />
                 <MDBRow>
                   <MDBCol sm="3">
-                    <MDBCardText>Mobile</MDBCardText>
+                    <MDBCardText>Gender</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">

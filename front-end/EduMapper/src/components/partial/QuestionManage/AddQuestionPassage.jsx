@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import StatusCode from "../../../utils/StautsCode";
 import Messages from "../../../utils/Message";
-import { AddQuestionToPassage, GetAllPassage } from "../../../api/PassageApi";
+import { AddQuestionToPassage, GetPassageExceptIelts } from "../../../api/PassageApi";
 
 export default function AddQuestionPassage(pros) {
   const { passageModal, setPassageModal, setIsCreated, questionId } = pros;
@@ -25,7 +25,7 @@ export default function AddQuestionPassage(pros) {
   useEffect(() => {
     const fetchPassage = async () => {
       try {
-        const data = await GetAllPassage();
+        const data = await GetPassageExceptIelts();
         const dataJson = await data.json();
         setPassages(dataJson.metaData.data);
         console.log(dataJson);

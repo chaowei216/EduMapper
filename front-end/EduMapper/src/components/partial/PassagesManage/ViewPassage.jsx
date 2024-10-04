@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Button, Divider, Menu, MenuItem } from "@mui/material";
+import {
+  Button,
+  Divider,
+  FormControl,
+  Menu,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import PageNavigation from "../../global/PageNavigation";
 import PageSize from "../../global/PageSize";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import PassageTable from "./PassageTable";
-import { GetAllPassage } from "../../../api/PassageApi";
+import {
+  GetAllPassage,
+  GetPassageExceptIelts,
+  GetPassageIelts,
+} from "../../../api/PassageApi";
 import CreatePassageModal from "./CreatePassageModal";
 import UpdateModal from "../MembershipManagement/UpdateModal";
 import DeleteModal from "../MembershipManagement/DeleteModal";
@@ -21,6 +32,7 @@ export default function ViewPassage() {
   const [openDetail, setOpenDetail] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [openCreatePassage2, setOpenCreatePassage2] = useState(false);
+  const [filter, setFilter] = useState("");
   useEffect(() => {
     const getAllPassage = async () => {
       const response = await GetAllPassage(page, pageSize);
@@ -28,13 +40,41 @@ export default function ViewPassage() {
         const responseJson = await response.json();
         const data = responseJson.metaData.data;
         setData(data);
-        // setTotalPages(responseJson.data.totalPages);
+        setTotalPages(responseJson.metaData.totalPages);
       } else {
         toast.error("Error getting data");
       }
     };
-    getAllPassage();
-  }, [page, totalPages, pageSize, isCreated]);
+    const getIeltsPassage = async () => {
+      const response = await GetPassageIelts(page, pageSize);
+      if (response.ok) {
+        const responseJson = await response.json();
+        const data = responseJson.metaData.data;
+        setData(data);
+        setTotalPages(responseJson.metaData.totalPages);
+      } else {
+        toast.error("Error getting data");
+      }
+    };
+    const getPassageOther = async () => {
+      const response = await GetPassageExceptIelts(page, pageSize);
+      if (response.ok) {
+        const responseJson = await response.json();
+        const data = responseJson.metaData.data;
+        setData(data);
+        setTotalPages(responseJson.metaData.totalPages);
+      } else {
+        toast.error("Error getting data");
+      }
+    };
+    if (filter == "ielts") {
+      getIeltsPassage();
+    } else if (filter == "other") {
+      getPassageOther();
+    } else {
+      getAllPassage();
+    }
+  }, [page, totalPages, pageSize, isCreated, filter]);
 
   const handleClickUpdate = (data) => {
     setDataDetail(data);
@@ -55,7 +95,9 @@ export default function ViewPassage() {
   const handleClose2 = () => {
     setAnchorEl(null);
   };
-
+  const handleChangeFilter = (data) => {
+    setFilter(data);
+  };
   return (
     <div
       style={{
@@ -69,19 +111,35 @@ export default function ViewPassage() {
       >
         Các đoạn văn
       </div>
-      <div style={{ marginBottom: "20px" }}>
-        <Button
-          id="basic-button"
-          variant="contained"
-          style={{ fontWeight: "bold" }}
-          aria-controls={open ? "basic-menu" : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? "true" : undefined}
-          onClick={handleClick}
-        >
-          <Inventory2Icon />
-          Tạo đoạn văn
-        </Button>
+      <div style={{ marginBottom: "20px", display: "flex", alignItems: "center", gap: "20px" }}>
+        <div>
+          <Button
+            id="basic-button"
+            variant="contained"
+            style={{ fontWeight: "bold", height: "50px", marginTop: "19px" }}
+            aria-controls={open ? "basic-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+            onClick={handleClick}
+          >
+            <Inventory2Icon />
+            Tạo đoạn văn
+          </Button>
+        </div>
+        <div>
+          <FormControl sx={{ width: "200px", marginTop: "20px" }}>
+            <Select
+              displayEmpty
+              defaultValue=""
+              inputProps={{ "aria-label": "Without label" }}
+              onChange={(e) => handleChangeFilter(e.target.value)}
+            >
+              <MenuItem value="">Tất cả</MenuItem>
+              <MenuItem value="ielts">Đoạn văn ielts</MenuItem>
+              <MenuItem value="other">Đoạn văn khác</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
         <Menu
           id="basic-menu"
           anchorEl={anchorEl}

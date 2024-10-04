@@ -54,7 +54,7 @@ export default function PassageTable({
       border: 0,
     },
   }));
-  const TableHeader = ["Id", "Tên", "Mô tả", "Hành động"];
+  const TableHeader = ["ID đoạn văn", "Tên", "Mô tả", "Hành động"];
 
   return (
     <div>
@@ -74,7 +74,7 @@ export default function PassageTable({
                       textAlign: "center",
                     },
                   }}
-                  align="left"
+                  align="center"
                   key={index}
                 >
                   <span style={{ fontSize: "larger" }}>{row}</span>
@@ -94,7 +94,7 @@ export default function PassageTable({
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <StyledTableCell
-                      style={{ fontWeight: "600", textAlign: "justify", width: "500px" }}
+                      style={{ fontWeight: "600", textAlign: "center", width: "500px" }}
                       component="th"
                       scope="row"
                     >
@@ -102,19 +102,19 @@ export default function PassageTable({
                     </StyledTableCell>
                     <StyledTableCell
                       style={{ fontWeight: "600" }}
-                      align="justify"
+                      align="center"
                     >
                       {row.passageTitle}
                     </StyledTableCell>
                     <StyledTableCell
                       style={{ fontWeight: "600", alignItems: "justify" }}
-                      align="left"
+                      align="center"
                     >
                       {row.passageContent}
                     </StyledTableCell>
                     <StyledTableCell
                       style={{ fontWeight: "600" }}
-                      align="justify"
+                      align="center"
                     >
                       <Button
                         variant="text"
