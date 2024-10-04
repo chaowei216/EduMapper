@@ -71,8 +71,6 @@ namespace BLL.Service
                                                                 ? p => p.QuestionText.Contains(request.Search.Trim())
                                                                 : null,
                                                                 orderBy: null,
-                                                                pageIndex: request.PageNumber,
-                                                                pageSize: request.PageSize,
                                                                 includeProperties: "Choices");
 
             var totalCount = response.Count(); // Make sure to use CountAsync to get the total count
@@ -96,8 +94,6 @@ namespace BLL.Service
         {
             var response = await _unitOfWork.QuestionRepository.Get(filter: c => (c.PassageId == null) && (string.IsNullOrEmpty(request.Search)
                                                                 || c.QuestionText.Contains(request.Search.Trim())),
-                                                                pageIndex: request.PageNumber,
-                                                                pageSize: request.PageSize,
                                                                 includeProperties: "Choices");
 
             var totalCount = response.Count(); // Make sure to use CountAsync to get the total count

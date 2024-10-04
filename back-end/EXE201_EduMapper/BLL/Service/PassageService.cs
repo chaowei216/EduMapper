@@ -12,6 +12,7 @@ using DAL.Models;
 using DAL.UnitOfWork;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Storage.V1;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
 namespace BLL.Service
@@ -27,6 +28,7 @@ namespace BLL.Service
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _configuration = configuration;
 
             string pathToJsonFile = "firebase.json";
 
@@ -45,6 +47,45 @@ namespace BLL.Service
                 throw new Exception(FirebaseLink.FailToCreatCer + ex.Message);
             }
         }
+
+        public async Task<FileStream> RetrieveItemAsync(string rootPath)
+        {
+            try
+            {
+                // Create temporary file to save the memory stream contents
+                var fileName = Path.GetTempFileName();
+
+                // Create an empty zip file
+                using (var fileStream = new FileStream(fileName, FileMode.Create))
+                {
+                    using (var stream = new MemoryStream())
+                    {
+                        // Download the file contents
+                        await _storageClient.DownloadObjectAsync("edumapper-ed77e.appspot.com", rootPath, stream);
+
+                        // Set the position of the memory stream to the beginning
+                        stream.Seek(0, SeekOrigin.Begin);
+
+                        // Copy the contents of the memory stream to the file stream
+                        await stream.CopyToAsync(fileStream);
+                    }
+                }
+
+                // Return FileStream for the file
+                return new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            }
+            catch (Google.GoogleApiException ex) when (ex.Error.Code == 403)
+            {
+                Console.WriteLine($"Access denied: {ex.Error.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return null!;
+        }
+
 
         public async Task<ResponseDTO> AddQuestionToPassage(AddQuestionDTO passage)
         {
@@ -137,12 +178,33 @@ namespace BLL.Service
             };
         }
 
-        public ResponseDTO CreatePassage(PassageCreateDTO passage)
+        public async Task<ResponseDTO> CreatePassage(PassageCreateDTO passage, IFormFile? file)
         {
             var mapPassage = _mapper.Map<Passage>(passage);
+            string files = string.Empty;
             mapPassage.PassageId = Guid.NewGuid().ToString();
             mapPassage.CreatedAt = DateTime.Now;
 
+            if(file != null)
+            {
+                var imageName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                files = imageName;
+                // Upload each image to Firebase Storage
+                using (var stream = file.OpenReadStream())
+                {
+                    await _storageClient.UploadObjectAsync(
+                    bucket: "edumapper-ed77e.appspot.com",
+                    objectName: imageName,
+                    contentType: file.ContentType,
+                    source: stream);
+                }
+            }
+            
+            if(passage.PassageContent == null && file != null)
+            {
+                mapPassage.PassageContent = files;
+            }
+            
             _unitOfWork.PassageRepository.Insert(mapPassage);
 
             _unitOfWork.Save();
@@ -162,8 +224,6 @@ namespace BLL.Service
                                                                         ? p => p.PassageTitle.Contains(request.Search.Trim())
                                                                         : null,
                                                                 orderBy: null,
-                                                                pageIndex: request.PageNumber,
-                                                                pageSize: request.PageSize,
                                                                 includeProperties: "SubQuestion,Sections,SubQuestion.Choices,SubQuestion.UserAnswers");
 
             var totalCount = response.Count(); // Make sure to use CountAsync to get the total count
@@ -172,7 +232,7 @@ namespace BLL.Service
             // Create the PagedList and map the results
             var pageList = new PagedList<Passage>(items, totalCount, request.PageNumber, request.PageSize);
             var mappedResponse = _mapper.Map<PaginationResponseDTO<PassageDTO>>(pageList);
-            mappedResponse.Data = _mapper.Map<List<PassageDTO>>(items);
+            mappedResponse.Data = _mapper.Map<List<PassageDTO>>(pageList);
 
 
             return new ResponseDTO
@@ -189,9 +249,7 @@ namespace BLL.Service
             var response = await _unitOfWork.PassageRepository.Get(includeProperties: "SubQuestion,Sections,SubQuestion.Choices,SubQuestion.UserAnswers",
                                                                 filter: c => !c.Sections.Any() && (string.IsNullOrEmpty(request.Search)
                                                                 || c.PassageTitle.Contains(request.Search.Trim())),
-                                                                orderBy: null,
-                                                                pageIndex: request.PageNumber,
-                                                                pageSize: request.PageSize);
+                                                                orderBy: null);
 
             var totalCount = response.Count(); // Make sure to use CountAsync to get the total count
             var items = response.ToList(); // Use ToListAsync to fetch items asynchronously
@@ -214,9 +272,7 @@ namespace BLL.Service
             var response = await _unitOfWork.PassageRepository.Get(includeProperties: "SubQuestion,Sections,SubQuestion.Choices,SubQuestion.UserAnswers",
                                                                 filter: c => c.Sections.Any() && (string.IsNullOrEmpty(request.Search)
                                                                 || c.PassageTitle.Contains(request.Search.Trim())),
-                                                                orderBy: null,
-                                                                pageIndex: request.PageNumber,
-                                                                pageSize: request.PageSize);
+                                                                orderBy: null);
 
             var totalCount = response.Count(); // Make sure to use CountAsync to get the total count
             var items = response.ToList(); // Use ToListAsync to fetch items asynchronously

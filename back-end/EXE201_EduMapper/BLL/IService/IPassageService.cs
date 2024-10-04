@@ -3,6 +3,7 @@ using Common.DTO;
 using Common.DTO.Passage;
 using Common.DTO.Query;
 using Common.DTO.Question;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,14 @@ namespace BLL.IService
         /// </summary>
         /// <param name="passage"></param>
         /// <returns></returns>
-        ResponseDTO CreatePassage(PassageCreateDTO passage);
+        Task<ResponseDTO> CreatePassage(PassageCreateDTO passage, IFormFile? file);
+
+        /// <summary>
+        /// Function to help service get image
+        /// </summary>
+        /// <param name="rootPath"></param>
+        /// <returns></returns>
+        Task<FileStream> RetrieveItemAsync(string rootPath);
 
         /// <summary>
         /// Get passage except ielts

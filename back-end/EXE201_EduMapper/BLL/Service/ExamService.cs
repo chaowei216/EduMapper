@@ -145,8 +145,6 @@ namespace BLL.Service
                                                                         ? p => p.ExamName.Contains(request.Search.Trim())
                                                                         : null,
                                                                 orderBy: null,
-                                                                pageIndex: request.PageNumber,
-                                                                pageSize: request.PageSize,
                                                                 includeProperties: "Passages,Passages.SubQuestion," +
                                                                                    "Passages.Sections,Passages.SubQuestion.Choices");
 
