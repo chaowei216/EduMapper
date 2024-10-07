@@ -1,5 +1,8 @@
 ﻿using BLL.IService;
+using BLL.Service;
 using Common.DTO;
+using Common.DTO.Exam;
+using Common.DTO.Test;
 using Common.Enum;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -72,6 +75,32 @@ namespace EXE201_EduMapper.Controllers
             var tests = await _testService.GetWritingTestById(id);
 
             return Ok(tests);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(201, Type = typeof(ResponseDTO))]
+        [ProducesResponseType(400, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> CreateNewTest([FromBody] TestCreateDTO testDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO
+                {
+                    StatusCode = StatusCodeEnum.BadRequest,
+                    Message = ModelState.ToString()!
+                });
+            }
+
+            var result = await _testService.CreateTest(testDTO);
+
+            if (result.IsSuccess)
+            {
+                return Created(uri: "", value: result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
         }
     }
 }

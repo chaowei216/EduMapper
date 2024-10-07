@@ -7,6 +7,7 @@ namespace DAL.Models
     {
         [Key]
         public string CenterId { get; set; } = null!; 
+        public List<string>? CenterImages { get; set; }
         public string CentersName { get; set; } = string.Empty;
         public string Location { get; set; } = string.Empty;
         public string ContactInfor { get; set; } = string.Empty;
@@ -16,5 +17,6 @@ namespace DAL.Models
         public DateTime? ReviewDate { get; set; }
         public ICollection<Feedback> Feedbacks { get; set; } = null!;
         public ICollection<ProgramTraining> ProgramTrainings { get; set; } = null!;
+        public ICollection<AdvertisingCenter> AdvertisingCenters { get; set; } = null!;
     }
 }

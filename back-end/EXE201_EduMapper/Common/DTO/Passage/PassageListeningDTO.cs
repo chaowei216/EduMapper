@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Common.DTO.Passage
 {
-    public class PassageDTO
+    public class PassageListeningDTO
     {
         public string PassageId { get; set; } = null!;
         public string? PassageTitle { get; set; } = string.Empty;
         public string? PassageContent { get; set; } = string.Empty;
-        public string? ListeningFile {  get; set; } 
         public ICollection<QuestionDTO> SubQuestion { get; set; } = null!;
         public ICollection<PassageSectionDTO> Sections { get; set; } = null!;
+        public string? ListeningFile { get; set; } = string.Empty;
     }
 }
