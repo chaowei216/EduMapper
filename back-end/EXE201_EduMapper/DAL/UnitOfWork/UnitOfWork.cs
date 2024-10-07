@@ -29,6 +29,7 @@ namespace DAL.UnitOfWork
         private UserReferenceRepository _userReferenceRepository ;
         private SectionRepository _sectionRepository;
         private MessageRepository _messageRepository ;
+        private AdverCenterRepository _adverCenterRepository;
 
         public IUserRepository UserRepository => _userRepository ??= new UserRepository(_context);
 
@@ -70,6 +71,7 @@ namespace DAL.UnitOfWork
         public ISectionRepository SectionRepository => _sectionRepository ??= new SectionRepository(_context);
 
         public IMessageRepository MessageRepository => _messageRepository ??= new MessageRepository(_context);
+        public IAdverCenterRepository AdverCenterRepository => _adverCenterRepository ??= new AdverCenterRepository(_context);
 
         public UnitOfWork(DataContext context)
         {

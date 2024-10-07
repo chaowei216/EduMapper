@@ -85,10 +85,10 @@ namespace EXE201_EduMapper.Controllers
             }
         }
 
-        [HttpPost("except-ielts")]
+        [HttpPost("listening")]
         [ProducesResponseType(201, Type = typeof(ResponseDTO))]
         [ProducesResponseType(400, Type = typeof(ResponseDTO))]
-        public async Task<IActionResult> CreateNewPassage([FromForm] PassageCreateDTO passageDTO, IFormFile? file)
+        public async Task<IActionResult> CreateListeningPassage([FromForm] PassageCreateDTO passageDTO, IFormFile? file)
         {
             if (!ModelState.IsValid)
             {
@@ -99,7 +99,33 @@ namespace EXE201_EduMapper.Controllers
                 });
             }
 
-            var result = await _passageService.CreatePassage(passageDTO, file);
+            var result = await _passageService.CreateListeningPassage(passageDTO, file);
+
+            if (result.IsSuccess)
+            {
+                return Created(uri: "", value: result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
+        [HttpPost("except-ielts")]
+        [ProducesResponseType(201, Type = typeof(ResponseDTO))]
+        [ProducesResponseType(400, Type = typeof(ResponseDTO))]
+        public IActionResult CreateNewPassage([FromBody] PassageCreateDTO passageDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO
+                {
+                    StatusCode = StatusCodeEnum.BadRequest,
+                    Message = ModelState.ToString()!
+                });
+            }
+
+            var result = _passageService.CreatePassage(passageDTO);
 
             if (result.IsSuccess)
             {

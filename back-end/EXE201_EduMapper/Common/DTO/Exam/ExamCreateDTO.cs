@@ -9,7 +9,9 @@ namespace Common.DTO.Exam
 {
     public class ExamCreateDTO
     {
-        public string ExamName { get; set; } = string.Empty;
+        public string ExamNames { get; set; } = string.Empty;
+        public string ExamNameType {  get; set; } = string.Empty;
+        public string ExamType { get; set; } = string.Empty!;
         public List<string>? PassageIds { get; set; } = null!;
     }
 }

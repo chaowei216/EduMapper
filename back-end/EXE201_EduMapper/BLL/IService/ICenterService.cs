@@ -18,6 +18,13 @@ namespace BLL.IService
         Task<ResponseDTO> GetAllCenters(CenterParameters request);
 
         /// <summary>
+        /// Get all exams
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<ResponseDTO> GetAllAdverCenters(CenterParameters request);
+
+        /// <summary>
         /// Get all passages
         /// </summary>
         /// <param name="id"></param>
