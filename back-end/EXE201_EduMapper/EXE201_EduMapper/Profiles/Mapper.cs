@@ -36,6 +36,7 @@ namespace EXE201_EduMapper.Profiles
             CreateMap<PassageSection, PassageSectionDTO>().ReverseMap();
             CreateMap<Test, TestDTO>().ReverseMap();
             CreateMap<Question, QuestionCreateDTO>().ReverseMap();
+            CreateMap<QuestionChoice, QuestionChoiceCreateDTO>().ReverseMap();
             CreateMap<Passage, PassageIELTSCreateDTO>().ReverseMap();
             CreateMap<Passage, PassageCreateDTO>().ReverseMap();
             CreateMap<PassageSectionCreateDTO, PassageSection>().ReverseMap();

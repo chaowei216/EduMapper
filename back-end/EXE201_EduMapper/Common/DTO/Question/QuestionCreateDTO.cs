@@ -19,6 +19,6 @@ namespace Common.DTO.Question
         [AllowNull]
         public int? WordsLimit { get; set; } = null!;
         [AllowNull]
-        public ICollection<QuestionChoiceDTO>? Choices { get; set; } = null!;
+        public ICollection<QuestionChoiceCreateDTO>? Choices { get; set; } = null!;
     }
 }
