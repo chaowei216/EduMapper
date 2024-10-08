@@ -22,13 +22,11 @@ namespace BLL.Service
         private readonly IUnitOfWork _unitOfWork;
         private readonly StorageClient _storageClient;
         private readonly IMapper _mapper;
-        private readonly IConfiguration _configuration;
 
-        public PassageService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
+        public PassageService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _configuration = configuration;
 
             string pathToJsonFile = "firebase.json";
 
@@ -178,7 +176,7 @@ namespace BLL.Service
             };
         }
 
-        public async Task<ResponseDTO> CreatePassage(PassageCreateDTO passage, IFormFile? file)
+        public async Task<ResponseDTO> CreateListeningPassage(PassageCreateDTO passage, IFormFile? file)
         {
             var mapPassage = _mapper.Map<Passage>(passage);
             string files = string.Empty;
@@ -198,13 +196,28 @@ namespace BLL.Service
                     contentType: file.ContentType,
                     source: stream);
                 }
+                mapPassage.ListeningFile = files;
             }
             
-            if(passage.PassageContent == null && file != null)
+            _unitOfWork.PassageRepository.Insert(mapPassage);
+
+            _unitOfWork.Save();
+
+            return new ResponseDTO
             {
-                mapPassage.PassageContent = files;
-            }
-            
+                IsSuccess = true,
+                Message = GeneralMessage.CreateSuccess,
+                StatusCode = StatusCodeEnum.Created,
+                MetaData = mapPassage
+            };
+        }
+
+        public ResponseDTO CreatePassage(PassageCreateDTO passage)
+        {
+            var mapPassage = _mapper.Map<Passage>(passage);
+            mapPassage.PassageId = Guid.NewGuid().ToString();
+            mapPassage.CreatedAt = DateTime.Now;
+
             _unitOfWork.PassageRepository.Insert(mapPassage);
 
             _unitOfWork.Save();
@@ -233,6 +246,31 @@ namespace BLL.Service
             var pageList = new PagedList<Passage>(items, totalCount, request.PageNumber, request.PageSize);
             var mappedResponse = _mapper.Map<PaginationResponseDTO<PassageDTO>>(pageList);
             mappedResponse.Data = _mapper.Map<List<PassageDTO>>(pageList);
+
+
+            return new ResponseDTO
+            {
+                StatusCode = StatusCodeEnum.OK,
+                IsSuccess = true,
+                Message = GeneralMessage.GetSuccess,
+                MetaData = mappedResponse
+            };
+        }
+
+        public async Task<ResponseDTO> GetAllListeningPassages(PassageParameters request)
+        {
+            var response = await _unitOfWork.PassageRepository.Get(includeProperties: "SubQuestion,Sections,SubQuestion.Choices,SubQuestion.UserAnswers",
+                                                                filter: c => c.ListeningFile != null && (string.IsNullOrEmpty(request.Search)
+                                                                || c.PassageTitle.Contains(request.Search.Trim())),
+                                                                orderBy: null);
+
+            var totalCount = response.Count(); // Make sure to use CountAsync to get the total count
+            var items = response.ToList(); // Use ToListAsync to fetch items asynchronously
+
+            // Create the PagedList and map the results
+            var pageList = new PagedList<Passage>(items, totalCount, request.PageNumber, request.PageSize);
+            var mappedResponse = _mapper.Map<PaginationResponseDTO<PassageListeningDTO>>(pageList);
+            mappedResponse.Data = _mapper.Map<List<PassageListeningDTO>>(pageList);
 
 
             return new ResponseDTO

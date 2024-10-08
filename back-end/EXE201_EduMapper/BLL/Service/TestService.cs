@@ -3,17 +3,12 @@ using BLL.Exceptions;
 using BLL.IService;
 using Common.Constant.Exam;
 using Common.Constant.Message;
-using Common.Constant.Message.Auth;
+using Common.Constant.Test;
 using Common.DTO;
 using Common.DTO.Test;
 using Common.Enum;
 using DAL.Models;
 using DAL.UnitOfWork;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL.Service
 {
@@ -26,6 +21,53 @@ namespace BLL.Service
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+        }
+
+        public async Task<ResponseDTO> CreateTest(TestCreateDTO test)
+        {
+            var mapTest = _mapper.Map<Test>(test);
+            int numOfQuestion = 0;
+            mapTest.TestId = Guid.NewGuid().ToString();
+
+
+            mapTest.CreatedDate = DateTime.Now;
+            _unitOfWork.TestRepository.Insert(mapTest);
+            if (test.ExamIds != null)
+            {
+                foreach (var exam in test.ExamIds)
+                {
+                    var thisExam = await _unitOfWork.ExamRepository.Get(filter: c => c.ExamId == exam,
+                                                                        includeProperties: "Passages,Passages.SubQuestion," +
+                                                                                   "Passages.Sections,Passages.SubQuestion.Choices");
+
+                    foreach (var ex in thisExam)
+                    {
+                        if (ex.TestId != null)
+                        {
+                            return new ResponseDTO
+                            {
+                                IsSuccess = false,
+                                Message = TestMessage.DuplicateTest,
+                                StatusCode = StatusCodeEnum.BadRequest,
+                            };
+                        }
+                        ex.TestId = mapTest.TestId;
+
+                        _unitOfWork.ExamRepository.Update(ex);
+                        _unitOfWork.Save();
+                    }
+                }
+            }
+
+            _unitOfWork.Save();
+
+            return new ResponseDTO
+            {
+                IsSuccess = true,
+                Message = GeneralMessage.CreateSuccess,
+                StatusCode = StatusCodeEnum.Created,
+                MetaData = mapTest
+            };
         }
 
         public async Task<ResponseDTO> GetListeningTestById(string id)
@@ -56,9 +98,9 @@ namespace BLL.Service
 
         public async Task<ResponseDTO> GetReadingTestById(string id)
         {
-            var test = await _unitOfWork.TestRepository.Get(includeProperties: "Exams,Exams.Passages,Exams.Passages.SubQuestion," +
-                                                                                   "Exams.Passages.Sections,Exams.Passages.SubQuestion.Choices",
-                                                            filter: c => c.TestId == id);
+            var test = await _unitOfWork.TestRepository.Get(filter: c => c.TestId == id, includeProperties: "Exams,Exams.Passages,Exams.Passages.SubQuestion," +
+                                                                                   "Exams.Passages.Sections,Exams.Passages.SubQuestion.Choices"
+                                                            );
 
             foreach (var item in test)
             {

@@ -28,6 +28,7 @@ namespace DAL.UnitOfWork
         IUserReferenceRepository UserReferenceRepository { get; }
         ISectionRepository SectionRepository { get; }
         IMessageRepository MessageRepository { get; }
+        IAdverCenterRepository AdverCenterRepository { get; }
         void Save();
     }
 }

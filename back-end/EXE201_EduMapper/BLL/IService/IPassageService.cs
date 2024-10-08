@@ -22,6 +22,13 @@ namespace BLL.IService
         Task<ResponseDTO> GetAllPassages(PassageParameters request);
 
         /// <summary>
+        /// Get all passages
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<ResponseDTO> GetAllListeningPassages(PassageParameters request);
+
+        /// <summary>
         /// Get passage of test by id
         /// </summary>
         /// <param name="id"></param>
@@ -40,7 +47,14 @@ namespace BLL.IService
         /// </summary>
         /// <param name="passage"></param>
         /// <returns></returns>
-        Task<ResponseDTO> CreatePassage(PassageCreateDTO passage, IFormFile? file);
+        Task<ResponseDTO> CreateListeningPassage(PassageCreateDTO passage, IFormFile? file);
+
+        /// <summary>
+        /// Create passage except ielts of test 
+        /// </summary>
+        /// <param name="passage"></param>
+        /// <returns></returns>
+        ResponseDTO CreatePassage(PassageCreateDTO passage);
 
         /// <summary>
         /// Function to help service get image

@@ -3,20 +3,15 @@ using BLL.Exceptions;
 using BLL.IService;
 using Common.Constant.Exam;
 using Common.Constant.Message;
-using Common.Constant.Notification;
 using Common.Constant.Progress;
 using Common.DTO;
 using Common.DTO.Exam;
-using Common.DTO.Notification;
 using Common.DTO.Progress;
 using Common.DTO.Query;
 using Common.DTO.Test;
 using Common.Enum;
 using DAL.Models;
 using DAL.UnitOfWork;
-using DAO.Models;
-using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BLL.Service
 {
@@ -51,19 +46,19 @@ namespace BLL.Service
                         var exam = await _unitOfWork.ExamRepository.GetByID(passage.ExamId);
                         if(exam != null)
                         {
-                            var progress = await _unitOfWork.ProgressRepository.Get(filter: c => c.UserId == answer.UserId && c.ExamId == exam.ExamId);
-                            var thisProgress = progress.FirstOrDefault();
+                            var userAns = await _unitOfWork.ProgressRepository.Get(filter: c => c.UserId == answer.UserId && c.ExamId == exam.ExamId);
+                            var thisAns = userAns.FirstOrDefault();
 
                             var questionCount = request.Answers.Count();
-                            if(thisProgress != null)
+                            if(thisAns != null)
                             {
                                 var percent = ((double) questionCount / exam.NumOfQuestions) * 100;
-                                thisProgress.Percent = percent;
-                                thisProgress.ProgressId = thisProgress.ProgressId;
-                                thisProgress.UpdatedDate = DateTime.Now;
-                                thisProgress.TestedDate = thisProgress.TestedDate;
-                                thisProgress.Score = thisProgress.Score;
-                                _unitOfWork.ProgressRepository.Update(thisProgress);
+                                thisAns.Percent = percent;
+                                thisAns.ProgressId = thisAns.ProgressId;
+                                thisAns.UpdatedDate = DateTime.Now;
+                                thisAns.TestedDate = thisAns.TestedDate;
+                                thisAns.Score = thisAns.Score;
+                                _unitOfWork.ProgressRepository.Update(thisAns);
                             }
                         }
                     }
@@ -86,7 +81,7 @@ namespace BLL.Service
             return new ResponseDTO
             {
                 IsSuccess = true,
-                Message = SaveAnswerSuccess.SaveAnswerSuccessfully,
+                Message = ExamMessage.SaveAnswerSuccessfully,
                 StatusCode = StatusCodeEnum.Created,
                 MetaData = request
             };
@@ -98,37 +93,84 @@ namespace BLL.Service
             int numOfQuestion = 0;
             mapQuestion.ExamId = Guid.NewGuid().ToString();
 
+            _unitOfWork.ExamRepository.Insert(mapQuestion);
+
+            try
+            {
+                _unitOfWork.Save(); 
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = ex.InnerException?.Message ?? ex.Message,
+                    StatusCode = StatusCodeEnum.InteralServerError,
+                };
+            }
+
             if (exam.PassageIds != null)
             {
                 foreach (var passage in exam.PassageIds)
                 {
-                    var thisPassage = await _unitOfWork.PassageRepository.Get(c => c.PassageId == passage,
-                                                                              includeProperties: "SubQuestion,Sections,SubQuestion.Choices,SubQuestion.UserAnswers");
+                    var thisPassage = await _unitOfWork.PassageRepository.Get(
+                        c => c.PassageId == passage,
+                        includeProperties: "SubQuestion,Sections,SubQuestion.Choices,SubQuestion.UserAnswers"
+                    );
 
                     foreach (var pas in thisPassage)
                     {
-                        if (pas != null && pas.ExamId == null)
+                        if (pas != null && pas.ExamId != null)
                         {
-                            pas.ExamId = mapQuestion.ExamId;
+                            return new ResponseDTO
+                            {
+                                IsSuccess = false,
+                                Message = ExamMessage.DuplicateExam,
+                                StatusCode = StatusCodeEnum.BadRequest,
+                            };
                         }
 
+                        pas.ExamId = mapQuestion.ExamId;
                         _unitOfWork.PassageRepository.Update(pas);
 
                         foreach (var question in pas.SubQuestion)
                         {
                             var cPassage = await _unitOfWork.QuestionRepository.Get(c => c.PassageId == passage);
+                            numOfQuestion += cPassage.Count();
+                        }
 
-                            int count = cPassage.Count();
-
-                            numOfQuestion = count;
+                        try
+                        {
+                            _unitOfWork.Save();
+                        }
+                        catch (Exception ex)
+                        {
+                            return new ResponseDTO
+                            {
+                                IsSuccess = false,
+                                Message = ex.InnerException?.Message ?? ex.Message,  
+                                StatusCode = StatusCodeEnum.InteralServerError,
+                            };
                         }
                     }
                 }
             }
-            mapQuestion.NumOfQuestions = numOfQuestion;
-            _unitOfWork.ExamRepository.Insert(mapQuestion);
 
-            _unitOfWork.Save();
+            mapQuestion.NumOfQuestions = numOfQuestion;
+
+            try
+            {
+                _unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = ex.InnerException?.Message ?? ex.Message,  
+                    StatusCode = StatusCodeEnum.InteralServerError,
+                };
+            }
 
             return new ResponseDTO
             {
@@ -138,6 +180,7 @@ namespace BLL.Service
                 MetaData = mapQuestion
             };
         }
+
 
         public async Task<ResponseDTO> GetAllExams(ExamParameters request)
         {
@@ -149,8 +192,8 @@ namespace BLL.Service
                                                                                    "Passages.Sections,Passages.SubQuestion.Choices");
 
 
-            var totalCount = response.Count(); // Make sure to use CountAsync to get the total count
-            var items = response.ToList(); // Use ToListAsync to fetch items asynchronously
+            var totalCount = response.Count(); 
+            var items = response.ToList(); 
 
             // Create the PagedList and map the results
             var pageList = new PagedList<Exam>(items, totalCount, request.PageNumber, request.PageSize);
