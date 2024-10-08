@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
+using Azure;
 using BLL.Exceptions;
 using BLL.IService;
 using Common.Constant.Exam;
 using Common.Constant.Message;
 using Common.Constant.Test;
 using Common.DTO;
+using Common.DTO.Exam;
+using Common.DTO.Query;
 using Common.DTO.Test;
 using Common.Enum;
 using DAL.Models;
@@ -67,6 +70,36 @@ namespace BLL.Service
                 Message = GeneralMessage.CreateSuccess,
                 StatusCode = StatusCodeEnum.Created,
                 MetaData = mapTest
+            };
+        }
+
+        public async Task<ResponseDTO> GetAllTest(TestParameters request)
+        {
+            var test = await _unitOfWork.TestRepository.Get(filter: !string.IsNullOrEmpty(request.Search)
+                                                                        ? p => p.Description.Contains(request.Search.Trim())
+                                                                        : null,
+                                                            includeProperties: "Exams,Exams.Passages,Exams.Passages.SubQuestion," +
+                                                                       "Exams.Passages.Sections,Exams.Passages.SubQuestion.Choices",
+                                                            pageSize: request.PageSize,
+                                                            pageIndex: request.PageNumber);
+
+            var test1 = await _unitOfWork.TestRepository.Get(includeProperties: "Exams,Exams.Passages,Exams.Passages.SubQuestion," +
+                                                                       "Exams.Passages.Sections,Exams.Passages.SubQuestion.Choices");
+
+            var totalCount = test1.Count();
+            var items = test.ToList();
+
+            // Create the PagedList and map the results
+            var pageList = new PagedList<Test>(items, totalCount, request.PageNumber, request.PageSize);
+            var mappedResponse = _mapper.Map<PaginationResponseDTO<TestDTO>>(pageList);
+            mappedResponse.Data = _mapper.Map<List<TestDTO>>(items);
+
+            return new ResponseDTO
+            {
+                StatusCode = StatusCodeEnum.OK,
+                IsSuccess = true,
+                Message = GeneralMessage.GetSuccess,
+                MetaData = mappedResponse
             };
         }
 

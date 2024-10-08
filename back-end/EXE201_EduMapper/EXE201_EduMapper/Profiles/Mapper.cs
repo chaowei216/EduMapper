@@ -56,6 +56,8 @@ namespace EXE201_EduMapper.Profiles
             CreateMap<PagedList<Exam>, PaginationResponseDTO<ExamDTO>>().ReverseMap();
             CreateMap<PagedList<Passage>, PassageDTO>().ReverseMap();
             CreateMap<PagedList<Passage>, PaginationResponseDTO<PassageDTO>>().ReverseMap();
+            CreateMap<PagedList<Test>, TestDTO>().ReverseMap();
+            CreateMap<PagedList<Test>, PaginationResponseDTO<TestDTO>>().ReverseMap();
             CreateMap<PagedList<Passage>, PassageListeningDTO>().ReverseMap();
             CreateMap<PagedList<Passage>, PaginationResponseDTO<PassageListeningDTO>>().ReverseMap();
             CreateMap<PagedList<Question>, QuestionDTO>().ReverseMap();
