@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import HeaderTesting from "../../components/global/HeaderTesting";
 import TestProgress from "../../components/partial/UserTesting/PartQuestion";
 import ReadingTest from "../../components/partial/UserTesting/ReadingTest";
+import { GetReadingTest } from "../../api/TestManageApi";
 function UserTestPage() {
   const [passages, setPassages] = useState([]);
   const [selectedAnswers, setSelectedAnswers] = useState([]);
@@ -10,9 +11,12 @@ function UserTestPage() {
   useEffect(() => {
     const fetchTestData = async () => {
       try {
-        const response = await fetch("/src/data/test2.json"); // Adjust path as necessary
+        //const response = await fetch("/src/data/test2.json"); // Adjust path as necessary
+        const response = await GetReadingTest(1);
         const data = await response.json();
-        setPassages(data.Tests[0].Exams[0].Passages); // Adjust based on your JSON structure
+        console.log(data.metaData);
+        //setPassages(data .Tests[0].Exams[0].Passages); // Adjust based on your JSON structure
+        setPassages(data.metaData.Exams[0].Passages);
       } catch (error) {
         console.error("Error fetching test data:", error);
       }
@@ -31,11 +35,15 @@ function UserTestPage() {
   const getAnsweredCount = (passageIndex) => {
     // Lấy danh sách câu hỏi từ đoạn văn cụ thể
     const questions = passages[passageIndex]?.SubQuestions || [];
-    
+
     // Đếm số câu hỏi đã trả lời dựa vào selectedAnswers
     return questions.reduce((count, question) => {
       // Kiểm tra xem câu hỏi có tồn tại trong selectedAnswers và có giá trị không
-      return selectedAnswers.find(answer => answer.questionId === question.QuestionId) ? count + 1 : count;
+      return selectedAnswers.find(
+        (answer) => answer.questionId === question.QuestionId
+      )
+        ? count + 1
+        : count;
     }, 0);
   };
   // const handleAnswerChange = (questionId, answer) => {

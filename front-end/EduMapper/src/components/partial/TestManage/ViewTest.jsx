@@ -1,60 +1,38 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Button, FormControl, MenuItem, Select } from "@mui/material";
-import UpdateModal from "./UpdateModal";
-import DeleteModal from "./DeleteModal";
 import PageNavigation from "../../global/PageNavigation";
 import PageSize from "../../global/PageSize";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
-import QuestionTable from "./QuestionTable";
-import CreateQuestionModal from "./CreateQuestionModal";
-import AddQuestionPassage from "./AddQuestionPassage";
-import {
-  GetAllQuestion,
-  GetFreeQuestion,
-} from "../../../api/QuestionManageApi";
-export default function ViewQuestion() {
+import DeleteExam from "./DeleteExam";
+import { GetAllExam } from "../../../api/ExamApi";
+import TestTable from "./TestTable";
+import CreateTest from "./CreateTest";
+export default function ViewTest() {
   const [totalPages, setTotalPages] = useState();
   const [page, setPage] = React.useState(1);
   const [pageSize, setPageSize] = React.useState(5);
   const [data, setData] = useState([]);
   const [centredModal, setCentredModal] = useState(false);
-  const [passageModal, setPassageModal] = useState(false);
   const [isCreated, setIsCreated] = useState(false);
   const [dataDetail, setDataDetail] = useState();
   const [openDetail, setOpenDetail] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-  const [questionId, setQuestionId] = useState([]);
-  const [filter, setFilter] = useState("");
   useEffect(() => {
-    const getAllQuestion = async () => {
-      const response = await GetAllQuestion(page, pageSize);
+    const getAllMemberShip = async () => {
+      const response = await GetAllExam(page, pageSize);
       if (response.ok) {
         const responseJson = await response.json();
         const data = responseJson.metaData.data;
         setData(data);
-        setTotalPages(responseJson.metaData.totalPages);
+        
+        // setTotalPages(responseJson.data.totalPages);
       } else {
         toast.error("Error getting data");
       }
     };
-    const getFreeQuestion = async () => {
-      const response = await GetFreeQuestion(page, pageSize);
-      if (response.ok) {
-        const responseJson = await response.json();
-        const data = responseJson.metaData.data;
-        setData(data);
-        setTotalPages(responseJson.metaData.totalPages);
-      } else {
-        toast.error("Error getting data");
-      }
-    };
-    if (filter == "free-question") {
-      getFreeQuestion();
-    } else {
-      getAllQuestion();
-    }
-  }, [page, totalPages, pageSize, isCreated, filter]);
+    getAllMemberShip();
+  }, [page, totalPages, pageSize, isCreated]);
 
   const handleClickUpdate = (data) => {
     setDataDetail(data);
@@ -67,9 +45,7 @@ export default function ViewQuestion() {
   const handleClose = () => {
     setOpenDelete(false);
   };
-  const handleChangeFilter = (data) => {
-    setFilter(data);
-  };
+
   return (
     <div
       style={{
@@ -81,7 +57,7 @@ export default function ViewQuestion() {
       <div
         style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "20px" }}
       >
-        Các câu hỏi
+        Các đề hiện có
       </div>
       <div style={{ marginBottom: "20px", display: "flex", gap: "20px" }}>
         <Button
@@ -90,29 +66,13 @@ export default function ViewQuestion() {
           onClick={() => setCentredModal(true)}
         >
           <Inventory2Icon />
-          Tạo câu hỏi
+          Tạo đề
         </Button>
-        <div>
-          <FormControl sx={{ width: "200px" }}>
-            <Select
-              displayEmpty
-              defaultValue=""
-              inputProps={{ "aria-label": "Without label" }}
-              onChange={(e) => handleChangeFilter(e.target.value)}
-            >
-              <MenuItem value="">Tất cả</MenuItem>
-              <MenuItem value="free-question">Câu hỏi còn trống</MenuItem>
-            </Select>
-          </FormControl>
-        </div>
       </div>
-      <QuestionTable
+      <TestTable
         data={data}
         handleClickUpdate={handleClickUpdate}
         handleClickDelete={handleClickDelete}
-        setQuestionId={setQuestionId}
-        setPassageModal={setPassageModal}
-        filter={filter}
       />
       {data && data.length > 0 && (
         <>
@@ -143,28 +103,16 @@ export default function ViewQuestion() {
           </div>
         </>
       )}
-      <CreateQuestionModal
+      <CreateTest
         centredModal={centredModal}
         setCentredModal={setCentredModal}
         setIsCreated={setIsCreated}
       />
-      <UpdateModal
-        centredModal={openDetail}
-        setCentredModal={setOpenDetail}
-        membershipData={dataDetail}
-        setIsCreated={setIsCreated}
-      />
-      <DeleteModal
+      <DeleteExam
         show={openDelete}
         handleClose={handleClose}
         data={dataDetail}
         setIsCreated={setIsCreated}
-      />
-      <AddQuestionPassage
-        passageModal={passageModal}
-        setPassageModal={setPassageModal}
-        setIsCreated={setIsCreated}
-        questionId={questionId}
       />
     </div>
   );

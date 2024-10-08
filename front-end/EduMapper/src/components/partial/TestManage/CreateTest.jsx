@@ -17,41 +17,45 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import StatusCode from "../../../utils/StautsCode";
 import Messages from "../../../utils/Message";
-import { GetAllPassage } from "../../../api/PassageApi";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
-import { CreateAllExam } from "../../../api/ExamApi";
+import { CreateTestApi } from "../../../api/TestManageApi";
+import { GetAllExam } from "../../../api/ExamApi";
+import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 
-export default function CreateExam({
+export default function CreateTest({
   centredModal,
   setCentredModal,
   setIsCreated,
 }) {
-  const [passagesList, setPassagesList] = useState();
+  const [examList, setExamList] = useState();
+
   useEffect(() => {
     const fetchExam = async () => {
       try {
-        const response = await GetAllPassage();
+        const response = await GetAllExam();
         const dataJson = await response.json();
-        setPassagesList(dataJson.metaData.data);
+        setExamList(dataJson.metaData.data);
       } catch (err) {
-        console.error("Failed to fetch notifications:", err);
+        console.error("Failed to fetch exams:", err);
       }
     };
 
     fetchExam();
   }, []);
+
   const validationSchema = Yup.object({
-    passageIds: Yup.array().min(1, "Required"),
-    examName: Yup.string().required("Required"),
+    type: Yup.string().required("Type is required"),
+    description: Yup.string().required("Description is required"),
+    isRequired: Yup.boolean().required("This field is required"),
+    examIds: Yup.array().min(1, "At least one exam must be selected"),
   });
 
   const handleSubmit = async (values) => {
-    console.log(values);
-    const response = await CreateAllExam(values);
+    const response = await CreateTestApi(values);
     if (response.status !== StatusCode.CREATED) {
-      toast.error(Messages.ERROR.BAD_REQUEST);
+      toast.error(Messages.ERROR.ALREADY_EXAM);
       return;
     }
     const responseJson = await response.json();
@@ -71,7 +75,7 @@ export default function CreateExam({
       <MDBModalDialog size="lg" centered>
         <MDBModalContent>
           <MDBModalHeader>
-            <MDBModalTitle>Create Passage</MDBModalTitle>
+            <MDBModalTitle>Create Exam</MDBModalTitle>
             <MDBBtn
               className="btn-close"
               color="none"
@@ -80,117 +84,123 @@ export default function CreateExam({
           </MDBModalHeader>
           <Formik
             initialValues={{
-              passageIds: [], // Chọn nhiều Passage
-              examNames: "",
-              examNameType: "",
-              examType: "",
+              type: "",
+              description: "",
+              isRequired: false,
+              examIds: [],
             }}
-            //validationSchema={validationSchema}
+            validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
             {({ setFieldValue }) => (
               <Form>
                 <MDBModalBody>
+                  {/* Type */}
                   <MDBRow style={{ marginBottom: "30px" }}>
                     <MDBCol sm="4">
-                      <MDBCardText>Tên bài thi: </MDBCardText>
+                      <MDBCardText>Thể loại đề thi:</MDBCardText>
                     </MDBCol>
                     <MDBCol sm="8">
                       <Field
                         as={MDBInput}
-                        name="examNames"
-                        label="Tên exam"
+                        name="type"
+                        label="Exam Type"
                         type="text"
                       />
                       <ErrorMessage
-                        name="examNames"
+                        name="type"
                         component="div"
                         className="text-red-500"
                       />
                     </MDBCol>
                   </MDBRow>
 
-                  <MDBRow style={{ marginBottom: "30px" }}>
-                    <MDBCol sm="4">
-                      <MDBCardText>Tên loại bài thi: </MDBCardText>
-                    </MDBCol>
-                    <MDBCol sm="8">
-                      <Field
-                        as={MDBInput}
-                        name="examNameType"
-                        label="Tên exam"
-                        type="text"
-                      />
-                      <ErrorMessage
-                        name="examNameType"
-                        component="div"
-                        className="text-red-500"
-                      />
-                    </MDBCol>
-                  </MDBRow>
-
-                  <MDBRow style={{ marginBottom: "30px" }}>
-                    <MDBCol sm="4">
-                      <MDBCardText>Loại bài thi: </MDBCardText>
-                    </MDBCol>
-                    <MDBCol sm="8">
-                      <Field
-                        as="select"
-                        name="examType"
-                        className="form-control"
-                      >
-                        <option value="">Chọn loại bài thi</option>
-                        <option value="IELTS">IELTS</option>
-                        <option value="TOEIC">TOEIC</option>
-                      </Field>
-                      <ErrorMessage
-                        name="examType"
-                        component="div"
-                        className="text-red-500"
-                      />
-                    </MDBCol>
-                  </MDBRow>
-
-                  {/* Passage Title */}
+                  {/* Description */}
                   <MDBRow>
                     <MDBCol sm="4">
-                      <MDBCardText style={{ marginTop: "8px" }}>
-                        Chọn các đoạn văn:
-                      </MDBCardText>
+                      <MDBCardText>Mô tả:</MDBCardText>
+                    </MDBCol>
+                    <MDBCol sm="8">
+                      <Field
+                        as={MDBInput}
+                        name="description"
+                        label="Description"
+                        type="text"
+                      />
+                      <ErrorMessage
+                        name="description"
+                        component="div"
+                        className="text-red-500"
+                      />
+                    </MDBCol>
+                  </MDBRow>
+
+                  {/* Is Required */}
+                  <MDBRow style={{marginTop: "15px", marginBottom: "15px"}}>
+                    <MDBCol sm="4">
+                      <MDBCardText>Có bắt buộc không:</MDBCardText>
+                    </MDBCol>
+                    <MDBCol sm="8">
+                      <Field name="isRequired">
+                        {({ field }) => (
+                          <RadioGroup
+                            row
+                            {...field}
+                            onChange={(event) =>
+                              setFieldValue(
+                                "isRequired",
+                                event.target.value === "true"
+                              )
+                            }
+                          >
+                            <FormControlLabel
+                              value="true"
+                              control={<Radio />}
+                              label="Có"
+                            />
+                            <FormControlLabel
+                              value="false"
+                              control={<Radio />}
+                              label="Không"
+                            />
+                          </RadioGroup>
+                        )}
+                      </Field>
+                      <ErrorMessage
+                        name="isRequired"
+                        component="div"
+                        className="text-red-500"
+                      />
+                    </MDBCol>
+                  </MDBRow>
+
+                  {/* Exam IDs */}
+                  <MDBRow>
+                    <MDBCol sm="4">
+                      <MDBCardText>Chọn các đề thi:</MDBCardText>
                     </MDBCol>
                     <MDBCol sm="8">
                       <Autocomplete
                         multiple
-                        options={
-                          passagesList && passagesList.length !== undefined
-                            ? passagesList
-                            : []
-                        } // List passages
-                        getOptionLabel={(option) => option.passageTitle}
+                        options={examList ?? []} // List exams
+                        getOptionLabel={(option) => option.examName}
                         onChange={(event, newValue) =>
                           setFieldValue(
-                            "passageIds",
-                            newValue.map((option) => option.passageId)
+                            "examIds",
+                            newValue.map((option) => option.examId)
                           )
                         }
                         renderInput={(params) => (
                           <TextField
                             {...params}
                             variant="outlined"
-                            label="Chọn Passage"
-                            placeholder="Chọn Passage"
+                            label="Select Exam"
+                            placeholder="Select Exam"
                           />
-                        )}
-                        renderOption={(props, option) => (
-                          <li {...props} key={option.passageId}>
-                            {" "}
-                            {/* Thêm key vào đây */}
-                            {option.passageTitle}
-                          </li>
                         )}
                       />
                       <ErrorMessage
-                        name="passageIds"
+                        name="examIds"
                         component="div"
                         className="text-red-500"
                       />

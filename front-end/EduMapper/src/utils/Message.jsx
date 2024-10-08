@@ -29,7 +29,8 @@ const Messages = {
     PAYMENT: "Thanh toán thất bại",
     CHOOSE_PAYMENT: "Làm ơn chọn phương thức thành toán",
     CAPTCHA: "Mã Captcha không được trùng khớp. Hãy thử lại!",
-    PACKAGE: "Gói này đã được tích hợp sẵn vào tài khoản bạn rồi!"
+    PACKAGE: "Gói này đã được tích hợp sẵn vào tài khoản bạn rồi!",
+    ALREADY_EXAM: "Đề này đã được chọn nằm trong bài kiểm tra khác rồi!"
   },
 };
 export default Messages;

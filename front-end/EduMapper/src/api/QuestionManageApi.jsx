@@ -1,8 +1,28 @@
 // Base Url for API
 const baseUrl = import.meta.env.VITE_API_HOST;
-export const GetAllQuestion = async (page, pageSize, filter) => {
+export const GetAllQuestion = async (page, pageSize) => {
   try {
-    const url = `${baseUrl}/api/Questions/${filter}?PageSize=${pageSize}&PageIndex=${page}`;
+    const url = `${baseUrl}/api/Questions?PageNumber=${page}&PageSize=${pageSize}`;
+    const request = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        //Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    };
+    const response = await fetch(url, request);
+    if (!response.ok) {
+      console.error("There was a problem with API");
+    }
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const GetFreeQuestion = async (page, pageSize) => {
+  try {
+    const url = `${baseUrl}/api/Questions/free-question?PageNumber=${page}&PageSize=${pageSize}`;
     const request = {
       method: "GET",
       headers: {

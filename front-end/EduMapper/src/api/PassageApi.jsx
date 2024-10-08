@@ -2,7 +2,7 @@
 const baseUrl = import.meta.env.VITE_API_HOST;
 export const GetAllPassage = async (page, pageSize) => {
   try {
-    const url = (page == undefined && pageSize == undefined) ? `${baseUrl}/api/Passages` : `${baseUrl}/api/Passages?PageSize=${pageSize}&PageIndex=${page}`;
+    const url = (page == undefined && pageSize == undefined) ? `${baseUrl}/api/Passages` : `${baseUrl}/api/Passages?PageNumber=${page}&PageSize=${pageSize}`;
     const request = {
       method: "GET",
       headers: {
@@ -82,7 +82,7 @@ export const CreatePassage = async (data) => {
 
   export const GetPassageExceptIelts = async (page, pageSize) => {
     try {
-      const url = (page == undefined && pageSize == undefined) ? `${baseUrl}/api/Passages/except-ielts` : `${baseUrl}/api/Passages/except-ielts?PageSize=${pageSize}&PageIndex=${page}`;
+      const url = (page == undefined && pageSize == undefined) ? `${baseUrl}/api/Passages/except-ielts` : `${baseUrl}/api/Passages/except-ielts?PageNumber=${page}&PageSize=${pageSize}`;
       const request = {
         method: "GET",
         headers: {
@@ -102,7 +102,7 @@ export const CreatePassage = async (data) => {
 
   export const GetPassageIelts = async (page, pageSize) => {
     try {
-      const url = (page == undefined && pageSize == undefined) ? `${baseUrl}/api/Passages/ielts` : `${baseUrl}/api/Passages/ielts?PageSize=${pageSize}&PageIndex=${page}`;
+      const url = (page == undefined && pageSize == undefined) ? `${baseUrl}/api/Passages/ielts` : `${baseUrl}/api/Passages/ielts?PageNumber=${page}&PageSize=${pageSize}`;
       const request = {
         method: "GET",
         headers: {

@@ -41,6 +41,13 @@ export default function Sidebar() {
       src: "/membership",
     },
     {
+      title: "Tạo bài thi",
+      path: "/test-management",
+      icon: <QuestionAnswerIcon />,
+      id: 33,
+      src: "/test-management",
+    },
+    {
       title: "Tạo đề thi",
       path: "/exam-management",
       icon: <ArticleIcon />,

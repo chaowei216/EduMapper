@@ -30,6 +30,8 @@ import WaitingCheckout from "../pages/PaymentPage/WaitingCheckOut";
 import ExamPage from "../pages/ExamPage/ExamPage";
 import ChatPage from "../pages/ChatPage/ChatPage";
 import DashboardPage from "../pages/DashboardPage/DashboardPage";
+import TestManagePage from "../pages/TestManagePage/TestManagePage";
+import TestListPage from "../pages/TakeTestPage/TestListPage";
 
 export const router = createBrowserRouter([
   {
@@ -168,5 +170,13 @@ export const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <DashboardPage />,
+  },
+  {
+    path: "/test-management",
+    element: <TestManagePage />,
+  },
+  {
+    path: "/listTest",
+    element: <TestListPage />,
   },
 ]);
