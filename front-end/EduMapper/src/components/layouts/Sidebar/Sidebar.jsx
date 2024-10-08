@@ -15,6 +15,7 @@ import CardMembershipIcon from "@mui/icons-material/CardMembership";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import ArticleIcon from "@mui/icons-material/Article";
+import DashboardIcon from '@mui/icons-material/Dashboard';
 export default function Sidebar() {
   const { user } = useAuth();
   const Menus = [
@@ -24,6 +25,13 @@ export default function Sidebar() {
       icon: <PersonIcon />,
       id: 1,
       src: "/user-profile",
+    },
+    {
+      title: "Dashboard",
+      path: "/dashboard",
+      icon: <DashboardIcon />,
+      id: 44,
+      src: "/dashboard",
     },
     {
       title: "MemberShip",

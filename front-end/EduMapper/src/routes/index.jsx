@@ -29,6 +29,7 @@ import Checkout from "../pages/PaymentPage/CheckOut";
 import WaitingCheckout from "../pages/PaymentPage/WaitingCheckOut";
 import ExamPage from "../pages/ExamPage/ExamPage";
 import ChatPage from "../pages/ChatPage/ChatPage";
+import DashboardPage from "../pages/DashboardPage/DashboardPage";
 
 export const router = createBrowserRouter([
   {
@@ -163,5 +164,9 @@ export const router = createBrowserRouter([
   {
     path: "/chat",
     element: <ChatPage />,
+  },
+  {
+    path: "/dashboard",
+    element: <DashboardPage />,
   },
 ]);
