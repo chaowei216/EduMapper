@@ -43,8 +43,10 @@ export default function CreateExam({
     fetchExam();
   }, []);
   const validationSchema = Yup.object({
-    passageIds: Yup.array().min(1, "Required"),
-    examName: Yup.string().required("Required"),
+    examNames: Yup.string().required("Required"),
+    examNameType: Yup.string().required("Required"),
+    examType: Yup.string().required("Required"),
+    passageIds: Yup.array().min(1, "Required")
   });
 
   const handleSubmit = async (values) => {
@@ -85,7 +87,7 @@ export default function CreateExam({
               examNameType: "",
               examType: "",
             }}
-            //validationSchema={validationSchema}
+            validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
             {({ setFieldValue }) => (
@@ -112,15 +114,19 @@ export default function CreateExam({
 
                   <MDBRow style={{ marginBottom: "30px" }}>
                     <MDBCol sm="4">
-                      <MDBCardText>Tên loại bài thi: </MDBCardText>
+                      <MDBCardText>Dạng bài thi: </MDBCardText>
                     </MDBCol>
                     <MDBCol sm="8">
                       <Field
-                        as={MDBInput}
+                        as="select"
                         name="examNameType"
-                        label="Tên exam"
-                        type="text"
-                      />
+                        className="form-control"
+                      >
+                        <option value="">Chọn loại bài thi</option>
+                        <option value="Reading">Reading</option>
+                        <option value="Listening">Listening</option>
+                        <option value="Writing">Writing</option>
+                      </Field>
                       <ErrorMessage
                         name="examNameType"
                         component="div"

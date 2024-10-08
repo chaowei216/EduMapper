@@ -98,15 +98,14 @@ export default function CreateTest({
                   {/* Type */}
                   <MDBRow style={{ marginBottom: "30px" }}>
                     <MDBCol sm="4">
-                      <MDBCardText>Thể loại đề thi:</MDBCardText>
+                      <MDBCardText>Loại đề: </MDBCardText>
                     </MDBCol>
                     <MDBCol sm="8">
-                      <Field
-                        as={MDBInput}
-                        name="type"
-                        label="Exam Type"
-                        type="text"
-                      />
+                      <Field as="select" name="type" className="form-control">
+                        <option value="">Chọn loại đề</option>
+                        <option value="IETLS">Ielts</option>
+                        <option value="TOEIC">Toeic</option>
+                      </Field>
                       <ErrorMessage
                         name="type"
                         component="div"
@@ -136,7 +135,7 @@ export default function CreateTest({
                   </MDBRow>
 
                   {/* Is Required */}
-                  <MDBRow style={{marginTop: "15px", marginBottom: "15px"}}>
+                  <MDBRow style={{ marginTop: "15px", marginBottom: "15px" }}>
                     <MDBCol sm="4">
                       <MDBCardText>Có bắt buộc không:</MDBCardText>
                     </MDBCol>

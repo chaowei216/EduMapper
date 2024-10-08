@@ -12,11 +12,12 @@ function UserTestPage() {
     const fetchTestData = async () => {
       try {
         //const response = await fetch("/src/data/test2.json"); // Adjust path as necessary
-        const response = await GetReadingTest(1);
+        const response = await GetReadingTest("56ab3c37-21c6-4105-b1ae-2f776bacac76");
         const data = await response.json();
-        console.log(data.metaData);
+        const test = data.metaData
+        console.log(test[0].exams[0]);
         //setPassages(data .Tests[0].Exams[0].Passages); // Adjust based on your JSON structure
-        setPassages(data.metaData.Exams[0].Passages);
+        setPassages(test[0]?.exams[0]?.passages);
       } catch (error) {
         console.error("Error fetching test data:", error);
       }
