@@ -8,6 +8,7 @@ namespace Common.DTO.Question
 {
     public class QuestionChoiceDTO
     {
+        public string ChoiceId { get; set; } = null!;
         public string ChoiceContent { get; set; } = string.Empty;
     }
 }
