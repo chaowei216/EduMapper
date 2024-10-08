@@ -4,6 +4,7 @@ using BLL.IService;
 using Common.Constant.Exam;
 using Common.Constant.Message;
 using Common.Constant.Progress;
+using Common.Constant.Test;
 using Common.DTO;
 using Common.DTO.Exam;
 using Common.DTO.Progress;
@@ -92,6 +93,7 @@ namespace BLL.Service
             var mapQuestion = _mapper.Map<Exam>(exam);
             int numOfQuestion = 0;
             mapQuestion.ExamId = Guid.NewGuid().ToString();
+            mapQuestion.ExamName = exam.ExamNameType + "_" + exam.ExamNames;
 
             _unitOfWork.ExamRepository.Insert(mapQuestion);
 
@@ -136,7 +138,7 @@ namespace BLL.Service
                         foreach (var question in pas.SubQuestion)
                         {
                             var cPassage = await _unitOfWork.QuestionRepository.Get(c => c.PassageId == passage);
-                            numOfQuestion += cPassage.Count();
+                            numOfQuestion += 1;
                         }
 
                         try
@@ -154,6 +156,118 @@ namespace BLL.Service
                         }
                     }
                 }
+            }
+
+            if(exam.ExamType.ToLower().Contains(TestType.IELTS.ToLower()) && numOfQuestion > 40)
+            {
+                if (exam.PassageIds != null)
+                {
+                    foreach (var passage in exam.PassageIds)
+                    {
+                        var thisPassage = await _unitOfWork.PassageRepository.Get(
+                            c => c.PassageId == passage,
+                            includeProperties: "SubQuestion,Sections,SubQuestion.Choices,SubQuestion.UserAnswers"
+                        );
+
+                        foreach (var pas in thisPassage)
+                        {
+
+                            pas.ExamId = null;
+                            _unitOfWork.PassageRepository.Update(pas);
+
+                            try
+                            {
+                                _unitOfWork.Save();
+                            }
+                            catch (Exception ex)
+                            {
+                                return new ResponseDTO
+                                {
+                                    IsSuccess = false,
+                                    Message = ex.InnerException?.Message ?? ex.Message,
+                                    StatusCode = StatusCodeEnum.InteralServerError,
+                                };
+                            }
+                        }
+                    }
+                }
+                await _unitOfWork.ExamRepository.Delete(mapQuestion.ExamId);
+
+                try
+                {
+                    _unitOfWork.Save();
+                }
+                catch (Exception ex)
+                {
+                    return new ResponseDTO
+                    {
+                        IsSuccess = false,
+                        Message = ex.InnerException?.Message ?? ex.Message,
+                        StatusCode = StatusCodeEnum.InteralServerError,
+                    };
+                }
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = ExamMessage.ExceedLimitQuestion,
+                    StatusCode = StatusCodeEnum.BadRequest,
+                };
+            }
+
+            if (exam.ExamType.ToLower().Contains(TestType.TOEIC.ToLower()) && numOfQuestion > 100)
+            {
+                if (exam.PassageIds != null)
+                {
+                    foreach (var passage in exam.PassageIds)
+                    {
+                        var thisPassage = await _unitOfWork.PassageRepository.Get(
+                            c => c.PassageId == passage,
+                            includeProperties: "SubQuestion,Sections,SubQuestion.Choices,SubQuestion.UserAnswers"
+                        );
+
+                        foreach (var pas in thisPassage)
+                        {
+
+                            pas.ExamId = null;
+                            _unitOfWork.PassageRepository.Update(pas);
+
+                            try
+                            {
+                                _unitOfWork.Save();
+                            }
+                            catch (Exception ex)
+                            {
+                                return new ResponseDTO
+                                {
+                                    IsSuccess = false,
+                                    Message = ex.InnerException?.Message ?? ex.Message,
+                                    StatusCode = StatusCodeEnum.InteralServerError,
+                                };
+                            }
+                        }
+                    }
+                }
+                await _unitOfWork.ExamRepository.Delete(mapQuestion.ExamId);
+
+                try
+                {
+                    _unitOfWork.Save();
+                }
+                catch (Exception ex)
+                {
+                    return new ResponseDTO
+                    {
+                        IsSuccess = false,
+                        Message = ex.InnerException?.Message ?? ex.Message,
+                        StatusCode = StatusCodeEnum.InteralServerError,
+                    };
+                }
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = ExamMessage.ExceedLimitQuestion,
+                    StatusCode = StatusCodeEnum.BadRequest,
+                };
             }
 
             mapQuestion.NumOfQuestions = numOfQuestion;
@@ -221,7 +335,7 @@ namespace BLL.Service
                 throw new NotFoundException(GeneralMessage.NotFound);
             }
 
-            var mapList = _mapper.Map<List<TestDTO>>(exams);
+            var mapList = _mapper.Map<List<ExamDTO>>(exams);
             return new ResponseDTO
             {
                 IsSuccess = true,
