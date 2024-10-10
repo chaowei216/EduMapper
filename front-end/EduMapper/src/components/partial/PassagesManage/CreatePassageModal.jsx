@@ -269,7 +269,56 @@ export default function CreatePassageModal({
                             )}
 
                             {/* Choices for Multiple Choice */}
-                            {subQuestion.questionType === "multiple_choice" && (
+                            {subQuestion.questionType == "multiple_choice" && (
+                              <FieldArray
+                                name={`subQuestions[${index}].choices`}
+                              >
+                                {({ push, remove }) => (
+                                  <>
+                                    {subQuestion.choices.map(
+                                      (choice, choiceIndex) => (
+                                        <div
+                                          key={choiceIndex}
+                                          style={{
+                                            marginBottom: "10px",
+                                            display: "flex",
+                                            alignItems: "center",
+                                          }}
+                                        >
+                                          <MDBInput
+                                            label={`Choice ${choiceIndex + 1}`}
+                                            type="text"
+                                            value={choice.choiceContent}
+                                            onChange={(e) =>
+                                              setFieldValue(
+                                                `subQuestions[${index}].choices[${choiceIndex}].choiceContent`,
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                          <IconButton
+                                            color="error"
+                                            onClick={() => remove(choiceIndex)} // Xóa choice theo đúng index
+                                            style={{ marginLeft: "10px" }}
+                                          >
+                                            <Delete />
+                                          </IconButton>
+                                        </div>
+                                      )
+                                    )}
+                                    <Button
+                                      onClick={() =>
+                                        push({ choiceContent: "" })
+                                      }
+                                      style={{ marginTop: "10px" }}
+                                    >
+                                      Add Choice
+                                    </Button>
+                                  </>
+                                )}
+                              </FieldArray>
+                            )}
+                            {subQuestion.questionType == "heading_matching" && (
                               <FieldArray
                                 name={`subQuestions[${index}].choices`}
                               >

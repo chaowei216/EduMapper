@@ -28,7 +28,6 @@ export default function AddQuestionPassage(pros) {
         const data = await GetPassageExceptIelts();
         const dataJson = await data.json();
         setPassages(dataJson.metaData.data);
-        console.log(dataJson);
       } catch (err) {
         console.error("Failed to fetch notifications:", err);
       }

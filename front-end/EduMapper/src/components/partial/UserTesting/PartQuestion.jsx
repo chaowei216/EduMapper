@@ -19,7 +19,7 @@ export default function TestProgress(pros) {
       <Toolbar sx={{ justifyContent: "space-around" }}>
         {passages && passages.map((passage, index) => (
           <Button
-            key={passage.PassageId}
+            key={passage.passageId}
             onClick={() => {
               handlePassageChange(index);
               setIsPlaying(false);
@@ -29,7 +29,7 @@ export default function TestProgress(pros) {
             sx={{ margin: "0 8px" }}
           >
             Part {index + 1}: {getAnsweredCount(index)} OF{" "}
-            {passage.SubQuestions?.length} QUESTIONS
+            {passage.subQuestion?.length} QUESTIONS
           </Button>
         ))}
       </Toolbar>
@@ -42,14 +42,14 @@ export default function TestProgress(pros) {
           gap={2}
           mb={2}
         >
-          {passages && passages[currentPassage]?.SubQuestions?.map((question, index) => {
+          {passages && passages[currentPassage]?.subQuestion?.map((question, index) => {
             // Kiểm tra xem câu hỏi đã được trả lời hay chưa
             const isAnswered = selectedAnswers.some(
-              (answer) => answer.questionId === question.QuestionId
+              (answer) => answer.questionId === question.questionId
             );
             return (
               <Box
-                key={question.QuestionId}
+                key={question.questionId}
                 sx={{
                   display: "flex",
                   alignItems: "center",

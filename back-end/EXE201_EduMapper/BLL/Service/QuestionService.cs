@@ -71,9 +71,17 @@ namespace BLL.Service
                                                                 ? p => p.QuestionText.Contains(request.Search.Trim())
                                                                 : null,
                                                                 orderBy: null,
+                                                                pageSize: request.PageSize,
+                                                                pageIndex: request.PageNumber,
                                                                 includeProperties: "Choices");
 
-            var totalCount = response.Count(); // Make sure to use CountAsync to get the total count
+            var response1 = await _unitOfWork.QuestionRepository.Get(filter: !string.IsNullOrEmpty(request.Search)
+                                                               ? p => p.QuestionText.Contains(request.Search.Trim())
+                                                               : null,
+                                                               orderBy: null,
+                                                               includeProperties: "Choices");
+
+            var totalCount = response1.Count(); // Make sure to use CountAsync to get the total count
             var items = response.ToList(); // Use ToListAsync to fetch items asynchronously
 
             // Create the PagedList and map the results
@@ -94,9 +102,15 @@ namespace BLL.Service
         {
             var response = await _unitOfWork.QuestionRepository.Get(filter: c => (c.PassageId == null) && (string.IsNullOrEmpty(request.Search)
                                                                 || c.QuestionText.Contains(request.Search.Trim())),
+                                                                pageSize: request.PageSize,
+                                                                pageIndex: request.PageNumber,
                                                                 includeProperties: "Choices");
 
-            var totalCount = response.Count(); // Make sure to use CountAsync to get the total count
+            var response1 = await _unitOfWork.QuestionRepository.Get(filter: c => (c.PassageId == null) && (string.IsNullOrEmpty(request.Search)
+                                                               || c.QuestionText.Contains(request.Search.Trim())),
+                                                               includeProperties: "Choices");
+
+            var totalCount = response1.Count(); // Make sure to use CountAsync to get the total count
             var items = response.ToList(); // Use ToListAsync to fetch items asynchronously
 
             // Create the PagedList and map the results

@@ -302,11 +302,18 @@ namespace BLL.Service
                                                                         ? p => p.ExamName.Contains(request.Search.Trim())
                                                                         : null,
                                                                 orderBy: null,
+                                                                pageSize: request.PageSize,
+                                                                pageIndex: request.PageNumber,
                                                                 includeProperties: "Passages,Passages.SubQuestion," +
                                                                                    "Passages.Sections,Passages.SubQuestion.Choices");
 
-
-            var totalCount = response.Count(); 
+            var response1 = await _unitOfWork.ExamRepository.Get(filter: !string.IsNullOrEmpty(request.Search)
+                                                                        ? p => p.ExamName.Contains(request.Search.Trim())
+                                                                        : null,
+                                                                orderBy: null,
+                                                                includeProperties: "Passages,Passages.SubQuestion," +
+                                                                                   "Passages.Sections,Passages.SubQuestion.Choices");
+            var totalCount = response1.Count(); 
             var items = response.ToList(); 
 
             // Create the PagedList and map the results

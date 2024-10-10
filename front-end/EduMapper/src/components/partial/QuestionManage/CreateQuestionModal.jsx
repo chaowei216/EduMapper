@@ -22,10 +22,10 @@ import Messages from "../../../utils/Message";
 import { CreateQuestion } from "../../../api/QuestionManageApi";
 
 export default function CreateQuestionModal({ centredModal, setCentredModal, setIsCreated }) {
-  const [choices, setChoices] = useState([{ ChoiceId: 1, ChoiceContent: "" }]);
+  const [choices, setChoices] = useState([{ choiceId: "1", choiceContent: "" }]);
 
   const addChoice = () => {
-    setChoices([...choices, { ChoiceId: choices.length + 1, ChoiceContent: "" }]);
+    setChoices([...choices, { choiceId: String(choices.length + 1), choiceContent: "" }]);
   };
 
   const removeLastChoice = () => {
@@ -38,9 +38,8 @@ export default function CreateQuestionModal({ centredModal, setCentredModal, set
       correctAnswer: values.questionType === "writing_task" ? "Empty" : values.correctAnswer,
       questionType: values.questionType,
       wordsLimit: values.questionType === "writing_task" ? values.wordsLimit : 0,
-      choices: values.questionType === "multiple_choice" ? choices : [],
+      choices: (values.questionType === "multiple_choice" || values.questionType === "heading_matching") ? choices : [],
     };
-
     const response = await CreateQuestion(dataInput);
     if (response.status !== StatusCode.CREATED) {
       toast.error(Messages.ERROR.BAD_REQUEST);
@@ -139,11 +138,40 @@ export default function CreateQuestionModal({ centredModal, setCentredModal, set
                                 <MDBInput
                                   label={`Lựa chọn ${index + 1}`}
                                   type="text"
-                                  value={choice.ChoiceContent}
+                                  value={choice.choiceContent}
                                   onChange={(e) =>
                                     setChoices((prevChoices) =>
                                       prevChoices.map((c, i) =>
-                                        i === index ? { ...c, ChoiceContent: e.target.value } : c
+                                        i === index ? { ...c, choiceContent: e.target.value } : c
+                                      )
+                                    )
+                                  }
+                                />
+                              </div>
+                            ))}
+                            <Button onClick={addChoice}>Thêm lựa chọn</Button>
+                            <IconButton color="error" onClick={removeLastChoice}>
+                              <Delete />
+                            </IconButton>
+                          </MDBCol>
+                        </MDBRow>
+                      )}
+                      {values.questionType === "heading_matching" && (
+                        <MDBRow style={{ marginTop: "20px" }}>
+                          <MDBCol sm="4">
+                            <MDBCardText>Lựa chọn: </MDBCardText>
+                          </MDBCol>
+                          <MDBCol sm="8">
+                            {choices.map((choice, index) => (
+                              <div key={index} style={{ marginBottom: "10px" }}>
+                                <MDBInput
+                                  label={`Lựa chọn ${index + 1}`}
+                                  type="text"
+                                  value={choice.choiceContent}
+                                  onChange={(e) =>
+                                    setChoices((prevChoices) =>
+                                      prevChoices.map((c, i) =>
+                                        i === index ? { ...c, choiceContent: e.target.value } : c
                                       )
                                     )
                                   }

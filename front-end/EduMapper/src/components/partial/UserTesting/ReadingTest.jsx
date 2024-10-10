@@ -29,6 +29,7 @@ export default function ReadingTest(pros) {
       resizerClassName={styles.customResizer}
     >
       <Scrollbars>
+        <div style={{ height: "100%", backgroundColor: "#f5f5f5"}}>
         {passages && passages[currentPassage] && (
           <Box style={{ backgroundColor: "#f5f5f5", padding: "15px" }}>
             <Typography variant="h5" sx={{ fontWeight: "bold" }}>
@@ -40,21 +41,22 @@ export default function ReadingTest(pros) {
               variant="h5"
               sx={{ fontWeight: "bold", textAlign: "center" }}
             >
-              {passages[currentPassage].PassageTitle}
+              {passages[currentPassage].passageTitle}
             </Typography>
-            <Typography variant="body2" paragraph>
+            <Typography style={{fontSize: "16px"}} variant="body2" paragraph textAlign={"justify"}>
               {passages[currentPassage].passageContent}
             </Typography>
-            {/* {passages && passages[currentPassage]?.passageContent?.map(
-              (section) => (
-                <Typography variant="body2" paragraph key={section}>
-                  <strong>{section}.</strong>{" "}
-                  {passages[currentPassage].passageContent[section]}
+            {passages &&
+              passages[currentPassage]?.sections != [] &&
+              passages[currentPassage]?.sections?.map((section) => (
+                <Typography style={{fontSize: "16px"}} variant="body2" paragraph key={section} textAlign={"justify"}>
+                  <strong>{section.sectionLabel}.</strong>{" "}
+                  {section.sectionContent}
                 </Typography>
-              )
-            )} */}
+              ))}
           </Box>
         )}
+        </div>
       </Scrollbars>
       <Scrollbars>
         {passages[currentPassage] && (
@@ -67,55 +69,67 @@ export default function ReadingTest(pros) {
                   key={question.questionId}
                 >
                   <Typography variant="body1">
-                    {index + 1}. {question.questionId}
+                    {index + 1}. {question.questionText}
                   </Typography>
 
                   {/* Handle multiple-choice questions */}
                   {question.questionType === "multiple_choice" && (
-                    <RadioGroup
-                      value={
-                        selectedAnswers.find(
-                          (answer) => answer.questionId === question.questionId
-                        )?.userChoice || ""
-                      }
-                      onChange={(e) =>
-                        handleAnswerChange(
-                          question.questionId,
-                          e.target.value, // choiceId
-                          e.target.value // userChoice
-                        )
-                      }
-                    >
-                      {question.choices.map((option) => (
-                        <FormControlLabel
-                          key={option.ChoiceId}
-                          value={option.ChoiceId}
-                          control={<Radio />}
-                          label={option.choiceContent}
-                        />
-                      ))}
-                    </RadioGroup>
+                    <>
+                      <Typography variant="body1" sx={{ marginTop: 2 }}>
+                        Multple Choice
+                      </Typography>
+                      <RadioGroup
+                        value={
+                          selectedAnswers.find(
+                            (answer) =>
+                              answer.questionId === question.questionId
+                          )?.userChoice || ""
+                        }
+                        onChange={(e) =>
+                          handleAnswerChange(
+                            question.questionId,
+                            e.target.value, // choiceId
+                            e.target.value // userChoice
+                          )
+                        }
+                      >
+                        {question.choices.map((option) => (
+                          <FormControlLabel
+                            key={option.choiceId}
+                            value={option.choiceId}
+                            control={<Radio />}
+                            label={option.choiceContent}
+                          />
+                        ))}
+                      </RadioGroup>
+                    </>
                   )}
 
                   {/* Handle fill-in-the-blank questions */}
                   {question.questionType === "fill_in_blank" && (
-                    <TextField
-                      variant="outlined"
-                      value={
-                        selectedAnswers.find(
-                          (answer) => answer.questionId === question.questionId
-                        )?.userChoice || ""
-                      }
-                      onChange={(e) =>
-                        handleAnswerChange(
-                          question.questionId,
-                          null, // Không có choiceId cho fill-in-blank
-                          e.target.value // userChoice
-                        )
-                      }
-                      style={{ marginRight: "10px" }}
-                      size="small"
-                    />
+                    <>
+                      <Typography variant="body1" sx={{ marginTop: 2 }}>
+                        Fill in blank
+                      </Typography>
+                      <TextField
+                        variant="outlined"
+                        value={
+                          selectedAnswers.find(
+                            (answer) =>
+                              answer.questionId === question.questionId
+                          )?.userChoice || ""
+                        }
+                        onChange={(e) =>
+                          handleAnswerChange(
+                            question.questionId,
+                            null, // Không có choiceId cho fill-in-blank
+                            e.target.value // userChoice
+                          )
+                        }
+                        style={{ marginRight: "10px" }}
+                        size="small"
+                      />
+                    </>
                   )}
 
                   {/* Handle heading matching questions */}
@@ -147,8 +161,8 @@ export default function ReadingTest(pros) {
                           </MenuItem>
                           {question?.choices.map((heading) => (
                             <MenuItem
-                              key={heading.ChoiceId}
-                              value={heading.ChoiceId}
+                              key={heading.choiceId}
+                              value={heading.choiceId}
                             >
                               {heading.choiceContent}
                             </MenuItem>

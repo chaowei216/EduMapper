@@ -2,6 +2,7 @@
 using BLL.Service;
 using Common.DTO;
 using Common.DTO.Exam;
+using Common.DTO.Query;
 using Common.DTO.Test;
 using Common.Enum;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +19,15 @@ namespace EXE201_EduMapper.Controllers
         public TestsController(ITestService testService)
         {
             _testService = testService;
+        }
+
+        [HttpGet]
+        [ProducesResponseType(200, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> GetAllTests([FromQuery] TestParameters request)
+        {
+            var result = await _testService.GetAllTest(request);
+
+            return Ok(result);
         }
 
         [HttpGet("{id}/reading")]
