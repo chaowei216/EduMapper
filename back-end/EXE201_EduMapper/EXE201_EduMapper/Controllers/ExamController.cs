@@ -116,5 +116,30 @@ namespace EXE201_EduMapper.Controllers
                 return BadRequest(result);
             }
         }
+
+        [HttpPut("submit-test")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> SubmitTest([FromBody] SubmitExamDTO exam)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO
+                {
+                    Message = ModelState.ToString()!,
+                    StatusCode = StatusCodeEnum.BadRequest
+                });
+            }
+
+            var result = await _examService.SubmitAnswer(exam);
+
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+
+            return NoContent();
+        }
     }
 }

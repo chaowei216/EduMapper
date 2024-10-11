@@ -48,5 +48,12 @@ namespace BLL.IService
         /// <param name="exam"></param>
         /// <returns></returns>
         Task<ResponseDTO> AnswerQuestion(AnswerDTO request);
+
+        /// <summary>
+        /// Submit test
+        /// </summary>
+        /// <param name="exam"></param>
+        /// <returns></returns>
+        Task<ResponseDTO> SubmitAnswer(SubmitExamDTO exam);
     }
 }
