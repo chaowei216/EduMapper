@@ -12,7 +12,7 @@ namespace Common.DTO.Test
         public string UserId { get; set; } = null!;
         public string QuestionId { get; set; } = null!;
         public string? ChoiceId { get; set; } = null!;
-        public string UserChoice { get; set; } = null!;
+        public string? UserChoice { get; set; } = null!;
         public string? Description { get; set; }
     }
 }

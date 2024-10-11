@@ -11,5 +11,7 @@ namespace Common.Constant.Exam
         public const string SaveAnswerSuccessfully = "Save answers successfully!";
         public const string DuplicateExam = "This passage is belong to another exam!";
         public const string ExceedLimitQuestion = "Number of questions exceeds the limit!";
+        public const string SubmitExam = "Submit success!";
+        public const string AnswerFail = "Please answer properly!";
     }
 }

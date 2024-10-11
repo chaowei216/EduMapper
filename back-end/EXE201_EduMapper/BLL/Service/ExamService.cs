@@ -32,9 +32,34 @@ namespace BLL.Service
             foreach(var answer in request.Answers)
             {
                 var mapAnswer = _mapper.Map<UserAnswer>(answer);
+                mapAnswer.IsCorrect = false;
+                if(answer.ChoiceId != null && answer.UserChoice == null)
+                {
+                    var choice = await _unitOfWork.QuestionChoiceRepository.GetByID(answer.ChoiceId);
+                    mapAnswer.UserChoice = choice.ChoiceContent;
 
-                mapAnswer.UserAnswerId = Guid.NewGuid().ToString();
-                mapAnswer.CreateAt = DateTime.Now;
+                    var correct = await _unitOfWork.QuestionRepository.GetByID(answer.QuestionId);
+                    if(mapAnswer.UserChoice.ToLower().Equals(correct.CorrectAnswer.ToLower()))
+                    {
+                        mapAnswer.IsCorrect = true; 
+                    }
+                } else if(answer.ChoiceId == null && answer.UserChoice != null)
+                {
+                    var correct = await _unitOfWork.QuestionRepository.GetByID(answer.QuestionId);
+                    if (answer.UserChoice.ToLower().Equals(correct.CorrectAnswer.ToLower()))
+                    {
+                        mapAnswer.IsCorrect = true;
+                    }
+                } else if((answer.ChoiceId == null && answer.UserChoice == null) ||(answer.ChoiceId != null && answer.UserChoice != null))
+                {
+                    return new ResponseDTO
+                    {
+                        IsSuccess = false,
+                        Message = ExamMessage.SaveAnswerSuccessfully,
+                        StatusCode = StatusCodeEnum.Created,
+                        MetaData = request
+                    };
+                }
 
                 var question = await _unitOfWork.QuestionRepository.GetByID(answer.QuestionId);
                     
@@ -70,9 +95,14 @@ namespace BLL.Service
 
                 if(first != null)
                 {
+                    mapAnswer.UserAnswerId = first.UserAnswerId;
+                    mapAnswer.CreateAt = first.CreateAt;
                     _unitOfWork.UserAnswerRepository.Update(mapAnswer);
                 } else
                 {
+                    mapAnswer.UserAnswerId = Guid.NewGuid().ToString();
+                    mapAnswer.CreateAt = DateTime.Now;
+
                     _unitOfWork.UserAnswerRepository.Insert(mapAnswer);
                 }
 
@@ -376,6 +406,155 @@ namespace BLL.Service
                 MetaData = mapProgress,
                 StatusCode = StatusCodeEnum.Created,
                 Message = GeneralMessage.CreateSuccess
+            };
+        }
+
+        private double? TOEICExamScore(int correctAns)
+        {
+            double? score = 0;
+            if (correctAns < 3)
+            {
+                score = 5;
+            } else
+            {
+                score = correctAns * 5;
+            }
+
+            return score;
+        }
+
+        private double? IELTSExamScore(int correctAns)
+        {
+            double? score = 0;
+            if (correctAns < 3) 
+            {
+                score = 0;
+            }
+
+            if(correctAns >= 3 && correctAns <=4)
+            {
+                score = 2.5;
+            }
+
+            if (correctAns >= 5 && correctAns <= 6)
+            {
+                score = 3;
+            }
+
+            if (correctAns >= 7 && correctAns <= 9)
+            {
+                score = 3.5;
+            }
+
+            if (correctAns >= 10 && correctAns <= 12)
+            {
+                score = 4;
+            }
+
+            if (correctAns >= 13 && correctAns <= 15)
+            {
+                score = 4.5;
+            }
+
+            if (correctAns >= 16 && correctAns <= 19)
+            {
+                score = 5;
+            }
+
+            if (correctAns >= 20 && correctAns <= 22)
+            {
+                score = 5.5;
+            }
+
+            if (correctAns >= 23 && correctAns <= 26)
+            {
+                score = 6;
+            }
+
+            if (correctAns >= 27 && correctAns <= 29)
+            {
+                score = 6.5;
+            }
+
+            if (correctAns >= 30 && correctAns <= 32)
+            {
+                score = 7;
+            }
+
+            if (correctAns >= 33 && correctAns <= 34)
+            {
+                score = 7.5;
+            }
+
+            if (correctAns >= 35 && correctAns <= 36)
+            {
+                score = 8;
+            }
+
+            if (correctAns >= 37 && correctAns <= 38)
+            {
+                score = 8.5;
+            }
+
+            if (correctAns >= 39 && correctAns <= 40)
+            {
+                score = 9;
+            }
+
+            return score;
+        }
+
+        public async Task<ResponseDTO> SubmitAnswer(SubmitExamDTO exam)
+        {
+            var progress = await _unitOfWork.ProgressRepository.Get(filter: c => c.ExamId == exam.ExamId && c.UserId == exam.UserId);
+            var thisProgress = progress.FirstOrDefault();
+            int countCorrect = 0;
+
+            thisProgress.Percent = 100;
+            var passage = await _unitOfWork.PassageRepository.Get(filter: c => c.ExamId == exam.ExamId);
+
+            foreach(var eachPassage in passage)
+            {
+                var question = await _unitOfWork.QuestionRepository.Get(filter: c => c.PassageId == eachPassage.PassageId);
+                foreach(var eachQuestion in question)
+                {
+                    var answer = await _unitOfWork.UserAnswerRepository.Get(filter: c => c.UserId == exam.UserId && c.QuestionId == eachQuestion.QuestionId);
+
+                    var thisAns = answer.FirstOrDefault();
+
+                    if (thisAns != null && thisAns.IsCorrect)
+                    {
+                        countCorrect++;
+                    }
+                }
+            }
+
+            var thisExam = await _unitOfWork.ExamRepository.GetByID(exam.ExamId);
+            
+            if(thisExam == null)
+            {
+                throw new NotFoundException(GeneralMessage.NotFound);
+            }
+
+            if(thisExam != null && thisExam.ExamType.ToLower().Contains(TestType.IELTS.ToLower()) 
+                && !thisExam.ExamName.ToLower().Contains(ExamNameConstant.WritingTest))
+            {
+                thisProgress.Score = IELTSExamScore(countCorrect);
+            } else if (thisExam != null && thisExam.ExamType.ToLower().Contains(TestType.TOEIC.ToLower())
+                && !thisExam.ExamName.ToLower().Contains(ExamNameConstant.WritingTest))
+            {
+                thisProgress.Score =  TOEICExamScore(countCorrect);
+            }
+            
+            _unitOfWork.ProgressRepository.Update(thisProgress);
+            _unitOfWork.Save();
+
+            return new ResponseDTO
+            {
+                IsSuccess = true,
+                MetaData = thisProgress,
+                StatusCode = StatusCodeEnum.Created,
+                Message = ExamMessage.SubmitExam
             };
         }
     }
