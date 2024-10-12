@@ -10,7 +10,8 @@ const Messages = {
     SEND_EMAIL: "Gửi email thành công!",
     CHANGE_PASSWORD: "Đổi mật khẩu thành công!",
     UPLOAD: "Tải lên thành công!",
-    PAYMENT: "Thành toán thành công"
+    PAYMENT: "Thành toán thành công",
+    SUCCESS_TEST: "Nộp bài thành công"
   },
   ERROR: {
     NOT_FOUND: "Không tìm thấy tài nguyên!",
@@ -30,7 +31,8 @@ const Messages = {
     CHOOSE_PAYMENT: "Làm ơn chọn phương thức thành toán",
     CAPTCHA: "Mã Captcha không được trùng khớp. Hãy thử lại!",
     PACKAGE: "Gói này đã được tích hợp sẵn vào tài khoản bạn rồi!",
-    ALREADY_EXAM: "Đề này đã được chọn nằm trong bài kiểm tra khác rồi!"
+    ALREADY_EXAM: "Đề này đã được chọn nằm trong bài kiểm tra khác rồi!",
+    FAIL_TEST: "Nộp bài không thành công"
   },
 };
 export default Messages;

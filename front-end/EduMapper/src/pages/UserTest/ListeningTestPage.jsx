@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import HeaderTesting from "../../components/global/HeaderTesting";
 import TestProgress from "../../components/partial/UserTesting/PartQuestion";
 import ListeningTest from "../../components/partial/UserTesting/ListeningTest";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { GetListeningTest } from "../../api/TestManageApi";
 function ListeningTestPage() {
   let { testId } = useParams();
@@ -10,6 +10,7 @@ function ListeningTestPage() {
   const [selectedAnswers, setSelectedAnswers] = useState([]);
   const [currentPassage, setCurrentPassage] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchTestData = async () => {
       try {
@@ -26,6 +27,7 @@ function ListeningTestPage() {
 
   const handleSubmit = () => {
     console.log(selectedAnswers);
+    navigate('/test-result')
   };
 
   const handlePassageChange = (index) => {

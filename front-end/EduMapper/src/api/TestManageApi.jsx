@@ -99,3 +99,43 @@ export const GetWritingTest = async (id) => {
     console.log(err);
   }
 };
+
+export const SaveAnswer = async (data) => {
+  try {
+    const response = await fetch(`${baseUrl}/api/Exam/answer`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        //Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      console.error("There was a problem with API");
+    }
+    return response;
+  } catch (error) {
+    console.error("There was a problem with the fetch operation:", error);
+    throw error;
+  }
+};
+
+export const SubmitAnswer = async (data) => {
+  try {
+    const response = await fetch(`${baseUrl}/api/Exam/submit-test`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        //Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      console.error("There was a problem with API");
+    }
+    return response;
+  } catch (error) {
+    console.error("There was a problem with the fetch operation:", error);
+    throw error;
+  }
+};

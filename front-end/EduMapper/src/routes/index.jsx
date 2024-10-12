@@ -32,6 +32,8 @@ import ChatPage from "../pages/ChatPage/ChatPage";
 import DashboardPage from "../pages/DashboardPage/DashboardPage";
 import TestManagePage from "../pages/TestManagePage/TestManagePage";
 import TestListPage from "../pages/TakeTestPage/TestListPage";
+import TestResult from "../components/partial/UserTesting/TestResult";
+import TestResultPage from "../pages/TestResult/TestResultPage";
 
 export const router = createBrowserRouter([
   {
@@ -178,5 +180,9 @@ export const router = createBrowserRouter([
   {
     path: "/list-test",
     element: <TestListPage />,
+  },
+  {
+    path: "/test-result",
+    element: <TestResultPage />,
   },
 ]);

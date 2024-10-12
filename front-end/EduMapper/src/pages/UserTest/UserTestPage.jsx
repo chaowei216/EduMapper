@@ -2,16 +2,21 @@ import { useEffect, useState } from "react";
 import HeaderTesting from "../../components/global/HeaderTesting";
 import TestProgress from "../../components/partial/UserTesting/PartQuestion";
 import ReadingTest from "../../components/partial/UserTesting/ReadingTest";
-import { GetReadingTest } from "../../api/TestManageApi";
+import { GetReadingTest, SaveAnswer, SubmitAnswer } from "../../api/TestManageApi";
 import { useNavigate, useParams } from "react-router-dom";
 import NoDataPage from "../../components/global/NoDataPage";
 import { toast } from "react-toastify";
+import useAuth from "../../hooks/useAuth";
+import StatusCode from "../../utils/StautsCode";
+import Messages from "../../utils/Message";
 function UserTestPage() {
+  const {user} = useAuth();
   const navigate = useNavigate();
   let { testId } = useParams();
   const [passages, setPassages] = useState([]);
   const [selectedAnswers, setSelectedAnswers] = useState([]);
   const [currentPassage, setCurrentPassage] = useState(0);
+  const [examId, setExamId] = useState("");
 
   useEffect(() => {
     const fetchTestData = async () => {
@@ -27,6 +32,7 @@ function UserTestPage() {
           return;
         }
         setPassages(test[0]?.exams[0]?.passages);
+        setExamId(test[0]?.exams[0]?.examId)
       } catch (error) {
         console.error("Error fetching test data:", error);
       }
@@ -34,8 +40,26 @@ function UserTestPage() {
     fetchTestData();
   }, [testId, navigate]);
 
-  const handleSubmit = () => {
-    console.log(selectedAnswers);
+  const handleSubmit = async () => {
+    const answers = {
+      answers: selectedAnswers
+  }
+    console.log(answers);
+    const data = {
+      examId: examId,
+      userId: user.id
+    }
+    const response = await SaveAnswer(answers);
+    const response2 = await SubmitAnswer(data)
+    console.log(response);
+    console.log(response2);
+    if (response.status == StatusCode.CREATED && response2.status == StatusCode.UPDATED){
+      toast.success(Messages.SUCCESS.SUCCESS_TEST)
+      navigate('/test-result')
+    }else {
+      //toast.error(Messages.ERROR.FAIL_TEST)
+      navigate('/test-result')
+    }
   };
 
   const handlePassageChange = (index) => {
@@ -68,7 +92,7 @@ function UserTestPage() {
       );
 
       const newAnswer = {
-        userId: "test",
+        userId: user.id,
         questionId: questionId,
         choiceId: choiceId || null, // Nếu không có lựa chọn (cho điền trống)
         userChoice: userChoice || null,
