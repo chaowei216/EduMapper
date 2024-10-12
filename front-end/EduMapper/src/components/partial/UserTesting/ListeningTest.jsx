@@ -13,6 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import FileListening from "./FileListening";
+import SplitPane from "react-split-pane";
 
 export default function ListeningTest(pros) {
   const { passages, currentPassage, selectedAnswers, handleAnswerChange, isPlaying, setIsPlaying } = pros;
@@ -20,6 +21,7 @@ export default function ListeningTest(pros) {
   let titleFillBlank = false;
 
   return (
+    <SplitPane split="vertical" minSize={50} defaultSize="100%">
     <Box sx={{ display: "flex", flexDirection: "column", minHeight: "60vh" }}>
       {passages[currentPassage] && (
         <div style={{ paddingTop: "1rem", background: "#fff", paddingBottom: "1rem" }}>
@@ -30,42 +32,42 @@ export default function ListeningTest(pros) {
         {passages[currentPassage] && (
           <Box>
             <Typography variant="h5" textAlign="center" sx={{ mb: 2 }}>
-              {passages[currentPassage].PassageTitle}
+              {passages[currentPassage].passageTitle}
             </Typography>
 
             {/* Loop through all SubQuestions */}
-            {passages[currentPassage].SubQuestions.map((question, index) => (
-              <Paper elevation={2} sx={{ padding: 2, mb: 2 }} key={question.QuestionId}>
+            {passages && passages[currentPassage]?.subQuestion?.map((question, index) => (
+              <Paper elevation={2} sx={{ padding: 2, mb: 2 }} key={question.questionId}>
                 <Typography variant="body1">
-                  {index + 1}. {question.QuestionText}
+                  {index + 1}. {question.questionText}
                 </Typography>
 
                 {/* Handle multiple-choice questions */}
-                {question.QuestionType === "multiple_choice" && (
+                {question.questionType === "multiple_choice" && (
                   <RadioGroup
-                    value={selectedAnswers.find(answer => answer.questionId === question.QuestionId)?.userChoice || ""}
+                    value={selectedAnswers.find(answer => answer.questionId === question.questionId)?.userChoice || ""}
                     onChange={(e) =>
-                      handleAnswerChange(question.QuestionId, e.target.value, e.target.value)
+                      handleAnswerChange(question.questionId, e.target.value, e.target.value)
                     }
                   >
-                    {question.Choices.map((option) => (
+                    {question.choices.map((option) => (
                       <FormControlLabel
-                        key={option.ChoiceId}
-                        value={option.ChoiceContent}
+                        key={option.choiceId}
+                        value={option.choiceContent}
                         control={<Radio />}
-                        label={option.ChoiceContent}
+                        label={option.choiceContent}
                       />
                     ))}
                   </RadioGroup>
                 )}
 
                 {/* Handle fill-in-the-blank questions */}
-                {question.QuestionType === "fill_in_blank" && (
+                {question.questionType === "fill_in_blank" && (
                   <TextField
                     variant="outlined"
-                    value={selectedAnswers.find(answer => answer.questionId === question.QuestionId)?.userChoice || ""}
+                    value={selectedAnswers.find(answer => answer.questionId === question.questionId)?.userChoice || ""}
                     onChange={(e) =>
-                      handleAnswerChange(question.QuestionId, null, e.target.value) // choiceId là null cho điền vào chỗ trống
+                      handleAnswerChange(question.questionId, null, e.target.value) // choiceId là null cho điền vào chỗ trống
                     }
                     style={{ marginRight: "10px" }}
                     size="small"
@@ -73,30 +75,30 @@ export default function ListeningTest(pros) {
                 )}
 
                 {/* Handle heading matching questions */}
-                {question.QuestionType === "heading_matching" && (
+                {question.questionType === "heading_matching" && (
                   <>
                     <Typography variant="h6" component="h2" sx={{ mt: 2 }}>
                       Match the headings with the paragraphs
                     </Typography>
                     <Typography variant="body1" sx={{ marginTop: 2 }}>
-                      Paragraph {question.QuestionText}
+                      Paragraph {question.questionText}
                     </Typography>
-                    <div key={question.QuestionId}>
+                    <div key={question.questionId}>
                       <FormControl fullWidth variant="outlined" sx={{ mt: 2 }}>
                         <InputLabel>Select heading</InputLabel>
                         <Select
-                          value={selectedAnswers.find(answer => answer.questionId === question.QuestionId)?.choiceId || ""}
+                          value={selectedAnswers.find(answer => answer.questionId === question.questionId)?.choiceId || ""}
                           onChange={(e) =>
-                            handleAnswerChange(question.QuestionId, e.target.value, null) // userChoice là null cho câu hỏi này
+                            handleAnswerChange(question.questionId, e.target.value, null) // userChoice là null cho câu hỏi này
                           }
                           label="Select heading"
                         >
                           <MenuItem value="">
                             <em>Select heading</em>
                           </MenuItem>
-                          {question.Choices.map((heading) => (
-                            <MenuItem key={heading.ChoiceId} value={heading.ChoiceId}>
-                              {heading.ChoiceContent}
+                          {question.choices.map((heading) => (
+                            <MenuItem key={heading.choiceId} value={heading.choiceId}>
+                              {heading.choiceContent}
                             </MenuItem>
                           ))}
                         </Select>
@@ -110,5 +112,6 @@ export default function ListeningTest(pros) {
         )}
       </Container>
     </Box>
+    </SplitPane>
   );
 }

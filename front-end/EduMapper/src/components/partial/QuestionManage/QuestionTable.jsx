@@ -16,6 +16,7 @@ import NoDataPage from "../../global/NoDataPage";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DoNotTouchIcon from '@mui/icons-material/DoNotTouch';
+import ExpandableText from "../../../utils/ExpandableText";
 export default function QuestionTable({
   data,
   handleClickUpdate,
@@ -121,9 +122,9 @@ export default function QuestionTable({
                     </StyledTableCell>
                     <StyledTableCell
                       style={{ fontWeight: "600", alignItems: "center" }}
-                      align="center"
+                      align="justify"
                     >
-                      {row.questionText}
+                      <ExpandableText text={row.questionText} />
                     </StyledTableCell>
                     <StyledTableCell
                       style={{ fontWeight: "600", alignItems: "center" }}

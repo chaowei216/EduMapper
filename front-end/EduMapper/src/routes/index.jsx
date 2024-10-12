@@ -79,15 +79,15 @@ export const router = createBrowserRouter([
     element: <CreateCenterRating />,
   },
   {
-    path: "/take-test",
+    path: "/take-test/:testId",
     element: <TakeTestPage />,
   },
   {
-    path: "/take-testPre",
+    path: "/take-testPre/:testId",
     element: <TakeTestPrePage />,
   },
   {
-    path: "/reading-test",
+    path: "/reading-test/:testId",
     element: <UserTestPage />,
   },
   {
@@ -99,11 +99,11 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/listening-test",
+    path: "/listening-test/:testId",
     element: <ListeningTestPage />,
   },
   {
-    path: "/writing-test",
+    path: "/writing-test/:testId",
     element: <WritingTestPage />,
   },
   {
@@ -176,7 +176,7 @@ export const router = createBrowserRouter([
     element: <TestManagePage />,
   },
   {
-    path: "/listTest",
+    path: "/list-test",
     element: <TestListPage />,
   },
 ]);

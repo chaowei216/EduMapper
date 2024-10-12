@@ -26,8 +26,7 @@ export default function ViewExam() {
         const responseJson = await response.json();
         const data = responseJson.metaData.data;
         setData(data);
-        
-        // setTotalPages(responseJson.data.totalPages);
+         setTotalPages(responseJson.metaData.totalPages);
       } else {
         toast.error("Error getting data");
       }

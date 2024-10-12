@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import HeaderTesting from "../../components/global/HeaderTesting";
 import TestProgress from "../../components/partial/UserTesting/PartQuestion";
-import ReadingTest from "../../components/partial/UserTesting/ReadingTest";
 import WritingTest from "../../components/partial/UserTesting/WritingTest";
+import { useParams } from "react-router-dom";
+import {  GetWritingTest } from "../../api/TestManageApi";
 function WritingTestPage() {
+  let { testId } = useParams();
   const [passages, setPassages] = useState([]);
   const [selectedAnswers, setSelectedAnswers] = useState([]);
   const [currentPassage, setCurrentPassage] = useState(0);
@@ -11,15 +13,16 @@ function WritingTestPage() {
   useEffect(() => {
     const fetchTestData = async () => {
       try {
-        const response = await fetch("/src/data/test2.json"); // Adjust path as necessary
+        const response = await GetWritingTest(testId);
         const data = await response.json();
-        setPassages(data.Tests[0].Exams[2].Passages); // Adjust based on your JSON structure
+        const test = data.metaData;
+        setPassages(test[0]?.exams[0]?.passages);
       } catch (error) {
         console.error("Error fetching test data:", error);
       }
     };
     fetchTestData();
-  }, []);
+  }, [testId]);
 
   const handleSubmit = () => {
     console.log(selectedAnswers);
@@ -30,11 +33,18 @@ function WritingTestPage() {
   };
 
   const getAnsweredCount = (passageIndex) => {
-    return (
-      passages[passageIndex]?.SubQuestions.filter(
-        (q) => selectedAnswers[q.QuestionId]
-      ).length || 0
-    );
+    // Lấy danh sách câu hỏi từ đoạn văn cụ thể
+    const questions = passages[passageIndex]?.subQuestion || [];
+
+    // Đếm số câu hỏi đã trả lời dựa vào selectedAnswers
+    return questions.reduce((count, question) => {
+      // Kiểm tra xem câu hỏi có tồn tại trong selectedAnswers và có giá trị không
+      return selectedAnswers.find(
+        (answer) => answer.questionId === question.questionId
+      )
+        ? count + 1
+        : count;
+    }, 0);
   };
 
   const handleAnswerChange = (questionId, userChoice) => {

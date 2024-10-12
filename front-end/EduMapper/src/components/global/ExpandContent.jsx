@@ -11,7 +11,7 @@ export default function ExpandContent({ features, numberLines }) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
-      {visibleFeatures && visibleFeatures.map((feature, index) => (
+      {visibleFeatures && visibleFeatures.length > 0 && visibleFeatures.map((feature, index) => (
         <div key={index} style={{ marginBottom: "5px" }}>
           {feature}
         </div>

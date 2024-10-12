@@ -32,7 +32,7 @@ export default function CreateExam({
   useEffect(() => {
     const fetchExam = async () => {
       try {
-        const response = await GetAllPassage();
+        const response = await GetAllPassage(1, 100);
         const dataJson = await response.json();
         setPassagesList(dataJson.metaData.data);
       } catch (err) {

@@ -45,10 +45,10 @@ export default function WritingTest(prop) {
                 variant="h5"
                 sx={{ fontWeight: "bold", textAlign: "center" }}
               >
-                {passages[currentPassage].PassageTitle}
+                {passages[currentPassage].passageTitle}
               </Typography>
               <Typography variant="body2" paragraph>
-                {passages[currentPassage].PassageContent.TaskDescription}
+                {passages[currentPassage].passageContent}
               </Typography>
             </Box>
           )}
@@ -57,14 +57,14 @@ export default function WritingTest(prop) {
         <Scrollbars>
           {passages[currentPassage] && (
             <Box style={{ backgroundColor: "#fff", padding: "15px" }}>
-              {passages[currentPassage].SubQuestions.map((question, index) => (
+              {passages[currentPassage].subQuestion.map((question, index) => (
                 <Paper
                   elevation={2}
                   sx={{ padding: 2, mb: 2 }}
-                  key={question.QuestionId}
+                  key={question.questionId}
                 >
                   <Typography variant="body1">
-                    {index + 1}. {question.QuestionText}
+                    {index + 1}. {question.questionText}
                   </Typography>
 
                   {/* Ô nhập liệu cho câu trả lời của Task 1 và Task 2 */}
@@ -76,12 +76,12 @@ export default function WritingTest(prop) {
                     placeholder={`Your answer (minimum ${question.WordLimit} words)`}
                     value={
                       selectedAnswers.find(
-                        (answer) => answer.questionId === question.QuestionId
+                        (answer) => answer.questionId === question.questionId
                       )?.userChoice || ""
                     }
                     onChange={(e) => {
                       const text = e.target.value; // Giữ cả chuỗi có xuống dòng
-                      handleAnswerChange(question.QuestionId, text);
+                      handleAnswerChange(question.questionId, text);
                     }}
                   />
 
@@ -93,9 +93,9 @@ export default function WritingTest(prop) {
                           const text =
                             selectedAnswers.find(
                               (answer) =>
-                                answer.questionId === question.QuestionId
+                                answer.questionId === question.questionId
                             )?.userChoice || "";
-                          handleCountWords(question.QuestionId, text);
+                          handleCountWords(question.questionId, text);
                         }}
                       >
                         Count Words
@@ -103,7 +103,7 @@ export default function WritingTest(prop) {
                     </Grid>
                     <Grid item xs={6} style={{ textAlign: "right" }}>
                       <Typography variant="caption">
-                        Word Count: {wordCounts[question.QuestionId] || 0}
+                        Word Count: {wordCounts[question.questionId] || 0}
                       </Typography>
                     </Grid>
                   </Grid>

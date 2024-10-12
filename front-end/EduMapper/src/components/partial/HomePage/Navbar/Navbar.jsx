@@ -228,7 +228,7 @@ const NAV_ITEMS = [
       {
         label: "Thi thử miễn phí",
         subLabel: "Listening và Reading",
-        href: "/take-test",
+        href: "/list-test",
       },
       {
         label: "Thi thử premium",

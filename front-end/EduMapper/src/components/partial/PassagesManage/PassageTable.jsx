@@ -14,7 +14,8 @@ import { useState } from "react";
 import { styled } from "@mui/material/styles";
 import NoDataPage from "../../global/NoDataPage";
 import DeleteIcon from "@mui/icons-material/Delete";
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import ExpandableText from "../../../utils/ExpandableText";
 export default function PassageTable({
   data,
   handleClickUpdate,
@@ -84,8 +85,11 @@ export default function PassageTable({
           </TableHead>
           <TableBody>
             {!data && <NoDataPage />}
-            {data && (data.length == 0 || data.length == undefined) && <NoDataPage />}
-            {data && data.length > 0 &&
+            {data && (data.length == 0 || data.length == undefined) && (
+              <NoDataPage />
+            )}
+            {data &&
+              data.length > 0 &&
               data.map((row, index) => {
                 return (
                   <StyledTableRow
@@ -94,7 +98,11 @@ export default function PassageTable({
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <StyledTableCell
-                      style={{ fontWeight: "600", textAlign: "center", width: "500px" }}
+                      style={{
+                        fontWeight: "600",
+                        textAlign: "center",
+                        width: "500px",
+                      }}
                       component="th"
                       scope="row"
                     >
@@ -107,10 +115,10 @@ export default function PassageTable({
                       {row.passageTitle}
                     </StyledTableCell>
                     <StyledTableCell
-                      style={{ fontWeight: "600", alignItems: "justify" }}
-                      align="center"
+                      style={{ fontWeight: "600", alignItems: "justify", width: "500px" }}
+                      align="justify"
                     >
-                      {row.passageContent}
+                      <ExpandableText text={row.passageContent} />
                     </StyledTableCell>
                     <StyledTableCell
                       style={{ fontWeight: "600" }}

@@ -21,11 +21,12 @@ import StatusCode from "../../../utils/StautsCode";
 import Messages from "../../../utils/Message";
 import { CreateQuestion } from "../../../api/QuestionManageApi";
 
-export default function CreateQuestionModal({ centredModal, setCentredModal, setIsCreated }) {
-  const [choices, setChoices] = useState([{ choiceId: "1", choiceContent: "" }]);
+export default function CreateQuestionModal(pros) {
+  const {centredModal, setCentredModal, setIsCreated} = pros
+  const [choices, setChoices] = useState([{ choiceContent: "" }]);
 
   const addChoice = () => {
-    setChoices([...choices, { choiceId: String(choices.length + 1), choiceContent: "" }]);
+    setChoices([...choices, { choiceContent: "" }]);
   };
 
   const removeLastChoice = () => {

@@ -8,6 +8,7 @@ import DeleteExam from "./DeleteExam";
 import { GetAllExam } from "../../../api/ExamApi";
 import TestTable from "./TestTable";
 import CreateTest from "./CreateTest";
+import { GetAllTest } from "../../../api/TestManageApi";
 export default function ViewTest() {
   const [totalPages, setTotalPages] = useState();
   const [page, setPage] = React.useState(1);
@@ -20,7 +21,7 @@ export default function ViewTest() {
   const [openDelete, setOpenDelete] = useState(false);
   useEffect(() => {
     const getAllMemberShip = async () => {
-      const response = await GetAllExam(page, pageSize);
+      const response = await GetAllTest(page, pageSize);
       if (response.ok) {
         const responseJson = await response.json();
         const data = responseJson.metaData.data;
@@ -57,7 +58,7 @@ export default function ViewTest() {
       <div
         style={{ fontSize: "30px", fontWeight: "bold", marginBottom: "20px" }}
       >
-        Các đề hiện có
+        Các bài thi hiện có
       </div>
       <div style={{ marginBottom: "20px", display: "flex", gap: "20px" }}>
         <Button
@@ -66,7 +67,7 @@ export default function ViewTest() {
           onClick={() => setCentredModal(true)}
         >
           <Inventory2Icon />
-          Tạo đề
+          Tạo bài thi
         </Button>
       </div>
       <TestTable

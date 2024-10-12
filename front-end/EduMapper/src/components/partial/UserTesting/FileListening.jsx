@@ -95,9 +95,10 @@ const FileListening = (pros) => {
         </div>
         <audio
           ref={audioRef}
-          src={
-            passages?.PassageContent?.AudioClip || "/src/assets/thienlyoi.mp3"
-          } // Đường dẫn tới file âm thanh của bạn
+          // src={
+          //   passages?.PassageContent?.AudioClip || "/src/assets/thienlyoi.mp3"
+          // } // Đường dẫn tới file âm thanh của bạn
+          src={`https://localhost:7228/api/Passages/files?fileName=${passages.listeningFile}`}
           onTimeUpdate={handleTimeUpdate}
           onLoadedMetadata={handleAudioLoaded}
         />

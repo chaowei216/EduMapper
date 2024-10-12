@@ -21,6 +21,7 @@ import CreatePassageModal from "./CreatePassageModal";
 import UpdateModal from "../MembershipManagement/UpdateModal";
 import DeleteModal from "../MembershipManagement/DeleteModal";
 import CreatePassage2 from "./CreatePassage2";
+import CreatePassageListening from "./CreatePassageListening";
 export default function ViewPassage() {
   const [totalPages, setTotalPages] = useState();
   const [page, setPage] = React.useState(1);
@@ -32,6 +33,7 @@ export default function ViewPassage() {
   const [openDetail, setOpenDetail] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [openCreatePassage2, setOpenCreatePassage2] = useState(false);
+  const [openListening, setOpenListening] = useState(false);
   const [filter, setFilter] = useState("");
   useEffect(() => {
     const getAllPassage = async () => {
@@ -111,7 +113,14 @@ export default function ViewPassage() {
       >
         Các đoạn văn
       </div>
-      <div style={{ marginBottom: "20px", display: "flex", alignItems: "center", gap: "20px" }}>
+      <div
+        style={{
+          marginBottom: "20px",
+          display: "flex",
+          alignItems: "center",
+          gap: "20px",
+        }}
+      >
         <div>
           <Button
             id="basic-button"
@@ -156,6 +165,15 @@ export default function ViewPassage() {
             }}
           >
             Tạo đoạn văn ielts
+          </MenuItem>
+          <Divider />
+          <MenuItem
+            onClick={() => {
+              setOpenListening(true);
+              setAnchorEl(null);
+            }}
+          >
+            Tạo đoạn listening
           </MenuItem>
           <Divider />
           <MenuItem
@@ -222,6 +240,11 @@ export default function ViewPassage() {
       <CreatePassage2
         centredModal={openCreatePassage2}
         setCentredModal={setOpenCreatePassage2}
+        setIsCreated={setIsCreated}
+      />
+      <CreatePassageListening
+        centredModal={openListening}
+        setCentredModal={setOpenListening}
         setIsCreated={setIsCreated}
       />
     </div>

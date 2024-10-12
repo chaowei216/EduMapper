@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import HeaderTesting from "../../components/global/HeaderTesting";
 import TestProgress from "../../components/partial/UserTesting/PartQuestion";
 import ListeningTest from "../../components/partial/UserTesting/ListeningTest";
+import { useParams } from "react-router-dom";
+import { GetListeningTest } from "../../api/TestManageApi";
 function ListeningTestPage() {
+  let { testId } = useParams();
   const [passages, setPassages] = useState([]);
   const [selectedAnswers, setSelectedAnswers] = useState([]);
   const [currentPassage, setCurrentPassage] = useState(0);
@@ -10,15 +13,16 @@ function ListeningTestPage() {
   useEffect(() => {
     const fetchTestData = async () => {
       try {
-        const response = await fetch("/src/data/test2.json"); // Adjust path as necessary
+        const response = await GetListeningTest(testId);
         const data = await response.json();
-        setPassages(data.Tests[0].Exams[1].Passages); // Adjust based on your JSON structure
+        const test = data.metaData;
+        setPassages(test[0]?.exams[0]?.passages);
       } catch (error) {
         console.error("Error fetching test data:", error);
       }
     };
     fetchTestData();
-  }, []);
+  }, [testId]);
 
   const handleSubmit = () => {
     console.log(selectedAnswers);
@@ -29,11 +33,18 @@ function ListeningTestPage() {
   };
 
   const getAnsweredCount = (passageIndex) => {
-    return (
-      passages[passageIndex]?.SubQuestions.filter(
-        (q) => selectedAnswers[q.QuestionId]
-      ).length || 0
-    );
+    // Lấy danh sách câu hỏi từ đoạn văn cụ thể
+    const questions = passages[passageIndex]?.subQuestion || [];
+
+    // Đếm số câu hỏi đã trả lời dựa vào selectedAnswers
+    return questions.reduce((count, question) => {
+      // Kiểm tra xem câu hỏi có tồn tại trong selectedAnswers và có giá trị không
+      return selectedAnswers.find(
+        (answer) => answer.questionId === question.questionId
+      )
+        ? count + 1
+        : count;
+    }, 0);
   };
 
   const handleAnswerChange = (questionId, choiceId, userChoice) => {

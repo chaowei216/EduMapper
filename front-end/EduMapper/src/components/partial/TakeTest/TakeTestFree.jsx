@@ -10,9 +10,10 @@ import {
 import { MenuBook, Create, Mic } from "@mui/icons-material"; // Import icons từ MUI
 import HeadphonesIcon from "@mui/icons-material/Headphones";
 import styles from "./TakeTest.module.css"; // Import CSS Module
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function TakeTestFree() {
+  let { testId } = useParams();
   const navigate = useNavigate();
   return (
     <Box className={styles.root}>
@@ -77,7 +78,7 @@ export default function TakeTestFree() {
               variant="contained"
               style={{ background: "#73fbfd" }}
               className={styles.testButton}
-              onClick={() => navigate('/listening-test')}
+              onClick={() => navigate(`/listening-test/${testId}`)}
             >
               Take Test
             </Button>
@@ -98,7 +99,7 @@ export default function TakeTestFree() {
               color="secondary"
               style={{ background: "#73fd91" }}
               className={styles.testButton}
-              onClick={() => navigate('/reading-test')}
+              onClick={() => navigate(`/reading-test/${testId}`)}
             >
               Take Test
             </Button>
@@ -119,7 +120,7 @@ export default function TakeTestFree() {
               color="secondary"
               style={{ background: "#f29d38" }}
               className={styles.testButton}
-              onClick={() => navigate('/writing-test')}
+              onClick={() => navigate(`/writing-test/${testId}`)}
             >
               Take Test
             </Button>

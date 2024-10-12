@@ -68,6 +68,7 @@ export default function ViewQuestion() {
     setOpenDelete(false);
   };
   const handleChangeFilter = (data) => {
+    setPage(1);
     setFilter(data);
   };
   return (

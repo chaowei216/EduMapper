@@ -16,6 +16,7 @@ import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import ArticleIcon from "@mui/icons-material/Article";
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import QuizIcon from '@mui/icons-material/Quiz';
 export default function Sidebar() {
   const { user } = useAuth();
   const Menus = [
@@ -43,7 +44,7 @@ export default function Sidebar() {
     {
       title: "Tạo bài thi",
       path: "/test-management",
-      icon: <QuestionAnswerIcon />,
+      icon: <QuizIcon />,
       id: 33,
       src: "/test-management",
     },

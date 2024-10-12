@@ -37,7 +37,7 @@ export default function TestTable({
       border: 0,
     },
   }));
-  const TableHeader = ["ID đề thi", "Tên đề", "Số câu hỏi", "Hành động"];
+  const TableHeader = ["ID đề thi", "Tên đề", "Ngày tạo", "MemberShip ?" , "Hành động"];
 
   return (
     <div>
@@ -84,16 +84,19 @@ export default function TestTable({
                       component="th"
                       scope="row"
                     >
-                      {row.examId}
+                      {row.testId}
                     </StyledTableCell>
                     <StyledTableCell
                       style={{ fontWeight: "600", alignItems: "center" }}
                       align="center"
                     >
-                      {row.examName}
+                      {row.description}
                     </StyledTableCell>
                     <StyledTableCell style={{ fontWeight: "600" }} align="center">
-                      {row.numOfQuestions}
+                      {row.createdDate?.slice(0,10) || "2024-12-12"}
+                    </StyledTableCell>
+                    <StyledTableCell style={{ fontWeight: "600" }} align="center">
+                      {row.isRequired ? "Có" : "Không"}
                     </StyledTableCell>
                     <StyledTableCell style={{ fontWeight: "600" }} align="center">
                       <Button

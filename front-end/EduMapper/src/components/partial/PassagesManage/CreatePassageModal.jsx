@@ -30,7 +30,7 @@ export default function CreatePassageModal({
   const validationSchema = Yup.object({
     passageTitle: Yup.string().required("Required"),
     passageContent: Yup.string().required("Required"),
-    subQuestions: Yup.array().of(
+    subQuestion: Yup.array().of(
       Yup.object({
         questionText: Yup.string().required("Required"),
         correctAnswer: Yup.string().when("questionType", {
@@ -100,7 +100,7 @@ export default function CreatePassageModal({
             initialValues={{
               passageTitle: "",
               passageContent: "",
-              subQuestions: [
+              subQuestion: [
                 {
                   questionText: "",
                   correctAnswer: "",
@@ -158,10 +158,10 @@ export default function CreatePassageModal({
                   </MDBRow>
 
                   {/* Sub Questions */}
-                  <FieldArray name="subQuestions">
+                  <FieldArray name="subQuestion">
                     {({ push, remove }) => (
                       <>
-                        {values.subQuestions.map((subQuestion, index) => (
+                        {values.subQuestion.map((subQuestion, index) => (
                           <div key={index}>
                             <MDBRow style={{ marginTop: "20px" }}>
                               <MDBCol sm="4">
@@ -172,12 +172,12 @@ export default function CreatePassageModal({
                               <MDBCol sm="8">
                                 <Field
                                   as={MDBInput}
-                                  name={`subQuestions[${index}].questionText`}
+                                  name={`subQuestion[${index}].questionText`}
                                   label="Question Text"
                                   type="text"
                                 />
                                 <ErrorMessage
-                                  name={`subQuestions[${index}].questionText`}
+                                  name={`subQuestion[${index}].questionText`}
                                   component="div"
                                   className="text-red-500"
                                 />
@@ -191,10 +191,10 @@ export default function CreatePassageModal({
                               <MDBCol sm="8">
                                 <Field
                                   as="select"
-                                  name={`subQuestions[${index}].questionType`}
+                                  name={`subQuestion[${index}].questionType`}
                                   onChange={(e) =>
                                     setFieldValue(
-                                      `subQuestions[${index}].questionType`,
+                                      `subQuestion[${index}].questionType`,
                                       e.target.value
                                     )
                                   }
@@ -213,7 +213,7 @@ export default function CreatePassageModal({
                                   </option>
                                 </Field>
                                 <ErrorMessage
-                                  name={`subQuestions[${index}].questionType`}
+                                  name={`subQuestion[${index}].questionType`}
                                   component="div"
                                   className="text-red-500"
                                 />
@@ -234,12 +234,12 @@ export default function CreatePassageModal({
                                 <MDBCol sm="8">
                                   <Field
                                     as={MDBInput}
-                                    name={`subQuestions[${index}].correctAnswer`}
+                                    name={`subQuestion[${index}].correctAnswer`}
                                     label="Correct Answer"
                                     type="text"
                                   />
                                   <ErrorMessage
-                                    name={`subQuestions[${index}].correctAnswer`}
+                                    name={`subQuestion[${index}].correctAnswer`}
                                     component="div"
                                     className="text-red-500"
                                   />
@@ -256,11 +256,11 @@ export default function CreatePassageModal({
                                 <MDBCol sm="8">
                                   <Field
                                     as={MDBInput}
-                                    name={`subQuestions[${index}].wordsLimit`}
+                                    name={`subQuestion[${index}].wordsLimit`}
                                     type="number"
                                   />
                                   <ErrorMessage
-                                    name={`subQuestions[${index}].wordsLimit`}
+                                    name={`subQuestion[${index}].wordsLimit`}
                                     component="div"
                                     className="text-red-500"
                                   />
@@ -271,7 +271,7 @@ export default function CreatePassageModal({
                             {/* Choices for Multiple Choice */}
                             {subQuestion.questionType == "multiple_choice" && (
                               <FieldArray
-                                name={`subQuestions[${index}].choices`}
+                                name={`subQuestion[${index}].choices`}
                               >
                                 {({ push, remove }) => (
                                   <>
@@ -291,7 +291,7 @@ export default function CreatePassageModal({
                                             value={choice.choiceContent}
                                             onChange={(e) =>
                                               setFieldValue(
-                                                `subQuestions[${index}].choices[${choiceIndex}].choiceContent`,
+                                                `subQuestion[${index}].choices[${choiceIndex}].choiceContent`,
                                                 e.target.value
                                               )
                                             }
@@ -320,7 +320,7 @@ export default function CreatePassageModal({
                             )}
                             {subQuestion.questionType == "heading_matching" && (
                               <FieldArray
-                                name={`subQuestions[${index}].choices`}
+                                name={`subQuestion[${index}].choices`}
                               >
                                 {({ push, remove }) => (
                                   <>
@@ -340,7 +340,7 @@ export default function CreatePassageModal({
                                             value={choice.choiceContent}
                                             onChange={(e) =>
                                               setFieldValue(
-                                                `subQuestions[${index}].choices[${choiceIndex}].choiceContent`,
+                                                `subQuestion[${index}].choices[${choiceIndex}].choiceContent`,
                                                 e.target.value
                                               )
                                             }
@@ -384,7 +384,7 @@ export default function CreatePassageModal({
                         </Button>
                         <IconButton
                           color="error"
-                          onClick={() => remove(values.subQuestions.length - 1)}
+                          onClick={() => remove(values.subQuestion.length - 1)}
                         >
                           <Delete />
                         </IconButton>

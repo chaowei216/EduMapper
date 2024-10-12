@@ -3,7 +3,12 @@ import HeaderTesting from "../../components/global/HeaderTesting";
 import TestProgress from "../../components/partial/UserTesting/PartQuestion";
 import ReadingTest from "../../components/partial/UserTesting/ReadingTest";
 import { GetReadingTest } from "../../api/TestManageApi";
+import { useNavigate, useParams } from "react-router-dom";
+import NoDataPage from "../../components/global/NoDataPage";
+import { toast } from "react-toastify";
 function UserTestPage() {
+  const navigate = useNavigate();
+  let { testId } = useParams();
   const [passages, setPassages] = useState([]);
   const [selectedAnswers, setSelectedAnswers] = useState([]);
   const [currentPassage, setCurrentPassage] = useState(0);
@@ -12,20 +17,22 @@ function UserTestPage() {
     const fetchTestData = async () => {
       try {
         //const response = await fetch("/src/data/test2.json"); // Adjust path as necessary
-        const response = await GetReadingTest(
-          "56ab3c37-21c6-4105-b1ae-2f776bacac76"
-        );
+        const response = await GetReadingTest(testId);
         const data = await response.json();
+        console.log(data);
         const test = data.metaData;
-        console.log(test[0].exams[0]);
-        //setPassages(data .Tests[0].Exams[0].Passages); // Adjust based on your JSON structure
+        if (test[0].exams.length == 0){
+          toast.error("No data")
+          navigate('/list-test')
+          return;
+        }
         setPassages(test[0]?.exams[0]?.passages);
       } catch (error) {
         console.error("Error fetching test data:", error);
       }
     };
     fetchTestData();
-  }, []);
+  }, [testId, navigate]);
 
   const handleSubmit = () => {
     console.log(selectedAnswers);
