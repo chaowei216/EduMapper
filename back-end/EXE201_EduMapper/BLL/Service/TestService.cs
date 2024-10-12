@@ -111,7 +111,7 @@ namespace BLL.Service
 
             foreach (var item in test)
             {
-                item.Exams = item.Exams.Where(e => e.ExamName.Contains(ExamNameConstant.ListeningTest)).ToList();
+                item.Exams = item.Exams.Where(e => e.ExamName.ToLower().Contains(ExamNameConstant.ListeningTest.ToLower())).ToList();
             }
 
             if (test == null)
@@ -137,7 +137,7 @@ namespace BLL.Service
 
             foreach (var item in test)
             {
-                item.Exams = item.Exams.Where(e => e.ExamName.Contains(ExamNameConstant.ReadingTest)).ToList();
+                item.Exams = item.Exams.Where(e => e.ExamName.ToLower().Contains(ExamNameConstant.ReadingTest.ToLower())).ToList();
             }
 
             if (test == null)
@@ -163,7 +163,7 @@ namespace BLL.Service
 
             foreach (var item in test)
             {
-                item.Exams = item.Exams.Where(e => e.ExamName.Contains(ExamNameConstant.WritingTest)).ToList();
+                item.Exams = item.Exams.Where(e => e.ExamName.ToLower().Contains(ExamNameConstant.WritingTest.ToLower())).ToList();
             }
 
             if (test == null)
