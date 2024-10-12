@@ -1,4 +1,5 @@
 ﻿using Common.DTO.Passage;
+using Common.DTO.Progress;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,5 +16,6 @@ namespace Common.DTO.Exam
         public int NumOfQuestions { get; set; }
         public string TestId { get; set; } = null!;
         public ICollection<PassageDTO> Passages { get; set; } = null!;
+        public ICollection<ProgressDTO> Progress { get; set; } = null!;
     }
 }

@@ -33,7 +33,7 @@ namespace BLL.Service
             {
                 var mapAnswer = _mapper.Map<UserAnswer>(answer);
                 mapAnswer.IsCorrect = false;
-                if(answer.ChoiceId != null && answer.UserChoice == null)
+                if((answer.ChoiceId != null && answer.UserChoice == null) || (answer.ChoiceId != null && answer.UserChoice != null))
                 {
                     var choice = await _unitOfWork.QuestionChoiceRepository.GetByID(answer.ChoiceId);
                     mapAnswer.UserChoice = choice.ChoiceContent;
@@ -50,13 +50,13 @@ namespace BLL.Service
                     {
                         mapAnswer.IsCorrect = true;
                     }
-                } else if((answer.ChoiceId == null && answer.UserChoice == null) ||(answer.ChoiceId != null && answer.UserChoice != null))
+                } else if((answer.ChoiceId == null && answer.UserChoice == null))
                 {
                     return new ResponseDTO
                     {
                         IsSuccess = false,
                         Message = ExamMessage.SaveAnswerSuccessfully,
-                        StatusCode = StatusCodeEnum.Created,
+                        StatusCode = StatusCodeEnum.BadRequest,
                         MetaData = request
                     };
                 }
@@ -334,15 +334,15 @@ namespace BLL.Service
                                                                 orderBy: null,
                                                                 pageSize: request.PageSize,
                                                                 pageIndex: request.PageNumber,
-                                                                includeProperties: "Passages,Passages.SubQuestion," +
-                                                                                   "Passages.Sections,Passages.SubQuestion.Choices");
+                                                                includeProperties: "Progress,Passages,Passages.SubQuestion," +
+                                                                                   "Passages.Sections,Passages.SubQuestion.Choices,Passages.SubQuestion.UserAnswers");
 
             var response1 = await _unitOfWork.ExamRepository.Get(filter: !string.IsNullOrEmpty(request.Search)
                                                                         ? p => p.ExamName.Contains(request.Search.Trim())
                                                                         : null,
                                                                 orderBy: null,
-                                                                includeProperties: "Passages,Passages.SubQuestion," +
-                                                                                   "Passages.Sections,Passages.SubQuestion.Choices");
+                                                                includeProperties: "Progress,Passages,Passages.SubQuestion," +
+                                                                                   "Passages.Sections,Passages.SubQuestion.Choices,Passages.SubQuestion.UserAnswers");
             var totalCount = response1.Count(); 
             var items = response.ToList(); 
 

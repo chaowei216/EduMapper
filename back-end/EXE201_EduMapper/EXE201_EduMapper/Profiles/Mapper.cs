@@ -15,6 +15,7 @@ using Common.DTO.Transaction;
 using Common.DTO.Notification;
 using Common.DTO.Progress;
 using Common.DTO.Message;
+using Common.DTO.UserAnswer;
 
 namespace EXE201_EduMapper.Profiles
 {
@@ -27,11 +28,13 @@ namespace EXE201_EduMapper.Profiles
             CreateMap<ExternalLoginDTO, ApplicationUser>().ReverseMap();   
             CreateMap<MemberShip, MemberShipDTO>().ReverseMap();
             CreateMap<MemberShipCreateDTO, MemberShip>().ReverseMap();
+            CreateMap<UserAnswer, GetUserAnswerDTO>().ReverseMap();
             CreateMap<MemberShipUpdateDTO, MemberShip>().ReverseMap();
             CreateMap<ExternalLoginDTO, ApplicationUser>().ReverseMap();    
             CreateMap<Question, QuestionDTO>().ReverseMap();
             CreateMap<QuestionChoiceDTO, QuestionChoice>().ReverseMap();
             CreateMap<Passage, PassageDTO>().ReverseMap();
+            CreateMap<Progress, ProgressDTO>().ReverseMap();
             CreateMap<Exam, ExamDTO>().ReverseMap();
             CreateMap<PassageSection, PassageSectionDTO>().ReverseMap();
             CreateMap<Test, TestDTO>().ReverseMap();
