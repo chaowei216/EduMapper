@@ -34,6 +34,8 @@ import TestManagePage from "../pages/TestManagePage/TestManagePage";
 import TestListPage from "../pages/TakeTestPage/TestListPage";
 import TestResult from "../components/partial/UserTesting/TestResult";
 import TestResultPage from "../pages/TestResult/TestResultPage";
+import RequireAuth from "../Guard/RequireAuth";
+import ErrorException from "../components/global/ErrorException";
 
 export const router = createBrowserRouter([
   {
@@ -43,6 +45,7 @@ export const router = createBrowserRouter([
         <HomePage />
       </RoleBasedGuard>
     ),
+    errorElement: <ErrorException/>
   },
   {
     path: "/login",
@@ -51,46 +54,57 @@ export const router = createBrowserRouter([
         <LoginPage />
       </GuestAuth>
     ),
+    errorElement: <ErrorException/>
   },
   {
     path: "/register",
     element: <ResgisterPage />,
+    errorElement: <ErrorException/>
   },
   {
     path: "/forgot-password",
     element: <ForgotPasswordPage />,
+    errorElement: <ErrorException/>
   },
   {
     path: "/package",
-    element: <PackagePage />,
+    element: <RequireAuth><PackagePage /></RequireAuth> ,
+    errorElement: <ErrorException/>
   },
   {
     path: "/english-center",
     element: <CenterPage />,
+    errorElement: <ErrorException/>
   },
   {
     path: "/english-center-detail",
     element: <CenterDetailPage />,
+    errorElement: <ErrorException/>
   },
   {
     path: "/rating",
     element: <CenterRatingPage />,
+    errorElement: <ErrorException/>
   },
   {
     path: "/create-rating",
     element: <CreateCenterRating />,
+    errorElement: <ErrorException/>
   },
   {
     path: "/take-test/:testId",
     element: <TakeTestPage />,
+    errorElement: <ErrorException/>
   },
   {
     path: "/take-testPre/:testId",
     element: <TakeTestPrePage />,
+    errorElement: <ErrorException/>
   },
   {
     path: "/reading-test/:testId",
-    element: <UserTestPage />,
+    element: <RequireAuth> <UserTestPage /> </RequireAuth>,
+    errorElement: <ErrorException/>
   },
   {
     path: "/complete-profile",
@@ -99,14 +113,17 @@ export const router = createBrowserRouter([
         <CompleteProfile />
       </GuestAuth>
     ),
+    errorElement: <ErrorException/>
   },
   {
     path: "/listening-test/:testId",
-    element: <ListeningTestPage />,
+    element: <RequireAuth> <ListeningTestPage /> </RequireAuth>,
+    errorElement: <ErrorException/>
   },
   {
     path: "/writing-test/:testId",
-    element: <WritingTestPage />,
+    element: <RequireAuth><WritingTestPage /></RequireAuth> ,
+    errorElement: <ErrorException/>
   },
   {
     path: "personal-profile",
@@ -118,7 +135,7 @@ export const router = createBrowserRouter([
       <CustomerPage />
       // </RoleBasedGuard>
     ),
-    //errorElement: <ErrorException />,
+    errorElement: <ErrorException />,
   },
   {
     path: "send-otp/:email",
@@ -127,62 +144,77 @@ export const router = createBrowserRouter([
         <SendOtpPage />
       </GuestAuth>
     ),
+    errorElement: <ErrorException/>
   },
   {
     path: "/membership",
-    element: <MemberShipPage />,
+    element: <RoleBasedGuard accessibleRoles={["Admin", "Customer"]}> <MemberShipPage /> </RoleBasedGuard>,
+    errorElement: <ErrorException/>
   },
   {
     path: "/customer-transaction",
     element: <CustomerTransactionPage />,
+    errorElement: <ErrorException/>
   },
   {
     path: "/course",
     element: <CoursePage />,
+    errorElement: <ErrorException/>
   },
   {
     path: "/question-management",
     element: <QuestionPage />,
+    errorElement: <ErrorException/>
   },
   {
     path: "/passage-management",
     element: <PassagePage />,
+    errorElement: <ErrorException/>
   },
   {
     path: "/user-profile",
     element: <UserProfilePage />,
+    errorElement: <ErrorException/>
   },
   {
     path: "/contact",
     element: <ContactPage />,
+    errorElement: <ErrorException/>
   },
-  { path: "/payment", element: <Checkout /> },
+  { path: "/payment", element: <Checkout />, errorElement: <ErrorException/>  },
   {
     path: "/waiting-checkout",
     element: <WaitingCheckout />,
+    errorElement: <ErrorException/>
   },
   {
     path: "/exam-management",
     element: <ExamPage />,
+    errorElement: <ErrorException/>
   },
   {
     path: "/chat",
-    element: <ChatPage />,
+    element: <RequireAuth><ChatPage /></RequireAuth>,
+    errorElement: <ErrorException/>
   },
   {
     path: "/dashboard",
     element: <DashboardPage />,
+    errorElement: <ErrorException/>
   },
   {
     path: "/test-management",
     element: <TestManagePage />,
+    errorElement: <ErrorException/>
   },
   {
     path: "/list-test",
     element: <TestListPage />,
+    errorElement: <ErrorException/>
   },
   {
     path: "/test-result",
     element: <TestResultPage />,
+    errorElement: <ErrorException/>
   },
 ]);

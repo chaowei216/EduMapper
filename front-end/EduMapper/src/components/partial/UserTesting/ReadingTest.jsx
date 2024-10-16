@@ -48,8 +48,8 @@ export default function ReadingTest(pros) {
             </Typography>
             {passages &&
               passages[currentPassage]?.sections != [] &&
-              passages[currentPassage]?.sections?.map((section) => (
-                <Typography style={{fontSize: "16px"}} variant="body2" paragraph key={section} textAlign={"justify"}>
+              passages[currentPassage]?.sections?.map((section, index) => (
+                <Typography style={{fontSize: "16px"}} variant="body2" paragraph key={section.sectionLabel || index} textAlign={"justify"}>
                   <strong>{section.sectionLabel}.</strong>{" "}
                   {section.sectionContent}
                 </Typography>
@@ -79,6 +79,7 @@ export default function ReadingTest(pros) {
                         Multple Choice
                       </Typography>
                       <RadioGroup
+                        key={index + 2}
                         value={
                           selectedAnswers.find(
                             (answer) =>
@@ -112,6 +113,7 @@ export default function ReadingTest(pros) {
                         Fill in blank
                       </Typography>
                       <TextField
+                        key={index + 3}
                         variant="outlined"
                         value={
                           selectedAnswers.find(
@@ -141,6 +143,7 @@ export default function ReadingTest(pros) {
                       <FormControl fullWidth variant="outlined" sx={{ mt: 2 }}>
                         <InputLabel>Select heading</InputLabel>
                         <Select
+                          key={index + 4}
                           value={
                             selectedAnswers.find(
                               (answer) =>
