@@ -14,5 +14,6 @@ namespace DAL.Models
         [ForeignKey("TestId")]
         public Test? Test { get; set; } = null!;
         public ICollection<Passage> Passages { get; set; } = null!;
+        public ICollection<Progress> Progress { get; set; } = null!;
     }
 }

@@ -37,7 +37,7 @@ const testResults = [
 ];
 
 const totalQuestions = 40;
-const correctAnswers = 7;
+const correctAnswers = 3;
 const timeSpent = "04:39";
 const maxTime = "60:00";
 

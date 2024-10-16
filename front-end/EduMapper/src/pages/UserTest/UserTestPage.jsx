@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import HeaderTesting from "../../components/global/HeaderTesting";
 import TestProgress from "../../components/partial/UserTesting/PartQuestion";
 import ReadingTest from "../../components/partial/UserTesting/ReadingTest";
-import { GetReadingTest, SaveAnswer, SubmitAnswer } from "../../api/TestManageApi";
+import { GetReadingTest, SaveAnswer, StartTest, SubmitAnswer } from "../../api/TestManageApi";
 import { useNavigate, useParams } from "react-router-dom";
 import NoDataPage from "../../components/global/NoDataPage";
 import { toast } from "react-toastify";
@@ -31,14 +31,19 @@ function UserTestPage() {
           navigate('/list-test')
           return;
         }
+        const startTest = {
+          examId: test[0]?.exams[0]?.examId,
+          userId: user.id
+        }
         setPassages(test[0]?.exams[0]?.passages);
         setExamId(test[0]?.exams[0]?.examId)
+        await StartTest(startTest)
       } catch (error) {
         console.error("Error fetching test data:", error);
       }
     };
     fetchTestData();
-  }, [testId, navigate]);
+  }, [testId, navigate, user]);
 
   const handleSubmit = async () => {
     const answers = {
@@ -50,7 +55,7 @@ function UserTestPage() {
       userId: user.id
     }
     const response = await SaveAnswer(answers);
-    const response2 = await SubmitAnswer(data)
+    const response2 = await SubmitAnswer(data);
     console.log(response);
     console.log(response2);
     if (response.status == StatusCode.CREATED && response2.status == StatusCode.UPDATED){

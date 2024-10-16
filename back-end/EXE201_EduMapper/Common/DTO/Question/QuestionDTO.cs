@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.DTO.UserAnswer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +16,6 @@ namespace Common.DTO.Question
         public int? WordsLimit { get; set; } = null!;
         public string? PassageId { get; set; } = null!;
         public ICollection<QuestionChoiceDTO>? Choices { get; set; } = null!;
+        public ICollection<GetUserAnswerDTO> UserAnswers { get; set; } = null!;
     }
 }
