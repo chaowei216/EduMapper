@@ -10,6 +10,7 @@ using Common.DTO.Exam;
 using Common.DTO.Progress;
 using Common.DTO.Query;
 using Common.DTO.Test;
+using Common.DTO.UserAnswer;
 using Common.Enum;
 using DAL.Models;
 using DAL.UnitOfWork;
@@ -555,6 +556,60 @@ namespace BLL.Service
                 MetaData = thisProgress,
                 StatusCode = StatusCodeEnum.Created,
                 Message = ExamMessage.SubmitExam
+            };
+        }
+
+        public async Task<ResponseDTO> GetUserAnswer(GetFinishDTO request)
+        {
+            var exam = await _unitOfWork.ExamRepository.Get(filter: c => c.ExamId == request.ExamId,
+                                                        includeProperties: "Progress,Passages,Passages.SubQuestion," +
+                                                                                   "Passages.Sections,Passages.SubQuestion.Choices,Passages.SubQuestion.UserAnswers");
+
+            var eachExam = exam.FirstOrDefault();
+            List<CheckAnswerDTO> response = new List<CheckAnswerDTO>();
+
+            if (eachExam != null)
+            {
+                foreach(var pas in eachExam.Passages)
+                {
+                    var passage = await _unitOfWork.PassageRepository.GetByID(pas.PassageId);
+                    if(passage != null)
+                    {
+                        foreach (var ques in passage.SubQuestion)
+                        {
+                            var userAnswers = await _unitOfWork.UserAnswerRepository.Get(filter: c => c.QuestionId == ques.QuestionId && c.UserId == request.UserId);
+                            var eachAnswer = userAnswers.FirstOrDefault();
+
+                            var eachResponse = new CheckAnswerDTO();
+
+                            if (eachAnswer != null)
+                            {
+                                eachResponse.QuestionIndex = ques.QuestionIndex;
+                                eachResponse.IsCorrect = eachAnswer.IsCorrect;
+                                eachResponse.UserChoice = eachAnswer.UserChoice;
+                                eachResponse.CorrectAnswer = ques.CorrectAnswer;
+
+                                response.Add(eachResponse);
+                            } else
+                            {
+                                eachResponse.QuestionIndex = ques.QuestionIndex;
+                                eachResponse.IsCorrect = false;
+                                eachResponse.UserChoice = null;
+                                eachResponse.CorrectAnswer = ques.CorrectAnswer;
+                            }
+                            
+                        }
+                    }
+                }
+                
+            }
+
+            return new ResponseDTO
+            {
+                IsSuccess = true,
+                MetaData = response,
+                StatusCode = StatusCodeEnum.OK,
+                Message = ExamMessage.GetAnswers
             };
         }
     }

@@ -13,5 +13,6 @@ namespace Common.Constant.Exam
         public const string ExceedLimitQuestion = "Number of questions exceeds the limit!";
         public const string SubmitExam = "Submit success!";
         public const string AnswerFail = "Please answer properly!";
+        public const string GetAnswers = "Get answer success!";
     }
 }
