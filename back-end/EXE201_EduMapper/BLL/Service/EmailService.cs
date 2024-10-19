@@ -8,6 +8,7 @@ using System.Net.Mail;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Common.DTO.Exam;
 
 namespace BLL.Service
 {
@@ -24,6 +25,27 @@ namespace BLL.Service
             var sendEmail = _configuration.GetSection("SendEmailAccount")["Email"]!;
             var toEmail = userEmail;
             var htmlBody = EmailTemplate.OTPEmailTemplate(userEmail, otpCode, subject);
+            MailMessage mailMessage = new MailMessage(sendEmail, toEmail, subject, htmlBody);
+            mailMessage.IsBodyHtml = true;
+
+            var smtpServer = _configuration.GetSection("SendEmailAccount")["SmtpServer"];
+            int.TryParse(_configuration.GetSection("SendEmailAccount")["Port"], out int port);
+            var userNameEmail = _configuration.GetSection("SendEmailAccount")["UserName"];
+            var password = _configuration.GetSection("SendEmailAccount")["Password"];
+
+            SmtpClient client = new SmtpClient(smtpServer, port);
+            client.UseDefaultCredentials = false;
+            client.Credentials = new NetworkCredential(userNameEmail, password);
+            client.EnableSsl = true; // Enable SSL/TLS encryption
+
+            client.Send(mailMessage);
+        }
+
+        public void SendSpeakingTestEmail(ScheduleSpeakingDTO request, string subject)
+        {
+            var sendEmail = _configuration.GetSection("SendEmailAccount")["Email"]!;
+            var toEmail = request.UserEmail;
+            var htmlBody = EmailTemplate.ScheduleMeetingEmailTemplate(request.UserEmail, request.ScheduleDate, request.LinkMeet, subject);
             MailMessage mailMessage = new MailMessage(sendEmail, toEmail, subject, htmlBody);
             mailMessage.IsBodyHtml = true;
 

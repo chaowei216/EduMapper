@@ -13,7 +13,6 @@ using DAL.UnitOfWork;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 
 namespace BLL.Service
 {
@@ -46,43 +45,43 @@ namespace BLL.Service
             }
         }
 
-        public async Task<FileStream> RetrieveItemAsync(string rootPath)
-        {
-            try
+            public async Task<FileStream> RetrieveItemAsync(string rootPath)
             {
-                // Create temporary file to save the memory stream contents
-                var fileName = Path.GetTempFileName();
-
-                // Create an empty zip file
-                using (var fileStream = new FileStream(fileName, FileMode.Create))
+                try
                 {
-                    using (var stream = new MemoryStream())
+                    // Create temporary file to save the memory stream contents
+                    var fileName = Path.GetTempFileName();
+
+                    // Create an empty zip file
+                    using (var fileStream = new FileStream(fileName, FileMode.Create))
                     {
-                        // Download the file contents
-                        await _storageClient.DownloadObjectAsync("edumapper-ed77e.appspot.com", rootPath, stream);
+                        using (var stream = new MemoryStream())
+                        {
+                            // Download the file contents
+                            await _storageClient.DownloadObjectAsync("edumapper-ed77e.appspot.com", rootPath, stream);
 
-                        // Set the position of the memory stream to the beginning
-                        stream.Seek(0, SeekOrigin.Begin);
+                            // Set the position of the memory stream to the beginning
+                            stream.Seek(0, SeekOrigin.Begin);
 
-                        // Copy the contents of the memory stream to the file stream
-                        await stream.CopyToAsync(fileStream);
+                            // Copy the contents of the memory stream to the file stream
+                            await stream.CopyToAsync(fileStream);
+                        }
                     }
+
+                    // Return FileStream for the file
+                    return new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                }
+                catch (Google.GoogleApiException ex) when (ex.Error.Code == 403)
+                {
+                    Console.WriteLine($"Access denied: {ex.Error.Message}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
 
-                // Return FileStream for the file
-                return new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                return null!;
             }
-            catch (Google.GoogleApiException ex) when (ex.Error.Code == 403)
-            {
-                Console.WriteLine($"Access denied: {ex.Error.Message}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-            return null!;
-        }
 
 
         public async Task<ResponseDTO> AddQuestionToPassage(AddQuestionDTO passage)
