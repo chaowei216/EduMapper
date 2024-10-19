@@ -63,5 +63,12 @@ namespace BLL.IService
         /// <param name="request"></param>
         /// <returns></returns>
         Task<ResponseDTO> GetUserAnswer(GetFinishDTO request);
+
+        /// <summary>
+        /// Get user answer
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        ResponseDTO SendSpeakingEmail(ScheduleSpeakingDTO request);
     }
 }
