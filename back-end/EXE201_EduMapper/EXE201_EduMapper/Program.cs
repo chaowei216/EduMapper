@@ -77,7 +77,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigins",
         builder =>
         {
-            builder.WithOrigins("http://localhost:5173/")
+            builder.WithOrigins("https://edumapper-en.vercel.app/")
                    .AllowAnyHeader()
                    .AllowAnyMethod()
                    .AllowCredentials();
