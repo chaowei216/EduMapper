@@ -1,18 +1,17 @@
 ﻿using AutoMapper;
+using Azure;
 using BLL.Exceptions;
 using BLL.IService;
 using Common.Constant.Exam;
 using Common.Constant.Message;
-using Common.Constant.Message.Auth;
+using Common.Constant.Test;
 using Common.DTO;
+using Common.DTO.Exam;
+using Common.DTO.Query;
 using Common.DTO.Test;
 using Common.Enum;
+using DAL.Models;
 using DAL.UnitOfWork;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL.Service
 {
@@ -27,6 +26,83 @@ namespace BLL.Service
             _mapper = mapper;
         }
 
+        public async Task<ResponseDTO> CreateTest(TestCreateDTO test)
+        {
+            var mapTest = _mapper.Map<Test>(test);
+            int numOfQuestion = 0;
+            mapTest.TestId = Guid.NewGuid().ToString();
+
+
+            mapTest.CreatedDate = DateTime.Now;
+            _unitOfWork.TestRepository.Insert(mapTest);
+            if (test.ExamIds != null)
+            {
+                foreach (var exam in test.ExamIds)
+                {
+                    var thisExam = await _unitOfWork.ExamRepository.Get(filter: c => c.ExamId == exam,
+                                                                        includeProperties: "Passages,Passages.SubQuestion," +
+                                                                                   "Passages.Sections,Passages.SubQuestion.Choices");
+
+                    foreach (var ex in thisExam)
+                    {
+                        if (ex.TestId != null)
+                        {
+                            return new ResponseDTO
+                            {
+                                IsSuccess = false,
+                                Message = TestMessage.DuplicateTest,
+                                StatusCode = StatusCodeEnum.BadRequest,
+                            };
+                        }
+                        ex.TestId = mapTest.TestId;
+
+                        _unitOfWork.ExamRepository.Update(ex);
+                        _unitOfWork.Save();
+                    }
+                }
+            }
+
+            _unitOfWork.Save();
+
+            return new ResponseDTO
+            {
+                IsSuccess = true,
+                Message = GeneralMessage.CreateSuccess,
+                StatusCode = StatusCodeEnum.Created,
+                MetaData = mapTest
+            };
+        }
+
+        public async Task<ResponseDTO> GetAllTest(TestParameters request)
+        {
+            var test = await _unitOfWork.TestRepository.Get(filter: !string.IsNullOrEmpty(request.Search)
+                                                                        ? p => p.Description.Contains(request.Search.Trim())
+                                                                        : null,
+                                                            includeProperties: "Exams,Exams.Passages,Exams.Passages.SubQuestion," +
+                                                                       "Exams.Passages.Sections,Exams.Passages.SubQuestion.Choices",
+                                                            pageSize: request.PageSize,
+                                                            pageIndex: request.PageNumber);
+
+            var test1 = await _unitOfWork.TestRepository.Get(includeProperties: "Exams,Exams.Passages,Exams.Passages.SubQuestion," +
+                                                                       "Exams.Passages.Sections,Exams.Passages.SubQuestion.Choices");
+
+            var totalCount = test1.Count();
+            var items = test.ToList();
+
+            // Create the PagedList and map the results
+            var pageList = new PagedList<Test>(items, totalCount, request.PageNumber, request.PageSize);
+            var mappedResponse = _mapper.Map<PaginationResponseDTO<TestDTO>>(pageList);
+            mappedResponse.Data = _mapper.Map<List<TestDTO>>(items);
+
+            return new ResponseDTO
+            {
+                StatusCode = StatusCodeEnum.OK,
+                IsSuccess = true,
+                Message = GeneralMessage.GetSuccess,
+                MetaData = mappedResponse
+            };
+        }
+
         public async Task<ResponseDTO> GetListeningTestById(string id)
         {
             var test = await _unitOfWork.TestRepository.Get(includeProperties: "Exams,Exams.Passages,Exams.Passages.SubQuestion," +
@@ -35,7 +111,7 @@ namespace BLL.Service
 
             foreach (var item in test)
             {
-                item.Exams = item.Exams.Where(e => e.ExamName.Contains(ExamNameConstant.ListeningTest)).ToList();
+                item.Exams = item.Exams.Where(e => e.ExamName.ToLower().Contains(ExamNameConstant.ListeningTest.ToLower())).ToList();
             }
 
             if (test == null)
@@ -55,13 +131,13 @@ namespace BLL.Service
 
         public async Task<ResponseDTO> GetReadingTestById(string id)
         {
-            var test = await _unitOfWork.TestRepository.Get(includeProperties: "Exams,Exams.Passages,Exams.Passages.SubQuestion," +
-                                                                                   "Exams.Passages.Sections,Exams.Passages.SubQuestion.Choices",
-                                                            filter: c => c.TestId == id);
+            var test = await _unitOfWork.TestRepository.Get(filter: c => c.TestId == id, includeProperties: "Exams,Exams.Passages,Exams.Passages.SubQuestion," +
+                                                                                   "Exams.Passages.Sections,Exams.Passages.SubQuestion.Choices"
+                                                            );
 
             foreach (var item in test)
             {
-                item.Exams = item.Exams.Where(e => e.ExamName.Contains(ExamNameConstant.ReadingTest)).ToList();
+                item.Exams = item.Exams.Where(e => e.ExamName.ToLower().Contains(ExamNameConstant.ReadingTest.ToLower())).ToList();
             }
 
             if (test == null)
@@ -87,7 +163,7 @@ namespace BLL.Service
 
             foreach (var item in test)
             {
-                item.Exams = item.Exams.Where(e => e.ExamName.Contains(ExamNameConstant.WritingTest)).ToList();
+                item.Exams = item.Exams.Where(e => e.ExamName.ToLower().Contains(ExamNameConstant.WritingTest.ToLower())).ToList();
             }
 
             if (test == null)

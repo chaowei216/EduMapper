@@ -1,7 +1,9 @@
+using BLL.Hubs;
 using BLL.IService;
 using BLL.Service;
 using EXE201_EduMapper.Extension;
 using EXE201_EduMapper.Middlewares;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text.Json.Serialization;
@@ -11,14 +13,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers().AddJsonOptions(x =>
-                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+{
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Authentication API",
+        Title = "Edumapper API",
         Version = "v1"
     });
 
@@ -36,6 +40,9 @@ builder.Services.AddSwaggerGen(options =>
 
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
+
+// signalR
+builder.Services.AddSignalR();
 
 // auto mapper
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
@@ -56,14 +63,25 @@ builder.Services.AddScoped<IMembershipService, MembershipService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<IPassageService, PassageService>();
 builder.Services.AddScoped<ITestService, TestService>();
+builder.Services.AddScoped<IExamService, ExamService>();
+builder.Services.AddScoped<ICenterService, CenterService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IVnPayService, VnPayService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IMessageService, MessageService>();
 
 // CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-                    b => b.AllowAnyHeader()
-                            .AllowAnyOrigin()
-                                .AllowAnyMethod());
+    options.AddPolicy("AllowSpecificOrigins",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:5173/")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod()
+                   .AllowCredentials();
+        });
 });
 
 var app = builder.Build();
@@ -79,12 +97,14 @@ app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowAll");
+app.UseCors("AllowSpecificOrigins");
 
 app.UseAuthentication();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<ChatHub>("/chatHub");
 
 app.Run();

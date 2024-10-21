@@ -32,6 +32,9 @@ namespace DAL.Data
         public DbSet<UserNotification> UserNotifications { get; set; }
         public DbSet<PassageSection> PassageSections { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<TestResult> TestResults { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<AdvertisingCenter> AdvertisingCenters { get; set; }
 
         #endregion
 
@@ -61,19 +64,8 @@ namespace DAL.Data
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(DataContext).Assembly);
 
             #region M_M relationship
-            modelBuilder.Entity<UserAnswer>()
-                .HasKey(uc => new { uc.UserId, uc.QuestionId });
-            modelBuilder.Entity<UserAnswer>()
-                .HasOne(uc => uc.User)
-                .WithMany(uc => uc.UserAnswers)
-                .HasForeignKey(uc => uc.UserId);
-            modelBuilder.Entity<UserAnswer>()
-                .HasOne(uc => uc.Question)
-                .WithMany(uc => uc.UserAnswers)
-                .HasForeignKey(uc => uc.QuestionId);
-
             modelBuilder.Entity<MemberShipDetail>()
-                .HasKey(uc => new { uc.UserId, uc.MemberShipId });
+                .HasKey(uc => uc.MemberShipDetailId);
             modelBuilder.Entity<MemberShipDetail>()
                 .HasOne(uc => uc.User)
                 .WithMany(uc => uc.MemberShipDetails)

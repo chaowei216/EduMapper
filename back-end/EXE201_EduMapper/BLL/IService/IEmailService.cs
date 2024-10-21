@@ -1,4 +1,6 @@
-﻿namespace BLL.IService
+﻿using Common.DTO.Exam;
+
+namespace BLL.IService
 {
     public interface IEmailService
     {
@@ -9,5 +11,12 @@
         /// <param name="otpCode"></param>
         /// <param name="subject"></param>
         void SendOTPEmail(string userEmail, string otpCode, string subject);
+
+        /// <summary>
+        /// Send email for speaking test
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="subject"></param>
+        void SendSpeakingTestEmail(ScheduleSpeakingDTO request, string subject);
     }
 }

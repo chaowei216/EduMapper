@@ -4,5 +4,6 @@
     {
         public const string ForgotPasswordSubject = "Sending OTP for resetting password";
         public const string VerifyEmailSubject = "Sending OTP for verifying email";
+        public const string SpeakingEmailSubject = "Speaking test schedule From EduMapper";
     }
 }

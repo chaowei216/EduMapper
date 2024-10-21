@@ -8,6 +8,7 @@ namespace DAL.Models
         public string MemberShipDetailId { get; set; } = null!;
         public string UserId { get; set; } = null!;
         public string MemberShipId { get; set; } = null!;
+        public bool IsFinished { get; set; }
         public DateTime RegistedDate { get; set; }
         public DateTime ExpiredDate { get; set; }
         public ApplicationUser User { get; set; } = null!;

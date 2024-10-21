@@ -8,7 +8,8 @@ namespace DAL.Models
         [Key]
         public string QuestionId { get; set; } = null!;
         public string QuestionText { get; set; } = null!;
-        public string CorrectAnswer { get; set; } = string.Empty;
+        public string? CorrectAnswer { get; set; } = string.Empty;
+        public int? QuestionIndex { get; set; }
         public string QuestionType { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
         public string? PassageId { get; set; } = null!;
