@@ -94,7 +94,7 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowSpecificOrigins");
+app.UseCors("Cors");
 
 app.UseAuthentication();
 
