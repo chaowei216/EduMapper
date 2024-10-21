@@ -77,7 +77,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigins",
         builder =>
         {
-            builder.WithOrigins("http://localhost:5173/")
+            builder.WithOrigins("http://103.177.111.32:7010/swagger/index.html")
                    .AllowAnyHeader()
                    .AllowAnyMethod()
                    .AllowCredentials();
