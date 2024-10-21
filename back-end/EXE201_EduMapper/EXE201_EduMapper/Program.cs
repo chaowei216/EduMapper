@@ -87,13 +87,12 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
-app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+app.UseSwagger();
+app.UseSwaggerUI();
+
+
+//app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
