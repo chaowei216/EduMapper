@@ -21,7 +21,6 @@ function UserTestPage() {
   useEffect(() => {
     const fetchTestData = async () => {
       try {
-        //const response = await fetch("/src/data/test2.json"); // Adjust path as necessary
         const response = await GetReadingTest(testId);
         const data = await response.json();
         console.log(data);
@@ -60,10 +59,10 @@ function UserTestPage() {
     console.log(response2);
     if (response.status == StatusCode.CREATED && response2.status == StatusCode.UPDATED){
       toast.success(Messages.SUCCESS.SUCCESS_TEST)
-      navigate('/test-result')
+      navigate(`/test-result/${examId}`)
     }else {
-      //toast.error(Messages.ERROR.FAIL_TEST)
-      navigate('/test-result')
+      toast.error(Messages.ERROR.FAIL_TEST)
+      // navigate('/test-result')
     }
   };
 

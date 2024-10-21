@@ -213,7 +213,7 @@ export const router = createBrowserRouter([
     errorElement: <ErrorException/>
   },
   {
-    path: "/test-result",
+    path: "/test-result/:examId",
     element: <TestResultPage />,
     errorElement: <ErrorException/>
   },

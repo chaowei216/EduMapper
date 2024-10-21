@@ -1,95 +1,139 @@
 .featuresWrapper {
+  display: flex;
   flex-direction: column;
   height: fit-content;
-  padding-top: 15rem;
+  padding-top: 20rem; /* Giảm padding cho các màn hình nhỏ */
   padding-bottom: 4rem;
 }
 
 .featuresHeading {
-  margin: 160px 10px 30px 10px;
-  font-size: 1.8rem;
+  margin: 80px 10px 30px 10px; /* Điều chỉnh margin để không quá lớn */
+  font-size: 2.5rem; /* Tự động điều chỉnh font size */
   text-align: center;
 }
 
 .featuresList {
-  width: 1100px;
-  height: 390px;
-  margin-right: 20px;
-
+  width: 100%; /* Chiếm toàn bộ chiều rộng trên các màn hình nhỏ hơn */
+  max-width: 1100px; /* Giới hạn chiều rộng trên màn hình lớn */
+  height: auto; /* Chiều cao sẽ tự động co dãn */
+  margin-right: 0; /* Loại bỏ margin để phù hợp trên các màn hình nhỏ */
 }
 
 .featuresListWrapper {
-  max-height: 500px;
+  max-height: 500px; /* Có thể giữ nguyên */
 }
 
 .container_content {
-  width: 100%;
+  width: 100%; /* Full-width cho các màn hình nhỏ */
 }
 
 .body_content {
   position: relative;
-  width: 70%;
-  left: 43%;
-  transform: translateX(-50%);
+  width: 90%; /* Điều chỉnh để phù hợp với các màn hình nhỏ */
+  max-width: 70%; /* Tối đa là 70% trên màn hình lớn */
+  margin: 0 auto; /* Căn giữa cho mọi kích thước màn hình */
   border-radius: 20px 0px 0px 20px;
   background: #66D4A9;
   box-shadow: 20px 15px 28.4px -1px rgba(0, 0, 0, 0.25);
 }
 
 .content {
-  padding: 75px 180px 60px 54px;
+  padding: 50px 20px; /* Điều chỉnh padding cho linh hoạt */
+  padding-right: 305px;
+  text-align: justify;
   color: #FFF;
   font-family: Inter;
-  font-size: 24px;
-  font-style: normal;
+  font-size: 1.5rem; /* Điều chỉnh kích thước chữ để dễ đọc trên màn hình nhỏ */
   font-weight: 600;
-  line-height: normal;
+  line-height: 1.5; /* Tăng line-height để dễ đọc */
 }
+
 @media (min-width: 1571px) and (max-width: 1629px) {
   .image {
-    top: 15.2%  !important;
+    top: 15.2% !important;
   }
 }
 
 @media (min-width: 1400px) and (max-width: 1570px) {
   .image {
-    top: 15.9%  !important;
-    left: 78%  !important;
-    width: 38rem  !important;
-    transform: translateX(-50%)  !important;
-    z-index: 1  !important;
+    top: 15.9% !important;
+    left: 78% !important;
+    width: 38rem !important;
+    transform: translateX(-50%) !important;
+    z-index: 1 !important;
   }
 }
+
 @media (min-width: 1217px) and (max-width: 1399px) {
   .image {
-    top: 16.6%  !important;
-    left: 78%  !important;
-    width: 38rem  !important;
-    height: 58rem !important;
-    transform: translateX(-50%)  !important;
-    z-index: 1  !important;
+    top: 16.6% !important;
+    left: 78% !important;
+    width: 36rem !important; /* Giảm kích thước cho phù hợp */
+    height: 50rem !important; /* Điều chỉnh kích thước hình ảnh */
+    transform: translateX(-50%) !important;
+    z-index: 1 !important;
   }
 }
+
 @media (max-width: 1216px) {
   .image {
     position: absolute !important;
     top: 17.5% !important;
-    width: 29rem !important;
-    height: 54rem !important;
+    width: 30rem !important; /* Giảm kích thước hình ảnh */
+    height: 40rem !important; /* Chiều cao tự động co lại */
     z-index: 1 !important;
   }
+
+  .featuresHeading {
+    font-size: 2rem; /* Điều chỉnh kích thước chữ nhỏ hơn */
+  }
+
+  .body_content {
+    width: 100%; /* Full width cho các màn hình nhỏ */
+  }
 }
+
 @media (max-width: 1024px) {
   .image {
-    position: absolute !important;
     top: 17.2% !important;
-    width: 24rem !important;
-    height: 55rem !important;
-    z-index: 1 !important;
+    width: 24rem !important; /* Giảm kích thước hình ảnh */
+    height: 35rem !important;
+  }
+
+  .featuresHeading {
+    font-size: 1.8rem; /* Font nhỏ hơn cho các thiết bị di động */
+  }
+
+  .content {
+    padding: 40px 15px; /* Điều chỉnh padding cho nhỏ hơn */
+    font-size: 1.2rem; /* Font nhỏ hơn để dễ đọc trên màn hình nhỏ */
   }
 }
-@media (max-width: 1200px) {
-  .container_all{
-    height: 76rem !important;
+
+@media (max-width: 768px) {
+  .image {
+    width: 9rem !important; /* Thu nhỏ hình ảnh hơn nữa */
+    height: auto;
+    left: 85% !important;
+    z-index: 0;
+    top: 16.5% !important
+  }
+
+  .featuresWrapper {
+    padding-top: 5rem; /* Giảm padding cho màn hình nhỏ */
+  }
+
+  .featuresHeading {
+    font-size: 1.5rem; /* Font nhỏ hơn cho điện thoại */
+  }
+
+  .featuresHeading h1{
+    display: none !important;
+  }
+
+  .content {
+    margin-top: 10rem;
+    padding-right: 50px;
+    font-size: 1rem; /* Font size cho điện thoại */
   }
 }

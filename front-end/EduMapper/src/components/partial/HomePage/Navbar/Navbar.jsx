@@ -23,6 +23,7 @@ import {
   PopoverTrigger,
   Stack,
   Text,
+  useBreakpointValue,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -57,6 +58,24 @@ function ResponsiveAppBar() {
     setAnchorElNav(null);
   };
 
+  const handleNavigateMenu = (name) => {
+    if (name == "Trang chủ"){
+      navigate('/')
+    }
+    if (name == "Trung tâm tiếng anh"){
+      navigate('/english-center')
+    }
+    if (name == "Thi thử"){
+      navigate('/list-test')
+    }
+    if (name == "Liên hệ"){
+      navigate('/contact')
+    }
+    if (name == "Cộng đồng"){
+      navigate('/chat')
+    }
+  }
+
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
@@ -64,6 +83,7 @@ function ResponsiveAppBar() {
   const handleClick = () => {
     navigate("/login");
   };
+  const displayImage = useBreakpointValue({ base: "none", md: "block" });
 
   return (
     <AppBar
@@ -83,6 +103,7 @@ function ResponsiveAppBar() {
             objectFit="cover"
             src={logoEdu}
             alt="Dan Abramov"
+            display={displayImage}
           />
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -114,7 +135,7 @@ function ResponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page} onClick={() => handleNavigateMenu(page)}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -137,7 +158,7 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            EduMapper
           </Typography>
           <Box
             sx={{

@@ -39,3 +39,23 @@ export const CreateAllExam = async (data) => {
     throw error;
   }
 };
+
+export const GetResultExam = async (userId, examId) => {
+  try {
+    const url = `${baseUrl}/api/Exam/user-answers?UserId=${userId}&ExamId=${examId}`;
+    const request = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        //Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    };
+    const response = await fetch(url, request);
+    if (!response.ok) {
+      console.error("There was a problem with API");
+    }
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+};

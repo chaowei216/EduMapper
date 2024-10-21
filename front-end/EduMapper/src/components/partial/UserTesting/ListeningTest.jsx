@@ -53,7 +53,7 @@ export default function ListeningTest(pros) {
                     {question.choices.map((option) => (
                       <FormControlLabel
                         key={option.choiceId}
-                        value={option.choiceContent}
+                        value={option.choiceId}
                         control={<Radio />}
                         label={option.choiceContent}
                       />

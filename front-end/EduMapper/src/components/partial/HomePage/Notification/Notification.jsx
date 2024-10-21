@@ -50,7 +50,7 @@ const Notification = () => {
     // Thiết lập một interval để kiểm tra thông báo mới mỗi phút
     const intervalId = setInterval(() => {
       fetchNotifications();
-    }, 60000); // 60000ms = 1 phút
+    }, 1800000); // 60000ms = 1 phút
 
     return () => clearInterval(intervalId); // Clear interval khi component bị unmount
   }, [user?.id]);

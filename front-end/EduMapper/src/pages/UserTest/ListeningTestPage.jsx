@@ -3,31 +3,65 @@ import HeaderTesting from "../../components/global/HeaderTesting";
 import TestProgress from "../../components/partial/UserTesting/PartQuestion";
 import ListeningTest from "../../components/partial/UserTesting/ListeningTest";
 import { useNavigate, useParams } from "react-router-dom";
-import { GetListeningTest } from "../../api/TestManageApi";
+import { GetListeningTest, SaveAnswer, StartTest, SubmitAnswer } from "../../api/TestManageApi";
+import { toast } from "react-toastify";
+import useAuth from "../../hooks/useAuth";
+import StatusCode from "../../utils/StautsCode";
+import Messages from "../../utils/Message";
 function ListeningTestPage() {
   let { testId } = useParams();
   const [passages, setPassages] = useState([]);
   const [selectedAnswers, setSelectedAnswers] = useState([]);
   const [currentPassage, setCurrentPassage] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [examId, setExamId] = useState("");
   const navigate = useNavigate();
+  const {user} = useAuth();
   useEffect(() => {
     const fetchTestData = async () => {
       try {
         const response = await GetListeningTest(testId);
         const data = await response.json();
         const test = data.metaData;
+        if (test[0].exams.length == 0){
+          toast.error("No data")
+          navigate('/list-test')
+          return;
+        }
+        const startTest = {
+          examId: test[0]?.exams[0]?.examId,
+          userId: user.id
+        }
         setPassages(test[0]?.exams[0]?.passages);
+        setExamId(test[0]?.exams[0]?.examId)
+        await StartTest(startTest)
       } catch (error) {
         console.error("Error fetching test data:", error);
       }
     };
     fetchTestData();
-  }, [testId]);
+  }, [testId, user, navigate]);
 
-  const handleSubmit = () => {
-    console.log(selectedAnswers);
-    navigate('/test-result')
+  const handleSubmit = async () => {
+    const answers = {
+      answers: selectedAnswers
+  }
+    console.log(answers);
+    const data = {
+      examId: examId,
+      userId: user.id
+    }
+    const response = await SaveAnswer(answers);
+    const response2 = await SubmitAnswer(data);
+    console.log(response);
+    console.log(response2);
+    if (response.status == StatusCode.CREATED && response2.status == StatusCode.UPDATED){
+      toast.success(Messages.SUCCESS.SUCCESS_TEST)
+      navigate(`/test-result/${examId}`)
+    }else {
+      toast.error(Messages.ERROR.FAIL_TEST)
+      // navigate('/test-result')
+    }
   };
 
   const handlePassageChange = (index) => {
@@ -57,7 +91,7 @@ function ListeningTestPage() {
       );
 
       const newAnswer = {
-        userId: "test",
+        userId: user.id,
         questionId: questionId,
         choiceId: choiceId || null, // Nếu không có lựa chọn (cho điền trống)
         userChoice: userChoice || null,
