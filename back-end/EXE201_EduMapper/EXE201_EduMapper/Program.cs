@@ -74,15 +74,12 @@ builder.Services.AddScoped<IMessageService, MessageService>();
 // CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigins",
-        builder =>
-        {
-            builder.WithOrigins("https://edumapper-en.vercel.app/")
-                   .AllowAnyHeader()
-                   .AllowAnyMethod()
-                   .WithExposedHeaders("Authorization")
-                   .AllowCredentials();
-        });
+    options.AddPolicy("Cors", builder =>
+    {
+        builder.WithOrigins("*")
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
 });
 
 var app = builder.Build();
