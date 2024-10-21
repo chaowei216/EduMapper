@@ -77,9 +77,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigins",
         builder =>
         {
-            builder//.WithOrigins("https://edumapper-en.vercel.app/")
+            builder.WithOrigins("https://edumapper-en.vercel.app/")
                    .AllowAnyHeader()
                    .AllowAnyMethod()
+                   .WithExposedHeaders("Authorization")
                    .AllowCredentials();
         });
 });
