@@ -1,20 +1,19 @@
-name: Toi muon deploy
+name: Toi chi muon deploy
 
-#sẽ trigger cái job này khi đẩy code lên nhánh nào: => đẩy code lên main thì tự trigger
 on:
   push:
-    branches:
-      - main
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
-#những công việc mà no sẽ khi ddaayr code
 jobs:
   docker-compose:
     runs-on: self-hosted
     environment: docker
     steps:
-    # tải code về vps
     - name: Checkout code
-      uses: actions/checkout@v2 
-    #build tại vps bằng docker thì sau đó con backend sẽ chạy ở docker trong vps
-    - name: Run docker compose
-      run: docker compose up --build -d
+      uses: actions/checkout@v4
+
+    - name: Run 'docker compose'
+      run: docker compose -f compose.yaml up --build -d
+      working-directory: /root/actions-runner/_work/EduMapper/EduMapper/back-end/EXE201_EduMapper/
