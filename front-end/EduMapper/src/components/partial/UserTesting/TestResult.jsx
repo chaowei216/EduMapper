@@ -27,7 +27,6 @@ const TestResult = () => {
     };
     fetchResult();
   }, [examId, user]);
-console.log(dataResult.answers);
 
   return (
     <Container style={{ marginBottom: "3rem", marginTop: "3rem" }}>
