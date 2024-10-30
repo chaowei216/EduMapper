@@ -27,6 +27,7 @@ const TestResult = () => {
     };
     fetchResult();
   }, [examId, user]);
+console.log(dataResult.answers);
 
   return (
     <Container style={{ marginBottom: "3rem", marginTop: "3rem" }}>
@@ -41,7 +42,7 @@ const TestResult = () => {
             <Box sx={{ textAlign: "center" }}>
               <Typography sx={{ marginBottom: 1 }}>Đáp án đúng</Typography>
               <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                {correctAnswers}/{totalQuestions}
+                {dataResult?.totalCorrect}/{totalQuestions}
               </Typography>
             </Box>
           </Grid>
@@ -51,7 +52,7 @@ const TestResult = () => {
                 Thời gian làm bài
               </Typography>
               <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                {timeSpent} / {maxTime}
+                {dataResult?.time?.slice(3,8)} / {maxTime}
               </Typography>
             </Box>
           </Grid>
@@ -63,7 +64,7 @@ const TestResult = () => {
         </Typography>
 
         <Grid container spacing={2}>
-          {dataResult.length > 0 && dataResult.map((section, index) => (
+          {dataResult && dataResult?.answers?.map((section, index) => (
             <Grid item xs={12} sm={6} md={3} key={index}>
               <Box
                 sx={{

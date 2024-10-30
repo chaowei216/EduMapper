@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Azure;
 using BLL.Exceptions;
 using BLL.IService;
 using Common.Constant.Exam;
 using Common.Constant.Message;
+using Common.Constant.Message.Email;
 using Common.Constant.Progress;
 using Common.Constant.Test;
 using Common.DTO;
@@ -20,12 +22,14 @@ namespace BLL.Service
     public class ExamService : IExamService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
 
-        public ExamService(IUnitOfWork unitOfWork, IMapper mapper)
+        public ExamService(IUnitOfWork unitOfWork, IMapper mapper, IEmailService emailService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _emailService = emailService;
         }
 
         public async Task<ResponseDTO> AnswerQuestion(AnswerDTO request)
@@ -386,20 +390,59 @@ namespace BLL.Service
         public async Task<ResponseDTO> StartExam(ProgressCreateDTO progress)
         {
             var mapProgress = _mapper.Map<Progress>(progress);
-            mapProgress.ProgressId = Guid.NewGuid().ToString();
-            mapProgress.TestedDate = DateTime.Now;
-            mapProgress.Status = ProgressStatus.InProgress;
 
-            var user = await _unitOfWork.UserRepository.GetByID(progress.UserId);
-            var exam = await _unitOfWork.ExamRepository.GetByID(progress.ExamId);
-
-            if (exam == null || user == null)
+            var checkExist = await _unitOfWork.ProgressRepository.Get(filter: c => c.ExamId == progress.ExamId && c.UserId == progress.UserId);
+            var checkExist1 = checkExist.FirstOrDefault();
+            if (checkExist1 != null)
             {
-                throw new NotFoundException(GeneralMessage.NotFound);
-            }
+                checkExist1.ProgressId = checkExist1.ProgressId;
+                checkExist1.Score = 0;
+                checkExist1.Percent = 0;
+                checkExist1.Status = ProgressStatus.InProgress;
+                checkExist1.UpdatedDate = null;
+                checkExist1.ExamId = checkExist1.ExamId;
+                checkExist1.UserId = checkExist1.UserId;
+                checkExist1.TestedDate = DateTime.Now;
+                _unitOfWork.ProgressRepository.Update(checkExist1);
+                _unitOfWork.Save();
 
-            _unitOfWork.ProgressRepository.Insert(mapProgress);
-            _unitOfWork.Save();
+                var passage = await _unitOfWork.PassageRepository.Get(filter: c => c.ExamId == progress.ExamId);
+                foreach (var eachPassage in passage)
+                {
+                    var question = await _unitOfWork.QuestionRepository.Get(filter: c => c.PassageId == eachPassage.PassageId);
+
+                    foreach (var eachQuestion in question)
+                    {
+                        var answer = await _unitOfWork.UserAnswerRepository.Get(filter: c => c.UserId == progress.UserId && c.QuestionId == eachQuestion.QuestionId);
+
+                        foreach(var eachAnswer in answer)
+                        {
+                            if (eachAnswer != null)
+                            {
+                                _unitOfWork.UserAnswerRepository.Delete(eachAnswer);
+                                _unitOfWork.Save();
+                            }
+                        }
+                    }
+                }
+            } else
+            {
+                
+                mapProgress.ProgressId = Guid.NewGuid().ToString();
+                mapProgress.TestedDate = DateTime.Now;
+                mapProgress.Status = ProgressStatus.InProgress;
+
+                var user = await _unitOfWork.UserRepository.GetByID(progress.UserId);
+                var exam = await _unitOfWork.ExamRepository.GetByID(progress.ExamId);
+
+                if (exam == null || user == null)
+                {
+                    throw new NotFoundException(GeneralMessage.NotFound);
+                }
+
+                _unitOfWork.ProgressRepository.Insert(mapProgress);
+                _unitOfWork.Save();
+            }
 
             return new ResponseDTO
             {
@@ -562,18 +605,21 @@ namespace BLL.Service
         public async Task<ResponseDTO> GetUserAnswer(GetFinishDTO request)
         {
             var exam = await _unitOfWork.ExamRepository.Get(filter: c => c.ExamId == request.ExamId,
-                                                        includeProperties: "Progress,Passages,Passages.SubQuestion," +
-                                                                                   "Passages.Sections,Passages.SubQuestion.Choices,Passages.SubQuestion.UserAnswers");
+                                                            includeProperties: "Progress,Passages,Passages.SubQuestion," +
+                                                                               "Passages.Sections,Passages.SubQuestion.Choices,Passages.SubQuestion.UserAnswers");
 
             var eachExam = exam.FirstOrDefault();
             List<CheckAnswerDTO> response = new List<CheckAnswerDTO>();
+            var progress = await _unitOfWork.ProgressRepository.Get(filter: c => c.ExamId == request.ExamId && c.UserId == request.UserId);
+            var thisProgress = progress.FirstOrDefault();
+            int totalCorrectAnswers = 0;
 
             if (eachExam != null)
             {
-                foreach(var pas in eachExam.Passages)
+                foreach (var pas in eachExam.Passages)
                 {
                     var passage = await _unitOfWork.PassageRepository.GetByID(pas.PassageId);
-                    if(passage != null)
+                    if (passage != null)
                     {
                         foreach (var ques in passage.SubQuestion)
                         {
@@ -589,25 +635,47 @@ namespace BLL.Service
                                 eachResponse.UserChoice = eachAnswer.UserChoice;
                                 eachResponse.CorrectAnswer = ques.CorrectAnswer;
 
+                                if (eachAnswer.IsCorrect)
+                                {
+                                    totalCorrectAnswers++; 
+                                }
+
                                 response.Add(eachResponse);
-                            } else
+                            }
+                            else
                             {
                                 eachResponse.QuestionIndex = ques.QuestionIndex;
                                 eachResponse.IsCorrect = false;
                                 eachResponse.UserChoice = null;
                                 eachResponse.CorrectAnswer = ques.CorrectAnswer;
                             }
-                            
                         }
                     }
                 }
-                
             }
 
             return new ResponseDTO
             {
                 IsSuccess = true,
-                MetaData = response,
+                MetaData = new
+                {
+                    Answers = response,   
+                    TotalCorrect = totalCorrectAnswers,
+                    Time = thisProgress.UpdatedDate - thisProgress.TestedDate,
+                },
+                StatusCode = StatusCodeEnum.OK,
+                Message = ExamMessage.GetAnswers
+            };
+        }
+
+
+        public ResponseDTO SendSpeakingEmail(ScheduleSpeakingDTO request)
+        {
+            _emailService.SendSpeakingTestEmail(request, EmailMessage.SpeakingEmailSubject);
+
+            return new ResponseDTO
+            {
+                IsSuccess = true,
                 StatusCode = StatusCodeEnum.OK,
                 Message = ExamMessage.GetAnswers
             };

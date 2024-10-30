@@ -101,6 +101,33 @@ namespace EXE201_EduMapper.Controllers
             }
         }
 
+
+        [HttpPost("speaking-email")]
+        [ProducesResponseType(201, Type = typeof(ResponseDTO))]
+        [ProducesResponseType(400, Type = typeof(ResponseDTO))]
+        public IActionResult AnswerQuestion([FromBody] ScheduleSpeakingDTO request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO
+                {
+                    StatusCode = StatusCodeEnum.BadRequest,
+                    Message = ModelState.ToString()!
+                });
+            }
+
+            var result = _examService.SendSpeakingEmail(request);
+
+            if (result.IsSuccess)
+            {
+                return Created(uri: "", value: result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
         [HttpPost("start-exam")]
         [ProducesResponseType(201, Type = typeof(ResponseDTO))]
         [ProducesResponseType(400, Type = typeof(ResponseDTO))]
