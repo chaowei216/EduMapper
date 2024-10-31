@@ -1,11 +1,14 @@
 using BLL.Hubs;
 using BLL.IService;
 using BLL.Service;
+using Common.DTO.Payment.PayOS;
 using EXE201_EduMapper.Extension;
 using EXE201_EduMapper.Middlewares;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using System.Runtime;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -70,6 +73,10 @@ builder.Services.AddScoped<IVnPayService, VnPayService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<IPayOSService, PayOSService>();
+
+// setting
+builder.Services.Configure<PaymentConfig>(builder.Configuration.GetSection("PayOs"));
 
 // CORS
 builder.Services.AddCors(options =>

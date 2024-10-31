@@ -1,5 +1,6 @@
 ﻿using Common.DTO;
 using Common.DTO.Payment;
+using Common.DTO.Payment.PayOS;
 using Microsoft.AspNetCore.Http;
 
 namespace BLL.IService

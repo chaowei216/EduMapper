@@ -6,11 +6,12 @@ using Common.Constant.Notification;
 using Common.Constant.Payment;
 using Common.DTO;
 using Common.DTO.Payment;
+using Common.DTO.Payment.PayOS;
 using Common.Enum;
-using DAL.Models;
 using DAL.UnitOfWork;
 using DAO.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace BLL.Service
 {
@@ -22,13 +23,17 @@ namespace BLL.Service
         private readonly INotificationService _notificationService;
         private readonly IVnPayService _vnpPayService;
         private readonly IUserService _userService;
+        private readonly IPayOSService _payOSService;
+        private readonly IConfiguration _configuration;
 
         public PaymentService(ITransactionService transactionService,
                               IVnPayService vnpPayService,
                               IMembershipService membershipService,
                               INotificationService notificationService,
                               IUnitOfWork unitOfWork,
-                              IUserService userService)
+                              IUserService userService,
+                              IPayOSService payOSService,
+                              IConfiguration configuration)
         {
             _transactionService = transactionService;
             _unitOfWork = unitOfWork;
@@ -36,6 +41,8 @@ namespace BLL.Service
             _membershipService = membershipService;
             _notificationService = notificationService;
             _userService = userService;
+            _payOSService = payOSService;
+            _configuration = configuration;
         }
 
         public async Task<ResponseDTO> CreatePaymentRequest(PaymentRequestDTO paymentInfo, HttpContext context)
@@ -74,7 +81,7 @@ namespace BLL.Service
                 await _transactionService.UpdateTransaction(unpaidTrans.TransactionId, unpaidTrans);
             }
 
-            var newTran = new Transaction()
+            var newTran = new DAO.Models.Transaction()
             {
                 TransactionId = Guid.NewGuid().ToString(),
                 PaymentMethod = paymentInfo.PaymentMethod,
@@ -92,13 +99,29 @@ namespace BLL.Service
             // save
             _unitOfWork.Save();
 
-            string url = _vnpPayService.CreatePaymentUrl(memberShip, context);
+            // choose payment method
+            object response;
+            if (paymentInfo.PaymentMethod == PaymentConst.PAYOS)
+            {
+                response = await _payOSService.CreatePaymentLink(new PayOSRequestDTO
+                {
+                    MemberShipName = memberShip.MemberShipName,
+                    Description = PaymentConst.PAYMENT_DESCRIPTION + memberShip.MemberShipName,
+                    TotalPrice = (int)memberShip.Price,
+                    returnUrl = _configuration["PaymentOSCallBack:ReturnUrl"]!,
+                    cancelUrl = _configuration["PaymentOSCallBack:CancelUrl"]!
+                });
+            } else
+            {
+                response = _vnpPayService.CreatePaymentUrl(memberShip, context);
+            }
+
             return new ResponseDTO
             {
                 IsSuccess = true,
                 Message = GeneralMessage.CreateSuccess,
                 StatusCode = StatusCodeEnum.Created,
-                MetaData = url
+                MetaData = response
             };
         }
 
@@ -134,6 +157,12 @@ namespace BLL.Service
                     unpaidTrans.TransactionInfo = response.TransactionInfo;
                     unpaidTrans.TransactionNumber = response.TransactionNumber;
                     unpaidTrans.Status = PaymentConst.CancelStatus;
+
+                    // cancel link
+                    if (unpaidTrans.PaymentMethod == PaymentConst.PAYOS)
+                    {
+                        await _payOSService.CancelPaymentLink(long.Parse(response.TransactionNumber));
+                    }
 
                     // update trans description
                     notifyDes = PaymentConst.FAIL;
