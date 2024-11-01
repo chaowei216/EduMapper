@@ -16,13 +16,16 @@ namespace BLL.Service
     public class UserService : IUserService
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMembershipService _membershipService;
         private readonly IMapper _mapper;
 
         public UserService(UserManager<ApplicationUser> userManager,
-                           IMapper mapper)
+                           IMapper mapper,
+                           IMembershipService membershipService)
         {
             _userManager = userManager;
             _mapper = mapper;
+            _membershipService = membershipService;
         }
 
         public async Task<ResponseDTO> GetUserByEmail(string email)
@@ -42,6 +45,10 @@ namespace BLL.Service
             mappedUser.Avatar = !string.IsNullOrEmpty(user.Avatar) ? user.Avatar : user.ImageLink;
             var roleList = await _userManager.GetRolesAsync(user);
             mappedUser.RoleName = roleList.Count == 0 ? Config.AdminName : roleList[0];
+
+            // set member ship
+            var memberShip = await _membershipService.GetCurMemberShip(mappedUser.Id);
+            mappedUser.CurrentMembership = memberShip != null ? memberShip.MemberShipName : null;
 
             // return
             return new ResponseDTO

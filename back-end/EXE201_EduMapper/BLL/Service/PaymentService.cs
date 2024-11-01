@@ -1,5 +1,6 @@
 ﻿using BLL.Exceptions;
 using BLL.IService;
+using Common.Constant;
 using Common.Constant.Message;
 using Common.Constant.Message.MemberShip;
 using Common.Constant.Notification;
@@ -59,11 +60,16 @@ namespace BLL.Service
             // check if user has already package
             var userMemberShips = await _unitOfWork.MemberShipDetailRepository.GetMemberShipOfUser(paymentInfo.UserId);
 
+            var freePackage = await _unitOfWork.MemberShipRepository.GetMemberShipByName(Config.MEMBERSHIP_FREE);
+
             // if had
-            if (userMemberShips.Any(p => p.MemberShipId == paymentInfo.MemberShipId && !p.IsFinished))
+            if (userMemberShips.Where(p => freePackage != null ? p.MemberShipId != freePackage!.MemberShipId : true)
+                .Any(p => p.MemberShipId == paymentInfo.MemberShipId && !p.IsFinished))
             {
                 // check date
-                foreach (var ms in userMemberShips.Where(p => p.MemberShipId == paymentInfo.MemberShipId && !p.IsFinished))
+                var msList = userMemberShips.Where(p => freePackage != null ? p.MemberShipId != freePackage!.MemberShipId : true
+                                                            && p.MemberShipId == paymentInfo.MemberShipId && !p.IsFinished);
+                foreach (var ms in msList)
                 {
                     if (ms.ExpiredDate < DateTime.Now)
                     {

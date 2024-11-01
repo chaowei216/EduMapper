@@ -103,6 +103,13 @@ namespace BLL.Service
             };
         }
 
+        public async Task<MemberShip?> GetCurMemberShip(string userId)
+        {
+            var memberShip = await _unitOfWork.MemberShipDetailRepository.GetCurMemberShip(userId);
+
+            return memberShip;
+        }
+
         public async Task<ResponseDTO> GetMemberShip(string id)
         {
             var membership = await _unitOfWork.MemberShipRepository.GetByID(id);
@@ -132,7 +139,9 @@ namespace BLL.Service
         public async Task<bool> RevokeUserMemberShip(MemberShipDetail memberShipDetail)
         {
             memberShipDetail.IsFinished = true;
-            return await _unitOfWork.MemberShipDetailRepository.Update(memberShipDetail.MemberShipDetailId, memberShipDetail);
+            var result = await _unitOfWork.MemberShipDetailRepository.Update(memberShipDetail.MemberShipDetailId, memberShipDetail);
+            _unitOfWork.Save();
+            return result;
         }
 
         public async Task UpdateMemberShip(string id, MemberShipUpdateDTO request)

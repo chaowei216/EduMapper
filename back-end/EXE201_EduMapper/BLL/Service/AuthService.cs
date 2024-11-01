@@ -159,6 +159,10 @@ namespace BLL.Service
             var roleList = await _userManager.GetRolesAsync(user);
             mappedUser.RoleName = roleList.Count == 0 ? Config.AdminName : roleList[0];
 
+            // set member ship
+            var memberShip = await _membershipService.GetCurMemberShip(mappedUser.Id);
+            mappedUser.CurrentMembership = memberShip != null ? memberShip.MemberShipName : null;
+
             return new ResponseDTO
             {
                 IsSuccess = true,
@@ -234,6 +238,10 @@ namespace BLL.Service
             var roleList = await _userManager.GetRolesAsync(user);
             mappedUser.RoleName = roleList.Count == 0 ? Config.AdminName : roleList[0];
 
+            // set member ship
+            var memberShip = await _membershipService.GetCurMemberShip(mappedUser.Id);
+            mappedUser.CurrentMembership = memberShip != null ? memberShip.MemberShipName : null;
+
             var response = new LoginResponseDTO
             {
                 User = mappedUser,
@@ -283,6 +291,10 @@ namespace BLL.Service
             mappedUser.Avatar = !string.IsNullOrEmpty(user.Avatar) ? user.Avatar : user.ImageLink;
             var roleList = await _userManager.GetRolesAsync(user);
             mappedUser.RoleName = roleList.Count == 0 ? Config.AdminName : roleList[0];
+
+            // set member ship
+            var memberShip = await _membershipService.GetCurMemberShip(mappedUser.Id);
+            mappedUser.CurrentMembership = memberShip != null ? memberShip.MemberShipName : null;
 
             var response = new LoginResponseDTO
             {
@@ -378,6 +390,10 @@ namespace BLL.Service
             responseUser.Avatar = !string.IsNullOrEmpty(mappedUser.Avatar) ? mappedUser.Avatar : mappedUser.ImageLink;
             var roleList = await _userManager.GetRolesAsync(mappedUser);
             responseUser.RoleName = roleList.Count == 0 ? Config.AdminName : roleList[0];
+
+            // set member ship
+            var memberShip = await _membershipService.GetCurMemberShip(mappedUser.Id);
+            responseUser.CurrentMembership = memberShip != null ? memberShip.MemberShipName : null;
 
             return new ResponseDTO
             {

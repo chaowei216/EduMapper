@@ -22,6 +22,6 @@
         public const string INVALID_TRANS = "Giao dịch không hợp lệ";
 
         // description
-        public const string PAYMENT_DESCRIPTION = "Thanh toán gói ";
+        public const string PAYMENT_DESCRIPTION = "Mua ";
     }
 }

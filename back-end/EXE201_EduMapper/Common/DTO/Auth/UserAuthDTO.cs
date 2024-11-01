@@ -12,5 +12,6 @@
         public bool ImageLinked { get; set; }
         public bool EmailConfirmed { get; set; }
         public string RoleName { get; set; } = null!;
+        public string? CurrentMembership { get; set; }
     }
 }
