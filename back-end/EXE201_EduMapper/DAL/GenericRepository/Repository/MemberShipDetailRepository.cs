@@ -1,4 +1,5 @@
-﻿using DAL.Data;
+﻿using Common.Constant;
+using DAL.Data;
 using DAL.GenericRepository.IRepository;
 using DAL.Models;
 using DAL.Repository;
@@ -24,7 +25,8 @@ namespace DAL.GenericRepository.Repository
 
         public async Task<MemberShip?> GetCurMemberShip(string userId)
         {
-            var memberShipDetail = await _context.MemberShipDetails.FirstOrDefaultAsync(p => p.UserId == userId && !p.IsFinished);
+            var memberShipDetail = await _context.MemberShipDetails.Where(p => p.MemberShip.MemberShipName != Config.MEMBERSHIP_FREE)
+                                                                    .FirstOrDefaultAsync(p => p.UserId == userId && !p.IsFinished);
 
             if (memberShipDetail != null)
             {
