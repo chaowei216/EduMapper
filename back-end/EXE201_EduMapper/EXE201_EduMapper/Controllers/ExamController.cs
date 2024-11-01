@@ -30,6 +30,15 @@ namespace EXE201_EduMapper.Controllers
             return Ok(result);
         }
 
+        [HttpGet("user-writing-answer")]
+        [ProducesResponseType(200, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> GetWritingAnswerById([FromQuery] string id)
+        {
+            var result = await _examService.GetWritingAnswerById(id);
+
+            return Ok(result);
+        }
+
         [HttpGet("speaking-request")]
         [ProducesResponseType(200, Type = typeof(ResponseDTO))]
         public async Task<IActionResult> GetAllSpeakingRequest([FromQuery] ExamParameters request)

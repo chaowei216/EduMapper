@@ -19,6 +19,7 @@ using Common.Enum;
 using DAL.Models;
 using DAL.UnitOfWork;
 using Google.Apis.Storage.v1.Data;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -896,6 +897,18 @@ namespace BLL.Service
                 Message = ExamMessage.SaveAnswerSuccessfully,
                 StatusCode = StatusCodeEnum.Created,
                 MetaData = answer
+            };
+        }
+
+        public async Task<ResponseDTO> GetWritingAnswerById(string userAnswerId)
+        {
+            var thisAnswer = await _unitOfWork.UserAnswerRepository.GetByID(userAnswerId);
+
+            return new ResponseDTO
+            {
+                IsSuccess = true,
+                StatusCode = StatusCodeEnum.OK,
+                MetaData = thisAnswer
             };
         }
     }

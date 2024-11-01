@@ -209,6 +209,32 @@ namespace BLL.Service
             };
         }
 
+        public async Task<ResponseDTO> GetSpeakingTestById(string id)
+        {
+            var test = await _unitOfWork.TestRepository.Get(includeProperties: "Exams,Exams.Passages,Exams.Passages.SubQuestion," +
+                                                                       "Exams.Passages.Sections,Exams.Passages.SubQuestion.Choices",
+                                                filter: c => c.TestId == id);
+
+            foreach (var item in test)
+            {
+                item.Exams = item.Exams.Where(e => e.ExamName.ToLower().Contains(ExamNameConstant.SpeakingTest.ToLower())).ToList();
+            }
+
+            if (test == null)
+            {
+                throw new NotFoundException(GeneralMessage.NotFound);
+            }
+
+            var mapList = _mapper.Map<List<TestDTO>>(test);
+            return new ResponseDTO
+            {
+                IsSuccess = true,
+                MetaData = mapList,
+                StatusCode = StatusCodeEnum.OK,
+                Message = GeneralMessage.GetSuccess
+            };
+        }
+
         public async Task<ResponseDTO> GetReadingTestById(string id)
         {
             var test = await _unitOfWork.TestRepository.Get(filter: c => c.TestId == id, includeProperties: "Exams,Exams.Passages,Exams.Passages.SubQuestion," +
