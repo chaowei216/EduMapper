@@ -46,6 +46,7 @@ namespace EXE201_EduMapper.Profiles
             CreateMap<Exam, ExamCreateDTO>().ReverseMap();
             CreateMap<Center, CenterDTO>().ReverseMap();
             CreateMap<Feedback, FeedbackDTO>().ReverseMap();
+            CreateMap<UserAnswer, WritingDTO>().ReverseMap();
             CreateMap<Progress, ProgressCreateDTO>().ReverseMap();
             CreateMap<ProgramTraining, ProgramTrainingDTO>().ReverseMap();
             CreateMap<PagedList<Transaction>, PaginationResponseDTO<TransactionDTO>>().ReverseMap();
@@ -69,7 +70,17 @@ namespace EXE201_EduMapper.Profiles
             CreateMap<PagedList<Center>, CenterDTO>().ReverseMap();
             CreateMap<Test, TestCreateDTO>().ReverseMap();
             CreateMap<PagedList<Center>, PaginationResponseDTO<CenterDTO>>().ReverseMap();
-
+            CreateMap<Progress, ProgressSpeakingDTO>().ForMember(dest => dest.ExamName, opt => opt.MapFrom(src => src.Exam.ExamName))
+                                                    .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User.FullName))
+                                                    .ReverseMap();
+            CreateMap<UserAnswer, WritingAnswerDTO>().ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User.FullName))
+                                                    .ForMember(dest => dest.QuestionText, opt => opt.MapFrom(src => src.Question.QuestionText))
+                                                    .ForMember(dest => dest.PassageTitle, opt => opt.MapFrom(src => src.Question.Passage.PassageTitle))
+                                                    .ForMember(dest => dest.PassageContent, opt => opt.MapFrom(src => src.Question.Passage.PassageContent))
+                                                    .ReverseMap();
+            CreateMap<PagedList<UserAnswer>, WritingAnswerDTO>().ReverseMap();
+            CreateMap<PagedList<UserAnswer>, PaginationResponseDTO<WritingAnswerDTO>>().ReverseMap();
+            CreateMap<PagedList<Progress>, PaginationResponseDTO<ProgressSpeakingDTO>>().ReverseMap();
         }
     }
 }

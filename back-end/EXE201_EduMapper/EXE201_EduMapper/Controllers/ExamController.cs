@@ -30,6 +30,24 @@ namespace EXE201_EduMapper.Controllers
             return Ok(result);
         }
 
+        [HttpGet("speaking-request")]
+        [ProducesResponseType(200, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> GetAllSpeakingRequest([FromQuery] ExamParameters request)
+        {
+            var result = await _examService.GetSpeakingRequest(request);
+
+            return Ok(result);
+        }
+
+        [HttpGet("writing-answer")]
+        [ProducesResponseType(200, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> GetAllWriting([FromQuery] ExamParameters request)
+        {
+            var result = await _examService.GetWritingAnswer(request);
+
+            return Ok(result);
+        }
+
         [HttpGet("user-answers")]
         [ProducesResponseType(200, Type = typeof(ResponseDTO))]
         public async Task<IActionResult> GetUserAnswer([FromQuery] GetFinishDTO request)
@@ -101,6 +119,32 @@ namespace EXE201_EduMapper.Controllers
             }
         }
 
+        [HttpPost("answer-writing")]
+        [ProducesResponseType(201, Type = typeof(ResponseDTO))]
+        [ProducesResponseType(400, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> AnswerWritingQuestion([FromBody] WritingDTO examDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO
+                {
+                    StatusCode = StatusCodeEnum.BadRequest,
+                    Message = ModelState.ToString()!
+                });
+            }
+
+            var result = await _examService.AnswerWritingQuestion(examDTO);
+
+            if (result.IsSuccess)
+            {
+                return Created(uri: "", value: result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
 
         [HttpPost("speaking-email")]
         [ProducesResponseType(201, Type = typeof(ResponseDTO))]
@@ -117,6 +161,32 @@ namespace EXE201_EduMapper.Controllers
             }
 
             var result = _examService.SendSpeakingEmail(request);
+
+            if (result.IsSuccess)
+            {
+                return Created(uri: "", value: result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
+        [HttpPost("request-speaking")]
+        [ProducesResponseType(201, Type = typeof(ResponseDTO))]
+        [ProducesResponseType(400, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> RequestSpeaking([FromBody] ProgressCreateDTO progressDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO
+                {
+                    StatusCode = StatusCodeEnum.BadRequest,
+                    Message = ModelState.ToString()!
+                });
+            }
+
+            var result = await _examService.RequestSpeakingExam(progressDTO);
 
             if (result.IsSuccess)
             {

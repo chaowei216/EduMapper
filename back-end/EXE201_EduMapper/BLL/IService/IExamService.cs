@@ -39,16 +39,23 @@ namespace BLL.IService
         /// <summary>
         /// Create exam of test 
         /// </summary>
-        /// <param name="exam"></param>
+        /// <param name="progress"></param>
         /// <returns></returns>
         Task<ResponseDTO> StartExam(ProgressCreateDTO progress);
 
         /// <summary>
         /// Create exam of test 
         /// </summary>
-        /// <param name="exam"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
         Task<ResponseDTO> AnswerQuestion(AnswerDTO request);
+
+        /// <summary>
+        /// Answer writing question
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<ResponseDTO> AnswerWritingQuestion(WritingDTO request);
 
         /// <summary>
         /// Submit test
@@ -65,10 +72,26 @@ namespace BLL.IService
         Task<ResponseDTO> GetUserAnswer(GetFinishDTO request);
 
         /// <summary>
+        /// Request speaking
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<ResponseDTO> RequestSpeakingExam(ProgressCreateDTO request);
+
+        /// <summary>
+        /// Get speaking request
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<ResponseDTO> GetSpeakingRequest(ExamParameters request);
+
+        /// <summary>
         /// Get user answer
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
         ResponseDTO SendSpeakingEmail(ScheduleSpeakingDTO request);
+
+        Task<ResponseDTO> GetWritingAnswer(ExamParameters request);
     }
 }
