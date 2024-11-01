@@ -17,6 +17,6 @@ namespace BLL.IService
         /// </summary>
         /// <param name="request"></param>
         /// <param name="subject"></param>
-        void SendSpeakingTestEmail(ScheduleSpeakingDTO request, string subject);
+        void SendSpeakingTestEmail(ScheduleSpeakingDTO request, DateTime scheduleDate, string subject);
     }
 }

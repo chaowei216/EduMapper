@@ -12,6 +12,8 @@ namespace Common.DTO.Progress
         public DateTime TestedDate { get; set; }
         public string Status { get; set; } = string.Empty;
         public string ExamName { get; set; } = null!;
+        public string ExamId { get; set; } = null!;
+        public string UserEmail { get; set; } = null!;
         public string FullName { get; set; } = null!;
     }
 }

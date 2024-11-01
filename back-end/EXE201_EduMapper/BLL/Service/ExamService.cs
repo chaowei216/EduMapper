@@ -98,6 +98,7 @@ namespace BLL.Service
                                 thisAns.TestedDate = thisAns.TestedDate;
                                 thisAns.Score = thisAns.Score;
                                 _unitOfWork.ProgressRepository.Update(thisAns);
+                                _unitOfWork.Save();
                             }
                         }
                     }
@@ -111,6 +112,7 @@ namespace BLL.Service
                     mapAnswer.UserAnswerId = first.UserAnswerId;
                     mapAnswer.CreateAt = first.CreateAt;
                     _unitOfWork.UserAnswerRepository.Update(mapAnswer);
+                    _unitOfWork.Save();
                 }
                 else
                 {
@@ -118,9 +120,8 @@ namespace BLL.Service
                     mapAnswer.CreateAt = DateTime.Now;
 
                     _unitOfWork.UserAnswerRepository.Insert(mapAnswer);
+                    _unitOfWork.Save();
                 }
-
-                _unitOfWork.Save();
             }
 
             return new ResponseDTO
@@ -449,7 +450,13 @@ namespace BLL.Service
                 {
                     throw new NotFoundException(GeneralMessage.NotFound);
                 }
-
+                /*_unitOfWork.TestResultRepository.Insert(new TestResult
+                {
+                    Score = 0,
+                    Status = ProgressStatus.InProgress,
+                    TestedDate = DateTime.Now,
+                    TestResultId = Guid.NewGuid().ToString(),
+                });*/
                 _unitOfWork.ProgressRepository.Insert(mapProgress);
                 _unitOfWork.Save();
             }
@@ -693,19 +700,35 @@ namespace BLL.Service
         }
 
 
-        public ResponseDTO SendSpeakingEmail(ScheduleSpeakingDTO request)
+        public async Task<ResponseDTO> SendSpeakingEmail(ScheduleSpeakingDTO request)
         {
-            _emailService.SendSpeakingTestEmail(request, EmailMessage.SpeakingEmailSubject);
+            var user = await _unitOfWork.UserRepository.Get(filter: c => c.Email == request.UserEmail);
+            var thisUser = user.FirstOrDefault();
+
+            if(thisUser == null)
+            {
+                throw new NotFoundException(GeneralMessage.NotFound);
+            }
+
+            var progress = await _unitOfWork.ProgressRepository.Get(filter: c => c.ExamId == request.ExamId && c.UserId == thisUser.Id);
+            var thisProgress = progress.FirstOrDefault();
+
+            if(thisProgress == null)
+            {
+                throw new NotFoundException(GeneralMessage.NotFound);
+
+            }
+            _emailService.SendSpeakingTestEmail(request, thisProgress.TestedDate, EmailMessage.SpeakingEmailSubject);
 
             return new ResponseDTO
             {
                 IsSuccess = true,
-                StatusCode = StatusCodeEnum.OK,
-                Message = ExamMessage.GetAnswers
+                StatusCode = StatusCodeEnum.Created,
+                Message = ExamMessage.EmailSpeaking
             };
         }
 
-        public async Task<ResponseDTO> RequestSpeakingExam(ProgressCreateDTO request)
+        public async Task<ResponseDTO> RequestSpeakingExam(RequestSpeakingDTO request)
         {
             var mapProgress = _mapper.Map<Progress>(request);
 
@@ -714,21 +737,16 @@ namespace BLL.Service
 
             if (thisProgress != null)
             {
-                thisProgress.ProgressId = thisProgress.ProgressId;
-                thisProgress.Score = 0;
-                thisProgress.Percent = 0;
-                thisProgress.Status = ProgressStatus.InProgress;
-                thisProgress.UpdatedDate = null;
-                thisProgress.ExamId = thisProgress.ExamId;
-                thisProgress.UserId = thisProgress.UserId;
-                thisProgress.TestedDate = DateTime.Now;
-                _unitOfWork.ProgressRepository.Update(thisProgress);
-                _unitOfWork.Save();
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = StatusCodeEnum.BadRequest,
+                };
             }
             else
             {
                 mapProgress.ProgressId = Guid.NewGuid().ToString();
-                mapProgress.TestedDate = DateTime.Now;
+                mapProgress.TestedDate = request.TestDate;
                 mapProgress.Status = ProgressStatus.InProgress;
 
                 var user = await _unitOfWork.UserRepository.GetByID(request.UserId);
@@ -778,8 +796,8 @@ namespace BLL.Service
             {
                 IsSuccess = true,
                 MetaData = mappedResponse,
-                StatusCode = StatusCodeEnum.Created,
-                Message = GeneralMessage.CreateSuccess
+                StatusCode = StatusCodeEnum.OK,
+                Message = GeneralMessage.GetSuccess
             };
         }
 
@@ -831,41 +849,45 @@ namespace BLL.Service
             };
         }
 
-        public async Task<ResponseDTO> AnswerWritingQuestion(WritingDTO request)
+        public async Task<ResponseDTO> AnswerWritingQuestion(AnswerWritingDTO answer)
         {
-            var mapAnswer = _mapper.Map<UserAnswer>(request);
-            mapAnswer.IsCorrect = null;
+            foreach(var request in answer.WritingsAnswer)
+            {
+                var mapAnswer = _mapper.Map<UserAnswer>(request);
+                mapAnswer.IsCorrect = null;
 
-            if (request.UserChoice != null)
-            {
-                mapAnswer.UserChoice = request.UserChoice;
-                mapAnswer.QuestionId = request.QuestionId;
-                mapAnswer.UserId = request.UserId;
-            } else
-            {
-                mapAnswer.UserChoice = "";
-                mapAnswer.QuestionId = request.QuestionId;
-                mapAnswer.UserId = request.UserId;
+                if (request.UserChoice != null)
+                {
+                    mapAnswer.UserChoice = request.UserChoice;
+                    mapAnswer.QuestionId = request.QuestionId;
+                    mapAnswer.UserId = request.UserId;
+                }
+                else
+                {
+                    mapAnswer.UserChoice = "";
+                    mapAnswer.QuestionId = request.QuestionId;
+                    mapAnswer.UserId = request.UserId;
+                }
+
+                var thisAnswer = await _unitOfWork.UserAnswerRepository.Get(filter: c => c.UserId == request.UserId && c.QuestionId == request.QuestionId);
+                var first = thisAnswer.FirstOrDefault();
+
+                if (first != null)
+                {
+                    mapAnswer.UserAnswerId = first.UserAnswerId;
+                    mapAnswer.CreateAt = first.CreateAt;
+                    _unitOfWork.UserAnswerRepository.Update(mapAnswer);
+                    _unitOfWork.Save();
+                }
+                else
+                {
+                    mapAnswer.UserAnswerId = Guid.NewGuid().ToString();
+                    mapAnswer.CreateAt = DateTime.Now;
+
+                    _unitOfWork.UserAnswerRepository.Insert(mapAnswer);
+                    _unitOfWork.Save();
+                }
             }
-
-            var thisAnswer = await _unitOfWork.UserAnswerRepository.Get(filter: c => c.UserId == request.UserId && c.QuestionId == request.QuestionId);
-            var first = thisAnswer.FirstOrDefault();
-
-            if (first != null)
-            {
-                mapAnswer.UserAnswerId = first.UserAnswerId;
-                mapAnswer.CreateAt = first.CreateAt;
-                _unitOfWork.UserAnswerRepository.Update(mapAnswer);
-            }
-            else
-            {
-                mapAnswer.UserAnswerId = Guid.NewGuid().ToString();
-                mapAnswer.CreateAt = DateTime.Now;
-
-                _unitOfWork.UserAnswerRepository.Insert(mapAnswer);
-            }
-
-            _unitOfWork.Save();
 
 
             return new ResponseDTO
@@ -873,7 +895,7 @@ namespace BLL.Service
                 IsSuccess = true,
                 Message = ExamMessage.SaveAnswerSuccessfully,
                 StatusCode = StatusCodeEnum.Created,
-                MetaData = request
+                MetaData = answer
             };
         }
     }

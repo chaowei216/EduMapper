@@ -122,7 +122,7 @@ namespace EXE201_EduMapper.Controllers
         [HttpPost("answer-writing")]
         [ProducesResponseType(201, Type = typeof(ResponseDTO))]
         [ProducesResponseType(400, Type = typeof(ResponseDTO))]
-        public async Task<IActionResult> AnswerWritingQuestion([FromBody] WritingDTO examDTO)
+        public async Task<IActionResult> AnswerWritingQuestion([FromBody] AnswerWritingDTO examDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -149,7 +149,7 @@ namespace EXE201_EduMapper.Controllers
         [HttpPost("speaking-email")]
         [ProducesResponseType(201, Type = typeof(ResponseDTO))]
         [ProducesResponseType(400, Type = typeof(ResponseDTO))]
-        public IActionResult AnswerQuestion([FromBody] ScheduleSpeakingDTO request)
+        public async Task<IActionResult> AnswerQuestion([FromBody] ScheduleSpeakingDTO request)
         {
             if (!ModelState.IsValid)
             {
@@ -160,7 +160,7 @@ namespace EXE201_EduMapper.Controllers
                 });
             }
 
-            var result = _examService.SendSpeakingEmail(request);
+            var result = await _examService.SendSpeakingEmail(request);
 
             if (result.IsSuccess)
             {
@@ -175,7 +175,7 @@ namespace EXE201_EduMapper.Controllers
         [HttpPost("request-speaking")]
         [ProducesResponseType(201, Type = typeof(ResponseDTO))]
         [ProducesResponseType(400, Type = typeof(ResponseDTO))]
-        public async Task<IActionResult> RequestSpeaking([FromBody] ProgressCreateDTO progressDTO)
+        public async Task<IActionResult> RequestSpeaking([FromBody] RequestSpeakingDTO progressDTO)
         {
             if (!ModelState.IsValid)
             {

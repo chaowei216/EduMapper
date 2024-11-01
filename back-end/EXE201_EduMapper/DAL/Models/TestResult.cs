@@ -11,7 +11,7 @@ namespace DAL.Models
     public class TestResult
     {
         [Key]
-        public int TestResultId { get; set; }
+        public string TestResultId { get; set; } = null!;
         public double? Score { get; set; }
         public DateTime TestedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
