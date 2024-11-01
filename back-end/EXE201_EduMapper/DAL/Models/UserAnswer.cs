@@ -13,7 +13,7 @@ namespace DAL.Models
         public string UserChoice { get; set; } = null!;
         public string? Description { get; set; }
         public DateTime CreateAt { get; set; }
-        public bool IsCorrect { get; set; }
+        public bool? IsCorrect { get; set; }
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; } = null!;
         [ForeignKey("QuestionId")]

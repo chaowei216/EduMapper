@@ -11,5 +11,6 @@ namespace Common.Constant.Exam
         public const string ReadingTest = "Reading";
         public const string ListeningTest = "Listening";
         public const string WritingTest = "Writing";
+        public const string SpeakingTest = "Speaking";
     }
 }

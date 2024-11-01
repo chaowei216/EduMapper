@@ -8,9 +8,11 @@ namespace Common.DTO.UserAnswer
 {
     public class CheckAnswerDTO
     {
-        public string? CorrectAnswer { get; set; } = string.Empty;
         public int? QuestionIndex { get; set; }
+        public string QuestionText { get; set; } = null!;
         public string? UserChoice { get; set; } = null!;
-        public bool IsCorrect { get; set; }
+        public string? CorrectAnswer { get; set; } = string.Empty;
+        public bool? IsCorrect { get; set; }
+        
     }
 }
