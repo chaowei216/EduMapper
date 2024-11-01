@@ -8,6 +8,7 @@ namespace Common.DTO.Query
 {
     public class TestParameters: QueryStringParameters
     {
+        public string UserId { get; set; }
         public string? Search { get; set; }
     }
 }

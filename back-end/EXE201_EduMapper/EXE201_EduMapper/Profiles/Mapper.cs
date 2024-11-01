@@ -72,6 +72,7 @@ namespace EXE201_EduMapper.Profiles
             CreateMap<PagedList<Center>, PaginationResponseDTO<CenterDTO>>().ReverseMap();
             CreateMap<Progress, ProgressSpeakingDTO>().ForMember(dest => dest.ExamName, opt => opt.MapFrom(src => src.Exam.ExamName))
                                                     .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User.FullName))
+                                                    .ForMember(dest => dest.UserEmail, opt => opt.MapFrom(src => src.User.Email))
                                                     .ReverseMap();
             CreateMap<UserAnswer, WritingAnswerDTO>().ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User.FullName))
                                                     .ForMember(dest => dest.QuestionText, opt => opt.MapFrom(src => src.Question.QuestionText))
@@ -79,6 +80,7 @@ namespace EXE201_EduMapper.Profiles
                                                     .ForMember(dest => dest.PassageContent, opt => opt.MapFrom(src => src.Question.Passage.PassageContent))
                                                     .ReverseMap();
             CreateMap<PagedList<UserAnswer>, WritingAnswerDTO>().ReverseMap();
+            CreateMap<Progress, RequestSpeakingDTO>().ReverseMap();
             CreateMap<PagedList<UserAnswer>, PaginationResponseDTO<WritingAnswerDTO>>().ReverseMap();
             CreateMap<PagedList<Progress>, PaginationResponseDTO<ProgressSpeakingDTO>>().ReverseMap();
         }

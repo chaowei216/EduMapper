@@ -29,6 +29,7 @@ namespace DAL.UnitOfWork
         ISectionRepository SectionRepository { get; }
         IMessageRepository MessageRepository { get; }
         IAdverCenterRepository AdverCenterRepository { get; }
+        ITestResultRepository TestResultRepository { get; }
         void Save();
     }
 }

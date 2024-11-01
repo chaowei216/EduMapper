@@ -41,11 +41,11 @@ namespace BLL.Service
             client.Send(mailMessage);
         }
 
-        public void SendSpeakingTestEmail(ScheduleSpeakingDTO request, string subject)
+        public void SendSpeakingTestEmail(ScheduleSpeakingDTO request, DateTime scheduleDate, string subject)
         {
             var sendEmail = _configuration.GetSection("SendEmailAccount")["Email"]!;
             var toEmail = request.UserEmail;
-            var htmlBody = EmailTemplate.ScheduleMeetingEmailTemplate(request.UserEmail, request.ScheduleDate, request.LinkMeet, subject);
+            var htmlBody = EmailTemplate.ScheduleMeetingEmailTemplate(request.UserEmail, scheduleDate, request.LinkMeet, subject);
             MailMessage mailMessage = new MailMessage(sendEmail, toEmail, subject, htmlBody);
             mailMessage.IsBodyHtml = true;
 

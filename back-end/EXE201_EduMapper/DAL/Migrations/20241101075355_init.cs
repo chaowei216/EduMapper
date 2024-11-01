@@ -261,7 +261,7 @@ namespace DAL.Migrations
                     AdverCenterId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AdverBudget = table.Column<double>(type: "float", nullable: false),
                     CenterDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AdverCenterImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AdverCenterImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CenterId = table.Column<string>(type: "nvarchar(450)", nullable: false)
@@ -463,6 +463,7 @@ namespace DAL.Migrations
                     ExamId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ExamName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NumOfQuestions = table.Column<int>(type: "int", nullable: false),
+                    ExamType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TestId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -479,8 +480,7 @@ namespace DAL.Migrations
                 name: "TestResults",
                 columns: table => new
                 {
-                    TestResultId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TestResultId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Score = table.Column<double>(type: "float", nullable: true),
                     TestedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -604,6 +604,7 @@ namespace DAL.Migrations
                     QuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     QuestionText = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CorrectAnswer = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    QuestionIndex = table.Column<int>(type: "int", nullable: true),
                     QuestionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PassageId = table.Column<string>(type: "nvarchar(450)", nullable: true),
@@ -650,7 +651,7 @@ namespace DAL.Migrations
                     UserChoice = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsCorrect = table.Column<bool>(type: "bit", nullable: false)
+                    IsCorrect = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {

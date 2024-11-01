@@ -516,11 +516,8 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Models.TestResult", b =>
                 {
-                    b.Property<int>("TestResultId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestResultId"));
+                    b.Property<string>("TestResultId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<double?>("Score")
                         .HasColumnType("float");
@@ -1079,13 +1076,13 @@ namespace DAL.Migrations
             modelBuilder.Entity("DAL.Models.TestResult", b =>
                 {
                     b.HasOne("DAL.Models.Test", "Test")
-                        .WithMany()
+                        .WithMany("TestResults")
                         .HasForeignKey("TestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DAL.Models.ApplicationUser", "User")
-                        .WithMany("Results")
+                        .WithMany("TestResults")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1262,7 +1259,7 @@ namespace DAL.Migrations
 
                     b.Navigation("RefreshTokens");
 
-                    b.Navigation("Results");
+                    b.Navigation("TestResults");
 
                     b.Navigation("Transactions");
 
@@ -1321,6 +1318,8 @@ namespace DAL.Migrations
             modelBuilder.Entity("DAL.Models.Test", b =>
                 {
                     b.Navigation("Exams");
+
+                    b.Navigation("TestResults");
                 });
 
             modelBuilder.Entity("DAO.Models.Notification", b =>

@@ -30,6 +30,15 @@ namespace EXE201_EduMapper.Controllers
             return Ok(result);
         }
 
+        [HttpGet("premium-test")]
+        [ProducesResponseType(200, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> GetAllPremiumTests([FromQuery] TestParameters request)
+        {
+            var result = await _testService.GetAllPremiumTest(request);
+
+            return Ok(result);
+        }
+
         [HttpGet("{id}/reading")]
         [ProducesResponseType(200, Type = typeof(ResponseDTO))]
         [ProducesResponseType(404, Type = typeof(ResponseDTO))]

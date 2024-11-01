@@ -30,8 +30,10 @@ namespace DAL.UnitOfWork
         private SectionRepository _sectionRepository;
         private MessageRepository _messageRepository ;
         private AdverCenterRepository _adverCenterRepository;
+        private TestResultRepository _testResultRepository;
 
         public IUserRepository UserRepository => _userRepository ??= new UserRepository(_context);
+        public ITestResultRepository TestResultRepository => _testResultRepository ??= new TestResultRepository(_context);
 
         public IMemberShipRepository MemberShipRepository => _memberShipRepository ??= new MemberShipRepository(_context);
 

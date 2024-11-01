@@ -9,6 +9,7 @@ using Common.DTO;
 using Common.DTO.Exam;
 using Common.DTO.Query;
 using Common.DTO.Test;
+using Common.DTO.UserAnswer;
 using Common.Enum;
 using DAL.Models;
 using DAL.UnitOfWork;
@@ -73,6 +74,47 @@ namespace BLL.Service
             };
         }
 
+        public async Task<ResponseDTO> GetAllPremiumTest(TestParameters request)
+        {
+            var test1 = await _unitOfWork.TestRepository.Get(includeProperties: "Exams,Exams.Passages,Exams.Passages.SubQuestion," +
+                                                           "Exams.Passages.Sections,Exams.Passages.SubQuestion.Choices");
+
+            List<Test> getTests = new List<Test>();
+
+            foreach (var eachTest in test1)
+            {
+                var result = await _unitOfWork.TestResultRepository.Get(filter: c => c.UserId == request.UserId && c.TestId == eachTest.TestId);
+                var eachResult = result.FirstOrDefault();
+
+                if (eachResult == null)
+                {
+                    getTests.Add(eachTest);
+                }
+            }
+
+            var pagingData = getTests.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize).ToList();
+
+            var answerPageList = new PagedList<Test>(pagingData, getTests.Count, request.PageNumber, request.PageSize);
+            var mappedResponse = _mapper.Map<PaginationResponseDTO<TestDTO>>(answerPageList);
+
+            if (request.PageNumber <= 0 || request.PageSize <= 0)
+            {
+                mappedResponse.Data = _mapper.Map<List<TestDTO>>(getTests);
+            }
+            else
+            {
+                mappedResponse.Data = _mapper.Map<List<TestDTO>>(pagingData);
+            }
+
+            return new ResponseDTO
+            {
+                StatusCode = StatusCodeEnum.OK,
+                IsSuccess = true,
+                Message = GeneralMessage.GetSuccess,
+                MetaData = mappedResponse
+            };
+        }
+
         public async Task<ResponseDTO> GetAllTest(TestParameters request)
         {
             var test = await _unitOfWork.TestRepository.Get(filter: !string.IsNullOrEmpty(request.Search)
@@ -101,6 +143,44 @@ namespace BLL.Service
                 Message = GeneralMessage.GetSuccess,
                 MetaData = mappedResponse
             };
+/*
+            var test1 = await _unitOfWork.TestRepository.Get(includeProperties: "Exams,Exams.Passages,Exams.Passages.SubQuestion," +
+                                                           "Exams.Passages.Sections,Exams.Passages.SubQuestion.Choices");
+
+            List<Test> getTests = new List<Test>();
+
+            foreach (var eachTest in test1)
+            {
+                var result = await _unitOfWork.TestResultRepository.Get(filter: c => c.UserId == request.UserId && c.TestId == eachTest.TestId);
+                var eachResult = result.FirstOrDefault();
+
+                if (eachResult == null)
+                {
+                    getTests.Add(eachTest);
+                }
+            }
+
+            var pagingData = getTests.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize).ToList();
+
+            var answerPageList = new PagedList<Test>(pagingData, getTests.Count, request.PageNumber, request.PageSize);
+            var mappedResponse = _mapper.Map<PaginationResponseDTO<TestDTO>>(answerPageList);
+
+            if (request.PageNumber <= 0 || request.PageSize <= 0)
+            {
+                mappedResponse.Data = _mapper.Map<List<TestDTO>>(getTests);
+            }
+            else
+            {
+                mappedResponse.Data = _mapper.Map<List<TestDTO>>(pagingData);
+            }
+
+            return new ResponseDTO
+            {
+                StatusCode = StatusCodeEnum.OK,
+                IsSuccess = true,
+                Message = GeneralMessage.GetSuccess,
+                MetaData = mappedResponse
+            };*/
         }
 
         public async Task<ResponseDTO> GetListeningTestById(string id)
