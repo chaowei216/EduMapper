@@ -1,6 +1,7 @@
 ﻿using BLL.IService;
 using Common.DTO;
 using Common.DTO.Payment;
+using Common.DTO.Payment.PayOS;
 using Common.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -19,7 +20,7 @@ namespace EXE201_EduMapper.Controllers
             _paymentService = paymentService;
         }
 
-        [HttpPost("vnpay")]
+        [HttpPost]
         [ProducesResponseType(201, Type = typeof(ResponseDTO))]
         [ProducesResponseType(400, Type = typeof(ResponseDTO))]
         [ProducesResponseType(401, Type = typeof(ResponseDTO))]
@@ -40,7 +41,7 @@ namespace EXE201_EduMapper.Controllers
             return Created("", response);
         }
 
-        [HttpPost("vnpay/handle-response")]
+        [HttpPost("handle-response")]
         [ProducesResponseType(200, Type = typeof(ResponseDTO))]
         [ProducesResponseType(400, Type = typeof(ResponseDTO))]
         [ProducesResponseType(401, Type = typeof(ResponseDTO))]

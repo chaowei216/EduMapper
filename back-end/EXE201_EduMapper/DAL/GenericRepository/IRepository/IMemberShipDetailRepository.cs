@@ -7,5 +7,6 @@ namespace DAL.GenericRepository.IRepository
     {
         Task<IEnumerable<MemberShipDetail>> GetMemberShipOfUser(string userId);
         Task<MemberShipDetail?> GetMemberShipDetail(string userId, string memberShipId);
+        Task<MemberShip?> GetCurMemberShip(string userId);
     }
 }

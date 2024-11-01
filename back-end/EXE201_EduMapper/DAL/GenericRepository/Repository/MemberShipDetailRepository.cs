@@ -21,5 +21,19 @@ namespace DAL.GenericRepository.Repository
         {
             return await _context.MemberShipDetails.Where(p => p.UserId == userId).ToListAsync();
         }
+
+        public async Task<MemberShip?> GetCurMemberShip(string userId)
+        {
+            var memberShipDetail = await _context.MemberShipDetails.FirstOrDefaultAsync(p => p.UserId == userId && !p.IsFinished);
+
+            if (memberShipDetail != null)
+            {
+                var memberShip = await _context.MemberShips.FindAsync(memberShipDetail.MemberShipId);
+
+                return memberShip;
+            }
+                   
+            return null;
+        }
     }
 }
