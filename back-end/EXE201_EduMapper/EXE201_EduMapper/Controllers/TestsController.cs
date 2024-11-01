@@ -58,6 +58,25 @@ namespace EXE201_EduMapper.Controllers
             return Ok(tests);
         }
 
+        [HttpGet("{id}/speaking")]
+        [ProducesResponseType(200, Type = typeof(ResponseDTO))]
+        [ProducesResponseType(404, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> GetSpeakingTestByTestId(string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO
+                {
+                    StatusCode = StatusCodeEnum.BadRequest,
+                    Message = ModelState.ToString()!
+                });
+            }
+
+            var tests = await _testService.GetSpeakingTestById(id);
+
+            return Ok(tests);
+        }
+
         [HttpGet("{id}/listening")]
         [ProducesResponseType(200, Type = typeof(ResponseDTO))]
         [ProducesResponseType(404, Type = typeof(ResponseDTO))]

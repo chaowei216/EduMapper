@@ -27,6 +27,13 @@ namespace BLL.IService
         Task<ResponseDTO> GetWritingTestById(string id);
 
         /// <summary>
+        /// Get speaking exam of test
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<ResponseDTO> GetSpeakingTestById(string id);
+
+        /// <summary>
         /// Get listening exam of test
         /// </summary>
         /// <param name="id"></param>
