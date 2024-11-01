@@ -186,7 +186,7 @@ namespace BLL.Service
                             _configuration["Jwt:Issuer"]!,
                             _configuration["Jwt:Audience"],
                             claims,
-                            expires: DateTime.Now.AddMinutes(25),
+                            expires: DateTime.Now.AddDays(1),
                             signingCredentials: credentials);
 
             // write jwt token
