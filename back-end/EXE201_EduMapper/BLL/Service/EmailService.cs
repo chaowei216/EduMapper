@@ -61,5 +61,47 @@ namespace BLL.Service
 
             client.Send(mailMessage);
         }
+
+        public void SendWritingTestEmail(string email, string studentName, double score, string feedback, string subject)
+        {
+            var sendEmail = _configuration.GetSection("SendEmailAccount")["Email"]!;
+            var toEmail = email;
+            var htmlBody = EmailTemplate.WritingScoreEmailTemplate(studentName, score, feedback, subject);
+            MailMessage mailMessage = new MailMessage(sendEmail, toEmail, subject, htmlBody);
+            mailMessage.IsBodyHtml = true;
+
+            var smtpServer = _configuration.GetSection("SendEmailAccount")["SmtpServer"];
+            int.TryParse(_configuration.GetSection("SendEmailAccount")["Port"], out int port);
+            var userNameEmail = _configuration.GetSection("SendEmailAccount")["UserName"];
+            var password = _configuration.GetSection("SendEmailAccount")["Password"];
+
+            SmtpClient client = new SmtpClient(smtpServer, port);
+            client.UseDefaultCredentials = false;
+            client.Credentials = new NetworkCredential(userNameEmail, password);
+            client.EnableSsl = true; // Enable SSL/TLS encryption
+
+            client.Send(mailMessage);
+        }
+
+        public void SendSpeakingTestEmail(string email, string studentName, double score, string feedback, string subject)
+        {
+            var sendEmail = _configuration.GetSection("SendEmailAccount")["Email"]!;
+            var toEmail = email;
+            var htmlBody = EmailTemplate.SpeakingScoreEmailTemplate(studentName, score, feedback, subject);
+            MailMessage mailMessage = new MailMessage(sendEmail, toEmail, subject, htmlBody);
+            mailMessage.IsBodyHtml = true;
+
+            var smtpServer = _configuration.GetSection("SendEmailAccount")["SmtpServer"];
+            int.TryParse(_configuration.GetSection("SendEmailAccount")["Port"], out int port);
+            var userNameEmail = _configuration.GetSection("SendEmailAccount")["UserName"];
+            var password = _configuration.GetSection("SendEmailAccount")["Password"];
+
+            SmtpClient client = new SmtpClient(smtpServer, port);
+            client.UseDefaultCredentials = false;
+            client.Credentials = new NetworkCredential(userNameEmail, password);
+            client.EnableSsl = true; // Enable SSL/TLS encryption
+
+            client.Send(mailMessage);
+        }
     }
 }

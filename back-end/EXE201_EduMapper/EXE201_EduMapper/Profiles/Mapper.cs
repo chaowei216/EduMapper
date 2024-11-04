@@ -79,9 +79,14 @@ namespace EXE201_EduMapper.Profiles
                                                     .ForMember(dest => dest.PassageTitle, opt => opt.MapFrom(src => src.Question.Passage.PassageTitle))
                                                     .ForMember(dest => dest.PassageContent, opt => opt.MapFrom(src => src.Question.Passage.PassageContent))
                                                     .ReverseMap();
+            CreateMap<Exam, WritingExamDTO>().ReverseMap();
+            CreateMap<Progress, WritingExamDTO>().ReverseMap();
             CreateMap<PagedList<UserAnswer>, WritingAnswerDTO>().ReverseMap();
+            CreateMap<PagedList<Exam>, WritingExamDTO>().ReverseMap();
             CreateMap<Progress, RequestSpeakingDTO>().ReverseMap();
             CreateMap<PagedList<UserAnswer>, PaginationResponseDTO<WritingAnswerDTO>>().ReverseMap();
+            CreateMap<PagedList<Exam>, PaginationResponseDTO<WritingExamDTO>>().ReverseMap();
+            CreateMap<PagedList<WritingExamDTO>, PaginationResponseDTO<WritingExamDTO>>().ReverseMap();
             CreateMap<PagedList<Progress>, PaginationResponseDTO<ProgressSpeakingDTO>>().ReverseMap();
         }
     }

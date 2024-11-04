@@ -2,15 +2,14 @@
 using Azure;
 using BLL.Exceptions;
 using BLL.IService;
+using Common.Constant.Email;
 using Common.Constant.Exam;
 using Common.Constant.Message;
 using Common.Constant.Message.Email;
-using Common.Constant.Notification;
 using Common.Constant.Progress;
 using Common.Constant.Test;
 using Common.DTO;
 using Common.DTO.Exam;
-using Common.DTO.Notification;
 using Common.DTO.Progress;
 using Common.DTO.Query;
 using Common.DTO.Test;
@@ -18,10 +17,6 @@ using Common.DTO.UserAnswer;
 using Common.Enum;
 using DAL.Models;
 using DAL.UnitOfWork;
-using Google.Apis.Storage.v1.Data;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace BLL.Service
 {
@@ -802,6 +797,56 @@ namespace BLL.Service
             };
         }
 
+        public async Task<ResponseDTO> GetWritingExamAnswer(ExamParameters request)
+        {
+            List<WritingExamDTO> userAnswers = new List<WritingExamDTO>();
+            var userAnswerList = await _unitOfWork.ExamRepository.Get(includeProperties: "Passages,Progress,Progress.User",
+                                                                    filter: c => c.ExamName.ToLower().Trim().Contains(ExamNameConstant.WritingTest.ToLower()));
+
+            foreach (var eachAnswer in userAnswerList)
+            {
+                var progress = await _unitOfWork.ProgressRepository.Get(filter: c => c.ExamId == eachAnswer.ExamId);
+                
+                foreach(var eachProgress in progress)
+                {
+                    var mapEachAnswer = _mapper.Map<WritingExamDTO>(eachProgress);
+                    var user = await _unitOfWork.UserRepository.GetByID(eachProgress.UserId);
+
+                    mapEachAnswer.FullName = user.FullName;
+                    mapEachAnswer.UserId = user.Id;
+                    mapEachAnswer.ExamName = eachAnswer.ExamName;
+                    mapEachAnswer.CreateAt = eachProgress.TestedDate;
+                    if(eachProgress.Score == null || eachProgress.Score <= 0)
+                    {
+                        userAnswers.Add(mapEachAnswer);
+                    }
+                }
+            }
+
+            var pagingData = userAnswers.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize).ToList();
+
+            var answerPageList = new PagedList<WritingExamDTO>(pagingData, userAnswers.Count, request.PageNumber, request.PageSize);
+            var mappedResponse = _mapper.Map<PaginationResponseDTO<WritingExamDTO>>(answerPageList);
+
+            if (request.PageNumber <= 0 || request.PageSize <= 0)
+            {
+                mappedResponse.Data = userAnswers;
+            }
+            else
+            {
+                mappedResponse.Data = pagingData;
+            }
+
+            return new ResponseDTO
+            {
+                IsSuccess = true,
+                MetaData = mappedResponse,
+                StatusCode = StatusCodeEnum.OK,
+                Message = ExamMessage.GetAnswers
+            };
+        }
+
+
         public async Task<ResponseDTO> GetWritingAnswer(ExamParameters request)
         {
             List<UserAnswer> userAnswers = new List<UserAnswer>();
@@ -900,15 +945,158 @@ namespace BLL.Service
             };
         }
 
-        public async Task<ResponseDTO> GetWritingAnswerById(string userAnswerId)
+        public async Task<ResponseDTO> GetWritingAnswerById(GetFinishDTO request)
         {
-            var thisAnswer = await _unitOfWork.UserAnswerRepository.GetByID(userAnswerId);
+            var exam = await _unitOfWork.ExamRepository.Get(filter: c => c.ExamId == request.ExamId,
+                                                             includeProperties: "Progress,Passages,Passages.SubQuestion," +
+                                                                                "Passages.Sections,Passages.SubQuestion.Choices,Passages.SubQuestion.UserAnswers");
+            var response = new UserAnswerWritingGetDTO();
 
+            var thisResponse = new List<WritingExamAnswerDTO>();
+            var eachExam = exam.FirstOrDefault();
+
+            var progress = await _unitOfWork.ProgressRepository.Get(filter: c => c.ExamId == request.ExamId && c.UserId == request.UserId);
+            var thisProgress = progress.FirstOrDefault();
+
+            if (eachExam != null && thisProgress != null)
+            {
+                foreach (var pas in eachExam.Passages)
+                {
+                    var passage = await _unitOfWork.PassageRepository.GetByID(pas.PassageId);
+                    if (passage != null)
+                    {
+                        foreach (var ques in passage.SubQuestion)
+                        {
+                            var userAnswers = await _unitOfWork.UserAnswerRepository.Get(filter: c => c.QuestionId == ques.QuestionId && c.UserId == request.UserId);
+                            var eachAnswer = userAnswers.FirstOrDefault();
+
+                            var eachResponse = new WritingExamAnswerDTO();
+
+                            if (eachAnswer != null)
+                            {
+                                eachResponse.QuestionIndex = ques.QuestionIndex;
+                                eachResponse.QuestionText = ques.QuestionText;
+                                eachResponse.UserChoice = eachAnswer.UserChoice;
+                                eachResponse.QuestionId = ques.QuestionId;
+
+                                thisResponse.Add(eachResponse);
+                            }
+                            else
+                            {
+                                eachResponse.QuestionIndex = ques.QuestionIndex;
+                                eachResponse.QuestionText = ques.QuestionText;
+                                eachResponse.QuestionId = ques.QuestionId;
+
+                                thisResponse.Add(eachResponse);
+                            }
+                        }
+                    }
+                }
+            }
+            response.GetUserAnswerDTO = thisResponse;
             return new ResponseDTO
             {
                 IsSuccess = true,
                 StatusCode = StatusCodeEnum.OK,
-                MetaData = thisAnswer
+                Message = GeneralMessage.GetSuccess,
+                MetaData = response
+            };
+        }
+
+        public async Task<ResponseDTO> ScoreWritingExam(ScoreWritingDTO request)
+        {
+            double? score = 0;
+            string feedback = "";
+            foreach(var eachRequest in request.ListAnswerDTO)
+            {
+                var user = await _unitOfWork.UserRepository.GetByID(eachRequest.UserId);
+                var userAnswers = await _unitOfWork.UserAnswerRepository.Get(filter: c => c.QuestionId == eachRequest.QuestionId && c.UserId ==  eachRequest.UserId);
+                var thisAnswer = userAnswers.FirstOrDefault();
+
+                if (thisAnswer != null && eachRequest.QuestionIndex == 1)
+                {
+                    score += eachRequest.Score * 1/3;
+                } else
+                {
+                    score += eachRequest.Score * 2 / 3;
+                }
+                var question = await _unitOfWork.QuestionRepository.GetByID(eachRequest.QuestionId);
+                if (question != null)
+                {
+                    var passage = await _unitOfWork.PassageRepository.GetByID(question.PassageId);
+
+                    if(passage != null)
+                    {
+                        var progress = await _unitOfWork.ProgressRepository.Get(filter: c => c.ExamId == passage.ExamId && c.UserId == eachRequest.UserId);
+                        var thisProgress = progress.FirstOrDefault();
+
+                        if(eachRequest.QuestionIndex == 1)
+                        {
+                            feedback += "Task 1: " + eachRequest.Description + " " +  "\n";
+                        }
+
+                        if(eachRequest.QuestionIndex == 2)
+                        {
+                            feedback += "Task 2: " + eachRequest.Description + " " + "\n";
+                        }
+                        thisProgress.Score = CustomRound(score ?? 0);
+                        thisProgress.UpdatedDate = DateTime.Now;
+                        thisProgress.Status = ProgressStatus.Done;
+                        thisProgress.Percent = 100;
+                        _unitOfWork.ProgressRepository.Update(thisProgress);
+                        _unitOfWork.Save();
+
+                        if(eachRequest.QuestionIndex == 2)
+                        {
+                            _emailService.SendWritingTestEmail(user.Email, user.FullName, CustomRound(score ?? 0), feedback, EmailSubject.WritingScore);
+                        }
+                    }
+                }
+            }
+            return new ResponseDTO
+            {
+                IsSuccess = true,
+                StatusCode = StatusCodeEnum.NoContent,
+                Message = GeneralMessage.CreateSuccess
+            };
+        }
+        private static double CustomRound(double value)
+        {
+            int integerPart = (int)value; 
+            double decimalPart = value - integerPart; 
+
+            if (decimalPart > 0.75)
+            {
+                return Math.Ceiling(value);
+            }
+            else if (decimalPart > 0.25)
+            {
+                return integerPart + 0.5; 
+            }
+            else
+            {
+                return integerPart; 
+            }
+        }
+
+        public async Task<ResponseDTO> ScoreReadingExam(ScoreReadingExam request)
+        {
+            var progress = await _unitOfWork.ProgressRepository.Get(filter: c => c.ExamId == request.ExamId &&  c.UserId == request.UserId);
+            var thisProgress = progress.FirstOrDefault();
+            var user = await _unitOfWork.UserRepository.GetByID(request.UserId);
+            thisProgress.Score = request.Score;
+            thisProgress.Percent = 100;
+            thisProgress.UpdatedDate = DateTime.Now;
+            thisProgress.Status = ProgressStatus.Done;
+            _unitOfWork.ProgressRepository.Update(thisProgress);
+            _unitOfWork.Save();
+
+            _emailService.SendSpeakingTestEmail(user.Email, user.FullName, request.Score, request.Description, EmailSubject.SpeakingScore);
+            return new ResponseDTO
+            {
+                IsSuccess = true,
+                StatusCode = StatusCodeEnum.NoContent,
+                Message = GeneralMessage.CreateSuccess
             };
         }
     }

@@ -104,6 +104,27 @@ namespace BLL.IService
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task<ResponseDTO> GetWritingAnswerById(string examId);
+        Task<ResponseDTO> GetWritingAnswerById(GetFinishDTO request);
+
+        /// <summary>
+        /// Get user answer (writing)
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<ResponseDTO> GetWritingExamAnswer(ExamParameters request);
+
+        /// <summary>
+        /// Get user answer (writing)
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<ResponseDTO> ScoreWritingExam(ScoreWritingDTO request);
+
+        /// <summary>
+        /// Get user answer (writing)
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<ResponseDTO> ScoreReadingExam(ScoreReadingExam request);
     }
 }
