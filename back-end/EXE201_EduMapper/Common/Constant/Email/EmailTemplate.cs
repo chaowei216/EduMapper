@@ -165,6 +165,181 @@
             return htmlTemplate;
         }
 
+        public static string WritingScoreEmailTemplate(string studentName, double score, string feedback, string subject)
+        {
+            string htmlTemplate = @"<head>    
+    <meta content=""text/html; charset=utf-8"" http-equiv=""Content-Type"">
+    <title>
+        {TITLE}
+    </title>
+    <style type=""text/css"">
+    html {
+        background-color: #FFF;
+    }
+    body {
+        font-size: 120%;
+        background-color: #f7f7f7;
+        border-radius: 5px;
+        font-family: Arial, sans-serif;
+        color: #333;
+    }
+    .logo {
+        text-align: center;
+        padding: 2% 0;
+    }
+    .logo img {
+        width: 40%;
+        height: 35%;
+    }
+    .title {
+        padding: 2% 5%;
+        text-align: center; 
+        background-color: #4CAF50; 
+        color: #FFF;
+        border-radius: 5px 5px 0 0;
+    }
+    .score-details {
+        padding: 3% 5%;
+        text-align: left;
+        background-color: #FFF;
+        border-radius: 0 0 5px 5px;
+    }
+    .score-details h3 {
+        font-size: 150%; /* Tăng kích thước font của Score */
+        color: #4CAF50;
+    }
+    .feedback {
+        margin-top: 20px;
+        font-style: italic;
+        color: #555;
+        font-size: 130%; /* Tăng kích thước font của Feedback */
+    }
+    .footer {
+        padding: 2% 5%;
+        text-align: center; 
+        font-size: 80%; 
+        opacity: 0.8; 
+    }
+</style>
+</head>
+<body>
+    <div class=""logo"">
+        <img src=""{LOGO_URL}""/>
+    </div>
+    <div class=""title"">
+        <h2>Hello, {STUDENT_NAME}</h2>
+        <p>Your Writing Exam Score is Available</p>
+    </div>
+    <div class=""score-details"">
+        <h3>Score: {SCORE}</h3>
+        <div class=""feedback"">
+            <p>Feedback: {FEEDBACK}</p>
+        </div>
+    </div>
+    <div class=""footer"">
+        <p>This is an automated email. Please do not reply.</p>
+        <p>17th Floor LandMark 81, 208 Nguyen Huu Canh Street, Binh Thanh District, Ho Chi Minh 700000, Vietnam</p>
+    </div>
+</body>
+</html>
+";
+
+            htmlTemplate = htmlTemplate.Replace("{STUDENT_NAME}", studentName)
+                                        .Replace("{SCORE}", score.ToString("F2"))
+                                        .Replace("{FEEDBACK}", feedback)
+                                        .Replace("{LOGO_URL}", logoUrl)
+                                        .Replace("{TITLE}", subject);
+
+            return htmlTemplate;
+        }
+
+        public static string SpeakingScoreEmailTemplate(string studentName, double score, string feedback, string subject)
+        {
+            string htmlTemplate = @"<head>    
+    <meta content=""text/html; charset=utf-8"" http-equiv=""Content-Type"">
+    <title>
+        {TITLE}
+    </title>
+    <style type=""text/css"">
+    html {
+        background-color: #FFF;
+    }
+    body {
+        font-size: 120%;
+        background-color: #f7f7f7;
+        border-radius: 5px;
+        font-family: Arial, sans-serif;
+        color: #333;
+    }
+    .logo {
+        text-align: center;
+        padding: 2% 0;
+    }
+    .logo img {
+        width: 40%;
+        height: 35%;
+    }
+    .title {
+        padding: 2% 5%;
+        text-align: center; 
+        background-color: #4CAF50; 
+        color: #FFF;
+        border-radius: 5px 5px 0 0;
+    }
+    .score-details {
+        padding: 3% 5%;
+        text-align: left;
+        background-color: #FFF;
+        border-radius: 0 0 5px 5px;
+    }
+    .score-details h3 {
+        font-size: 150%; /* Tăng kích thước font của Score */
+        color: #4CAF50;
+    }
+    .feedback {
+        margin-top: 20px;
+        font-style: italic;
+        color: #555;
+        font-size: 130%; /* Tăng kích thước font của Feedback */
+    }
+    .footer {
+        padding: 2% 5%;
+        text-align: center; 
+        font-size: 80%; 
+        opacity: 0.8; 
+    }
+</style>
+</head>
+<body>
+    <div class=""logo"">
+        <img src=""{LOGO_URL}""/>
+    </div>
+    <div class=""title"">
+        <h2>Hello, {STUDENT_NAME}</h2>
+        <p>Your Reading Exam Score is Available</p>
+    </div>
+    <div class=""score-details"">
+        <h3>Score: {SCORE}</h3>
+        <div class=""feedback"">
+            <p>Feedback: {FEEDBACK}</p>
+        </div>
+    </div>
+    <div class=""footer"">
+        <p>This is an automated email. Please do not reply.</p>
+        <p>17th Floor LandMark 81, 208 Nguyen Huu Canh Street, Binh Thanh District, Ho Chi Minh 700000, Vietnam</p>
+    </div>
+</body>
+</html>
+";
+
+            htmlTemplate = htmlTemplate.Replace("{STUDENT_NAME}", studentName)
+                                        .Replace("{SCORE}", score.ToString("F2"))
+                                        .Replace("{FEEDBACK}", feedback)
+                                        .Replace("{LOGO_URL}", logoUrl)
+                                        .Replace("{TITLE}", subject);
+
+            return htmlTemplate;
+        }
     }
 }
 

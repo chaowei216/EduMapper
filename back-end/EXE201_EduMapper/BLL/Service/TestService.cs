@@ -77,7 +77,8 @@ namespace BLL.Service
         public async Task<ResponseDTO> GetAllPremiumTest(TestParameters request)
         {
             var test1 = await _unitOfWork.TestRepository.Get(includeProperties: "Exams,Exams.Passages,Exams.Passages.SubQuestion," +
-                                                           "Exams.Passages.Sections,Exams.Passages.SubQuestion.Choices");
+                                                           "Exams.Passages.Sections,Exams.Passages.SubQuestion.Choices",
+                                                           filter: c => c.IsRequired == true);
 
             List<Test> getTests = new List<Test>();
 
@@ -86,7 +87,7 @@ namespace BLL.Service
                 var result = await _unitOfWork.TestResultRepository.Get(filter: c => c.UserId == request.UserId && c.TestId == eachTest.TestId);
                 var eachResult = result.FirstOrDefault();
 
-                if (eachResult == null)
+                if (eachResult != null)
                 {
                     getTests.Add(eachTest);
                 }
@@ -237,13 +238,28 @@ namespace BLL.Service
 
         public async Task<ResponseDTO> GetReadingTestById(string id)
         {
-            var test = await _unitOfWork.TestRepository.Get(filter: c => c.TestId == id, includeProperties: "Exams,Exams.Passages,Exams.Passages.SubQuestion," +
-                                                                                   "Exams.Passages.Sections,Exams.Passages.SubQuestion.Choices"
-                                                            );
+            var test = await _unitOfWork.TestRepository.Get(
+                filter: c => c.TestId == id,
+                includeProperties: "Exams,Exams.Passages,Exams.Passages.SubQuestion," +
+                                   "Exams.Passages.Sections,Exams.Passages.SubQuestion.Choices"
+            );
 
             foreach (var item in test)
             {
-                item.Exams = item.Exams.Where(e => e.ExamName.ToLower().Contains(ExamNameConstant.ReadingTest.ToLower())).ToList();
+                // Lọc theo tên của bài thi
+                item.Exams = item.Exams
+                    .Where(e => e.ExamName.ToLower().Contains(ExamNameConstant.ReadingTest.ToLower()))
+                    .ToList();
+
+                foreach (var exam in item.Exams)
+                {
+                    foreach (var passage in exam.Passages)
+                    {
+                        passage.Sections = passage.Sections
+                            .OrderBy(s => s.SectionLabel) 
+                            .ToList();
+                    }
+                }
             }
 
             if (test == null)

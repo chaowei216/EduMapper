@@ -32,9 +32,9 @@ namespace EXE201_EduMapper.Controllers
 
         [HttpGet("user-writing-answer")]
         [ProducesResponseType(200, Type = typeof(ResponseDTO))]
-        public async Task<IActionResult> GetWritingAnswerById([FromQuery] string id)
+        public async Task<IActionResult> GetWritingAnswerById([FromQuery] GetFinishDTO request)
         {
-            var result = await _examService.GetWritingAnswerById(id);
+            var result = await _examService.GetWritingAnswerById(request);
 
             return Ok(result);
         }
@@ -53,6 +53,15 @@ namespace EXE201_EduMapper.Controllers
         public async Task<IActionResult> GetAllWriting([FromQuery] ExamParameters request)
         {
             var result = await _examService.GetWritingAnswer(request);
+
+            return Ok(result);
+        }
+
+        [HttpGet("writing-exam-answer")]
+        [ProducesResponseType(200, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> GetAllWritingExamAnswer([FromQuery] ExamParameters request)
+        {
+            var result = await _examService.GetWritingExamAnswer(request);
 
             return Ok(result);
         }
@@ -91,6 +100,58 @@ namespace EXE201_EduMapper.Controllers
             }
 
             var result = await _examService.CreateExam(examDTO);
+
+            if (result.IsSuccess)
+            {
+                return Created(uri: "", value: result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
+        [HttpPut("score-writing")]
+        [ProducesResponseType(201, Type = typeof(ResponseDTO))]
+        [ProducesResponseType(400, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> ScoreWriting([FromBody] ScoreWritingDTO examDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO
+                {
+                    StatusCode = StatusCodeEnum.BadRequest,
+                    Message = ModelState.ToString()!
+                });
+            }
+
+            var result = await _examService.ScoreWritingExam(examDTO);
+
+            if (result.IsSuccess)
+            {
+                return Created(uri: "", value: result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
+        [HttpPut("score-reading")]
+        [ProducesResponseType(201, Type = typeof(ResponseDTO))]
+        [ProducesResponseType(400, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> ScoreReading([FromBody] ScoreReadingExam examDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO
+                {
+                    StatusCode = StatusCodeEnum.BadRequest,
+                    Message = ModelState.ToString()!
+                });
+            }
+
+            var result = await _examService.ScoreReadingExam(examDTO);
 
             if (result.IsSuccess)
             {
