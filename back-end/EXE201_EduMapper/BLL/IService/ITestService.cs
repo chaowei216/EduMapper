@@ -61,6 +61,13 @@ namespace BLL.IService
         /// <returns></returns>
         Task<ResponseDTO> GetAllPremiumTest(TestParameters request);
 
+        /// <summary>
+        /// Get listening exam of test
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<ResponseDTO> GetAllNormal(TestParameters request);
 
+        Task<ResponseDTO> GetScore(string id);
     }
 }

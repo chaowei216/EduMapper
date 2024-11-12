@@ -74,6 +74,7 @@ builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<IPayOSService, PayOSService>();
+builder.Services.AddScoped<IStatisticService, StatisticService>();
 
 // setting
 builder.Services.Configure<PaymentConfig>(builder.Configuration.GetSection("PayOs"));

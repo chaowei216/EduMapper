@@ -399,8 +399,20 @@ namespace BLL.Service
 
             var checkExist = await _unitOfWork.ProgressRepository.Get(filter: c => c.ExamId == progress.ExamId && c.UserId == progress.UserId);
             var checkExist1 = checkExist.FirstOrDefault();
+            var exam = await _unitOfWork.ExamRepository.GetByID(progress.ExamId);
+
             if (checkExist1 != null)
             {
+                if(exam != null && exam.ExamName.ToLower().Trim().Contains(ExamNameConstant.WritingTest))
+                {
+                    throw new BadRequestException(GeneralMessage.BadRequest);
+                }
+
+                if (exam != null && exam.ExamName.ToLower().Trim().Contains(ExamNameConstant.SpeakingTest))
+                {
+                    throw new BadRequestException(GeneralMessage.BadRequest);
+                }
+
                 checkExist1.ProgressId = checkExist1.ProgressId;
                 checkExist1.Score = 0;
                 checkExist1.Percent = 0;
@@ -434,25 +446,34 @@ namespace BLL.Service
             }
             else
             {
-
                 mapProgress.ProgressId = Guid.NewGuid().ToString();
                 mapProgress.TestedDate = DateTime.Now;
                 mapProgress.Status = ProgressStatus.InProgress;
 
                 var user = await _unitOfWork.UserRepository.GetByID(progress.UserId);
-                var exam = await _unitOfWork.ExamRepository.GetByID(progress.ExamId);
 
                 if (exam == null || user == null)
                 {
                     throw new NotFoundException(GeneralMessage.NotFound);
                 }
-                /*_unitOfWork.TestResultRepository.Insert(new TestResult
+
+                if (exam.TestId != null)
                 {
-                    Score = 0,
-                    Status = ProgressStatus.InProgress,
-                    TestedDate = DateTime.Now,
-                    TestResultId = Guid.NewGuid().ToString(),
-                });*/
+                    var test = await _unitOfWork.TestRepository.GetByID(exam.TestId);
+                    var testResult = await _unitOfWork.TestResultRepository.Get(filter: c => c.UserId == progress.UserId && c.TestId == test.TestId);
+
+                    if(testResult != null)
+                    {
+                        _unitOfWork.TestResultRepository.Insert(new TestResult
+                        {
+                            Score = 0,
+                            Status = ProgressStatus.InProgress,
+                            TestedDate = DateTime.Now,
+                            TestResultId = Guid.NewGuid().ToString(),
+                        });
+                    }
+                }
+
                 _unitOfWork.ProgressRepository.Insert(mapProgress);
                 _unitOfWork.Save();
             }

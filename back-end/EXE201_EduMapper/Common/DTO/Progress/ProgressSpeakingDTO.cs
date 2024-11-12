@@ -9,6 +9,7 @@ namespace Common.DTO.Progress
     public class ProgressSpeakingDTO
     {
         public string ProgressId { get; set; } = null!;
+        public string UserId { get; set; } = null!;
         public DateTime TestedDate { get; set; }
         public string Status { get; set; } = string.Empty;
         public string ExamName { get; set; } = null!;
