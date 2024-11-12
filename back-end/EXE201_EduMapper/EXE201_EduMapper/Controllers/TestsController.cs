@@ -39,6 +39,24 @@ namespace EXE201_EduMapper.Controllers
             return Ok(result);
         }
 
+        [HttpGet("user-score")]
+        [ProducesResponseType(200, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> GetAllUserScore([FromQuery] string userId)
+        {
+            var result = await _testService.GetScore(userId);
+
+            return Ok(result);
+        }
+
+        [HttpGet("normal-test")]
+        [ProducesResponseType(200, Type = typeof(ResponseDTO))]
+        public async Task<IActionResult> GetAllNormalTests([FromQuery] TestParameters request)
+        {
+            var result = await _testService.GetAllNormal(request);
+
+            return Ok(result);
+        }
+
         [HttpGet("{id}/reading")]
         [ProducesResponseType(200, Type = typeof(ResponseDTO))]
         [ProducesResponseType(404, Type = typeof(ResponseDTO))]
