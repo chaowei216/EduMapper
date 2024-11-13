@@ -13,6 +13,7 @@ namespace Common.DTO.Passage
         public string? PassageTitle { get; set; } = string.Empty;
         public string? PassageContent { get; set; } = string.Empty;
         public string? ListeningFile {  get; set; } 
+        public string? PassageImage {  get; set; } 
         public ICollection<QuestionDTO> SubQuestion { get; set; } = null!;
         public ICollection<PassageSectionDTO> Sections { get; set; } = null!;
     }
