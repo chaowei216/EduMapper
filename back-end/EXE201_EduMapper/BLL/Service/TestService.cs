@@ -196,6 +196,20 @@ namespace BLL.Service
             foreach (var item in test)
             {
                 item.Exams = item.Exams.Where(e => e.ExamName.ToLower().Contains(ExamNameConstant.ListeningTest.ToLower())).ToList();
+
+                foreach (var exam in item.Exams)
+                {
+                    foreach (var passage in exam.Passages)
+                    {
+                        passage.Sections = passage.Sections
+                            .OrderBy(s => s.SectionLabel)
+                            .ToList();
+
+                        passage.SubQuestion = passage.SubQuestion
+                            .OrderBy(sq => sq.QuestionIndex)
+                            .ToList();
+                    }
+                }
             }
 
             if (test == null)
@@ -261,6 +275,10 @@ namespace BLL.Service
                         passage.Sections = passage.Sections
                             .OrderBy(s => s.SectionLabel)
                             .ToList();
+
+                        passage.SubQuestion = passage.SubQuestion
+                            .OrderBy(sq => sq.QuestionIndex)
+                            .ToList();
                     }
                 }
             }
@@ -289,6 +307,17 @@ namespace BLL.Service
             foreach (var item in test)
             {
                 item.Exams = item.Exams.Where(e => e.ExamName.ToLower().Contains(ExamNameConstant.WritingTest.ToLower())).ToList();
+
+                foreach (var exam in item.Exams)
+                {
+                    foreach (var passage in exam.Passages)
+                    {
+
+                        passage.SubQuestion = passage.SubQuestion
+                            .OrderBy(sq => sq.QuestionIndex)
+                            .ToList();
+                    }
+                }
             }
 
             if (test == null)
