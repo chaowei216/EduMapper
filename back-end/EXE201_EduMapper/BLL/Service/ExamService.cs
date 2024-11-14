@@ -593,6 +593,7 @@ namespace BLL.Service
 
             thisProgress.Percent = 100;
             thisProgress.Status = ProgressStatus.Done;
+            thisProgress.UpdatedDate = DateTime.Now;
             var passage = await _unitOfWork.PassageRepository.Get(filter: c => c.ExamId == exam.ExamId);
 
             foreach (var eachPassage in passage)
@@ -703,6 +704,9 @@ namespace BLL.Service
                 duration = thisProgress.UpdatedDate - thisProgress.TestedDate;
 
             }
+
+            response = response.OrderBy(r => r.QuestionIndex).ToList();
+
             return new ResponseDTO
             {
                 IsSuccess = true,
