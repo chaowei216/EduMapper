@@ -469,6 +469,8 @@ namespace BLL.Service
                             Score = 0,
                             Status = ProgressStatus.InProgress,
                             TestedDate = DateTime.Now,
+                            UserId = progress.UserId,
+                            TestId = test.TestId,
                             TestResultId = Guid.NewGuid().ToString(),
                         });
                     }
