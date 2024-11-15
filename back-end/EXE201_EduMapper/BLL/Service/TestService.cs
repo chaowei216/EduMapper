@@ -368,11 +368,12 @@ namespace BLL.Service
             var progresses = await _unitOfWork.TestResultRepository.Get(includeProperties: "Test,Test.Exams",
                                                 filter: c => c.UserId == id);
             var result = new TestPointDTO();
-            
+            var eachResult = new TestResultDTO();
+
             foreach (var item in progresses)
             {
                 var exam = await _unitOfWork.ExamRepository.Get(filter: c => c.TestId == item.TestId);
-                var eachResult = new TestResultDTO();
+                
                 foreach (var eachExam in exam)
                 {
                     var progress = await _unitOfWork.ProgressRepository.Get(filter: c => c.ExamId == eachExam.ExamId && c.UserId == id);
@@ -402,10 +403,10 @@ namespace BLL.Service
                         }
                     }
                 }
-                result.TestResultDTOs.Add(eachResult);
+              
             }
 
-
+            result.TestResultDTOs.Add(eachResult);
 
             return new ResponseDTO
             {
