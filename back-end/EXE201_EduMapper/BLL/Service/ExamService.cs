@@ -400,7 +400,7 @@ namespace BLL.Service
             var checkExist = await _unitOfWork.ProgressRepository.Get(filter: c => c.ExamId == progress.ExamId && c.UserId == progress.UserId);
             var checkExist1 = checkExist.FirstOrDefault();
             var exam = await _unitOfWork.ExamRepository.GetByID(progress.ExamId);
-
+            var test12 = await _unitOfWork.TestRepository.GetByID(exam.TestId);
             if (checkExist1 != null)
             {
                 if(exam != null && exam.ExamName.ToLower().Trim().Contains(ExamNameConstant.WritingTest))
@@ -409,6 +409,16 @@ namespace BLL.Service
                 }
 
                 if (exam != null && exam.ExamName.ToLower().Trim().Contains(ExamNameConstant.SpeakingTest))
+                {
+                    throw new BadRequestException(GeneralMessage.BadRequest);
+                }
+
+                if (exam != null && exam.ExamName.ToLower().Trim().Contains(ExamNameConstant.ReadingTest) && test12.IsRequired)
+                {
+                    throw new BadRequestException(GeneralMessage.BadRequest);
+                }
+
+                if (exam != null && exam.ExamName.ToLower().Trim().Contains(ExamNameConstant.ListeningTest) && test12.IsRequired)
                 {
                     throw new BadRequestException(GeneralMessage.BadRequest);
                 }
