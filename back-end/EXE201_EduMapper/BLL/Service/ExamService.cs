@@ -796,14 +796,14 @@ namespace BLL.Service
         public async Task<ResponseDTO> GetSpeakingRequest(ExamParameters request)
         {
             var progress = await _unitOfWork.ProgressRepository.Get(includeProperties: "User,Exam",
-                                                                    filter: c => (c.Exam.ExamName.ToLower().Trim().Contains(ExamNameConstant.SpeakingTest.ToLower()))
+                                                                    filter: c => (c.Status != ProgressStatus.Done) && (c.Exam.ExamName.ToLower().Trim().Contains(ExamNameConstant.SpeakingTest.ToLower())) 
                                                                     && (string.IsNullOrEmpty(request.Search) ||
                                                                     c.Status.ToLower().Trim().Contains(request.Search.ToLower().Trim())),
                                                                     pageSize: request.PageSize,
                                                                     pageIndex: request.PageNumber);
 
             var progressCount = await _unitOfWork.ProgressRepository.Get(includeProperties: "User,Exam",
-                                                                    filter: c => (c.Exam.ExamName.ToLower().Trim().Contains(ExamNameConstant.SpeakingTest.ToLower()))
+                                                                    filter: c => (c.Status != ProgressStatus.Done) && (c.Exam.ExamName.ToLower().Trim().Contains(ExamNameConstant.SpeakingTest.ToLower()))
                                                                     && (string.IsNullOrEmpty(request.Search) ||
                                                                     c.Status.ToLower().Trim().Contains(request.Search.ToLower().Trim())));
 
