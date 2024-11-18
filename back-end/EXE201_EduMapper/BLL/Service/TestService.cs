@@ -94,8 +94,13 @@ namespace BLL.Service
                 }
             }
 
-            var oneTest = test1.Skip(countDone).Take(1).First();
-            getTests.Add(oneTest);
+            var oneTest = test1.Skip(countDone).Take(1);
+
+            if(oneTest != null && oneTest.Any())
+            {
+                var oneTestFirst = oneTest.First();
+                getTests.Add(oneTestFirst);
+            }
             var pagingData = getTests.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize).ToList();
 
             var answerPageList = new PagedList<Test>(pagingData, getTests.Count, request.PageNumber, request.PageSize);
