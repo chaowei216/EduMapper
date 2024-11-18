@@ -33,5 +33,13 @@ namespace BLL.IService
         /// <param name="request"></param>
         /// <param name="subject"></param>
         void SendSpeakingTestEmail(string email, string studentName, double score, string feedback, string subject);
+        
+        /// <summary>
+        /// Send email after payment
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="studentName"></param>
+        /// <param name="subject"></param>
+        void SendEmailAfterPayment(string email, string studentName, string subject);
     }
 }
