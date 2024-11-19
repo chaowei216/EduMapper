@@ -174,6 +174,14 @@ namespace BLL.Service
                         passage.SubQuestion = passage.SubQuestion
                             .OrderBy(sq => sq.QuestionIndex)
                             .ToList();
+
+                        foreach (var question in passage.SubQuestion)
+                        {
+                            question.Choices = question.Choices
+                                .OrderBy(q => !string.IsNullOrEmpty(q.ChoiceContent)
+                                        ? q.ChoiceContent.Substring(0, 1) : string.Empty)
+                                .ToList();
+                        }
                     }
                 }
             }
