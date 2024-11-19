@@ -96,7 +96,7 @@ namespace BLL.Service
 
             var oneTest = test1.Skip(countDone).Take(1);
 
-            if(oneTest != null && oneTest.Any())
+            if (oneTest != null && oneTest.Any())
             {
                 var oneTestFirst = oneTest.First();
                 getTests.Add(oneTestFirst);
@@ -140,7 +140,6 @@ namespace BLL.Service
             var totalCount = test1.Count();
             var items = test.ToList();
 
-            // Create the PagedList and map the results
             var pageList = new PagedList<Test>(items, totalCount, request.PageNumber, request.PageSize);
             var mappedResponse = _mapper.Map<PaginationResponseDTO<TestDTO>>(pageList);
             mappedResponse.Data = _mapper.Map<List<TestDTO>>(items);
@@ -152,44 +151,6 @@ namespace BLL.Service
                 Message = GeneralMessage.GetSuccess,
                 MetaData = mappedResponse
             };
-            /*
-                        var test1 = await _unitOfWork.TestRepository.Get(includeProperties: "Exams,Exams.Passages,Exams.Passages.SubQuestion," +
-                                                                       "Exams.Passages.Sections,Exams.Passages.SubQuestion.Choices");
-
-                        List<Test> getTests = new List<Test>();
-
-                        foreach (var eachTest in test1)
-                        {
-                            var result = await _unitOfWork.TestResultRepository.Get(filter: c => c.UserId == request.UserId && c.TestId == eachTest.TestId);
-                            var eachResult = result.FirstOrDefault();
-
-                            if (eachResult == null)
-                            {
-                                getTests.Add(eachTest);
-                            }
-                        }
-
-                        var pagingData = getTests.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize).ToList();
-
-                        var answerPageList = new PagedList<Test>(pagingData, getTests.Count, request.PageNumber, request.PageSize);
-                        var mappedResponse = _mapper.Map<PaginationResponseDTO<TestDTO>>(answerPageList);
-
-                        if (request.PageNumber <= 0 || request.PageSize <= 0)
-                        {
-                            mappedResponse.Data = _mapper.Map<List<TestDTO>>(getTests);
-                        }
-                        else
-                        {
-                            mappedResponse.Data = _mapper.Map<List<TestDTO>>(pagingData);
-                        }
-
-                        return new ResponseDTO
-                        {
-                            StatusCode = StatusCodeEnum.OK,
-                            IsSuccess = true,
-                            Message = GeneralMessage.GetSuccess,
-                            MetaData = mappedResponse
-                        };*/
         }
 
         public async Task<ResponseDTO> GetListeningTestById(string id)
@@ -268,7 +229,6 @@ namespace BLL.Service
 
             foreach (var item in test)
             {
-                // Lọc theo tên của bài thi
                 item.Exams = item.Exams
                     .Where(e => e.ExamName.ToLower().Contains(ExamNameConstant.ReadingTest.ToLower()))
                     .ToList();
@@ -284,6 +244,14 @@ namespace BLL.Service
                         passage.SubQuestion = passage.SubQuestion
                             .OrderBy(sq => sq.QuestionIndex)
                             .ToList();
+
+                        foreach (var question in passage.SubQuestion)
+                        {
+                            question.Choices = question.Choices
+                                .OrderBy(q => !string.IsNullOrEmpty(q.ChoiceContent)
+                                        ? q.ChoiceContent.Substring(0, 1): string.Empty)
+                                .ToList();
+                        }
                     }
                 }
             }
@@ -378,7 +346,7 @@ namespace BLL.Service
             foreach (var item in progresses)
             {
                 var exam = await _unitOfWork.ExamRepository.Get(filter: c => c.TestId == item.TestId);
-                
+
                 foreach (var eachExam in exam)
                 {
                     var progress = await _unitOfWork.ProgressRepository.Get(filter: c => c.ExamId == eachExam.ExamId && c.UserId == id);
@@ -408,7 +376,7 @@ namespace BLL.Service
                         }
                     }
                 }
-              
+
             }
 
             result.TestResultDTOs.Add(eachResult);
