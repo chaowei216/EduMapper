@@ -113,14 +113,15 @@ namespace BLL.Service
             object response;
             if (paymentInfo.PaymentMethod == PaymentConst.PAYOS)
             {
-                response = await _payOSService.CreatePaymentLink(new PayOSRequestDTO
-                {
-                    MemberShipName = memberShip.MemberShipName,
-                    Description = PaymentConst.PAYMENT_DESCRIPTION + memberShip.MemberShipName,
-                    TotalPrice = (int)memberShip.Price,
-                    returnUrl = _configuration["PaymentOSCallBack:ReturnUrl"]!,
-                    cancelUrl = _configuration["PaymentOSCallBack:CancelUrl"]!
-                });
+                //response = await _payOSService.CreatePaymentLink(new PayOSRequestDTO
+                //{
+                //    MemberShipName = memberShip.MemberShipName,
+                //    Description = PaymentConst.PAYMENT_DESCRIPTION + memberShip.MemberShipName,
+                //    TotalPrice = (int)memberShip.Price,
+                //    returnUrl = _configuration["PaymentOSCallBack:ReturnUrl"]!,
+                //    cancelUrl = _configuration["PaymentOSCallBack:CancelUrl"]!
+                //});
+                response = "May mat hi";
             }
             else
             {
