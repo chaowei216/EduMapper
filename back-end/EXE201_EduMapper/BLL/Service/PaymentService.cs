@@ -27,7 +27,7 @@ namespace BLL.Service
         private readonly IUserService _userService;
         private readonly IPayOSService _payOSService;
         private readonly IConfiguration _configuration;
-        private readonly IEmailService _emailService;
+        //private readonly IEmailService _emailService;
 
         public PaymentService(ITransactionService transactionService,
                               IVnPayService vnpPayService,
@@ -36,8 +36,7 @@ namespace BLL.Service
                               IUnitOfWork unitOfWork,
                               IUserService userService,
                               IPayOSService payOSService,
-                              IConfiguration configuration,
-                              IEmailService emailService)
+                              IConfiguration configuration)
         {
             _transactionService = transactionService;
             _unitOfWork = unitOfWork;
@@ -47,7 +46,7 @@ namespace BLL.Service
             _userService = userService;
             _payOSService = payOSService;
             _configuration = configuration;
-            _emailService = emailService;
+            //_emailService = emailService;
         }
 
         public async Task<ResponseDTO> CreatePaymentRequest(PaymentRequestDTO paymentInfo, HttpContext context)
@@ -201,7 +200,7 @@ namespace BLL.Service
                 _unitOfWork.Save();
 
                 // send email
-                _emailService.SendEmailAfterPayment(user.Email!, user.FullName, EmailMessage.EmailAfterPayment);
+                //_emailService.SendEmailAfterPayment(user.Email!, user.FullName, EmailMessage.EmailAfterPayment);
 
                 return new ResponseDTO
                 {
