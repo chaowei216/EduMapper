@@ -83,10 +83,9 @@ builder.Services.Configure<PaymentConfig>(builder.Configuration.GetSection("PayO
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Cors", builder => builder
-                                .WithOrigins("https://en-edumapper.vercel.app")
+                                .WithOrigins("*")
                                 .AllowAnyMethod()
-                                .AllowAnyHeader()
-                                .AllowCredentials());
+                                .AllowAnyHeader());
 });
 
 var app = builder.Build();
