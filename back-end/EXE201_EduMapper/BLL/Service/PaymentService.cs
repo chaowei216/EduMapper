@@ -85,53 +85,54 @@ namespace BLL.Service
                 } 
             }
 
-            //if (unpaidTrans != null)
-            //{
-            //    unpaidTrans.Status = PaymentConst.CancelStatus;
-            //    await _transactionService.UpdateTransaction(unpaidTrans.TransactionId, unpaidTrans);
-            //}
+            if (unpaidTrans != null)
+            {
+                unpaidTrans.Status = PaymentConst.CancelStatus;
+                await _transactionService.UpdateTransaction(unpaidTrans.TransactionId, unpaidTrans);
+            }
 
-            //var newTran = new DAO.Models.Transaction()
-            //{
-            //    TransactionId = Guid.NewGuid().ToString(),
-            //    PaymentMethod = paymentInfo.PaymentMethod,
-            //    TransactionDate = DateTime.Now,
-            //    Amount = memberShip.Price,
-            //    TransactionInfo = PaymentConst.UnSet,
-            //    TransactionNumber = PaymentConst.UnSet,
-            //    Status = PaymentConst.PendingStatus,
-            //    UserId = paymentInfo.UserId,
-            //    MemberShipId = memberShip.MemberShipId
-            //};
+            var newTran = new DAO.Models.Transaction()
+            {
+                TransactionId = Guid.NewGuid().ToString(),
+                PaymentMethod = paymentInfo.PaymentMethod,
+                TransactionDate = DateTime.Now,
+                Amount = memberShip.Price,
+                TransactionInfo = PaymentConst.UnSet,
+                TransactionNumber = PaymentConst.UnSet,
+                Status = PaymentConst.PendingStatus,
+                UserId = paymentInfo.UserId,
+                MemberShipId = memberShip.MemberShipId
+            };
 
-            //_transactionService.AddNewTransaction(newTran);
+            _transactionService.AddNewTransaction(newTran);
 
-            //// save
-            //_unitOfWork.Save();
+            // save
+            _unitOfWork.Save();
 
-            //// choose payment method
-            //object response;
-            //if (paymentInfo.PaymentMethod == PaymentConst.PAYOS)
-            //{
-            //    response = await _payOSService.CreatePaymentLink(new PayOSRequestDTO
-            //    {
-            //        MemberShipName = memberShip.MemberShipName,
-            //        Description = PaymentConst.PAYMENT_DESCRIPTION + memberShip.MemberShipName,
-            //        TotalPrice = (int)memberShip.Price,
-            //        returnUrl = _configuration["PaymentOSCallBack:ReturnUrl"]!,
-            //        cancelUrl = _configuration["PaymentOSCallBack:CancelUrl"]!
-            //    });
-            //} else
-            //{
-            //    response = _vnpPayService.CreatePaymentUrl(memberShip, context);
-            //}
+            // choose payment method
+            object response;
+            if (paymentInfo.PaymentMethod == PaymentConst.PAYOS)
+            {
+                response = await _payOSService.CreatePaymentLink(new PayOSRequestDTO
+                {
+                    MemberShipName = memberShip.MemberShipName,
+                    Description = PaymentConst.PAYMENT_DESCRIPTION + memberShip.MemberShipName,
+                    TotalPrice = (int)memberShip.Price,
+                    returnUrl = _configuration["PaymentOSCallBack:ReturnUrl"]!,
+                    cancelUrl = _configuration["PaymentOSCallBack:CancelUrl"]!
+                });
+            }
+            else
+            {
+                response = _vnpPayService.CreatePaymentUrl(memberShip, context);
+            }
 
             return new ResponseDTO
             {
                 IsSuccess = true,
                 Message = GeneralMessage.CreateSuccess,
                 StatusCode = StatusCodeEnum.Created,
-                MetaData = "response"
+                MetaData = response
             };
         }
 
