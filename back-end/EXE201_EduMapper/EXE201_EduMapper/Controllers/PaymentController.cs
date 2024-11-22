@@ -14,10 +14,12 @@ namespace EXE201_EduMapper.Controllers
     public class PaymentController : ControllerBase
     {
         private readonly IPaymentService _paymentService;
+        private readonly ILogger<PaymentController> _logger;
 
-        public PaymentController(IPaymentService paymentService)
+        public PaymentController(IPaymentService paymentService, ILogger<PaymentController> logger)
         {
             _paymentService = paymentService;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -27,6 +29,7 @@ namespace EXE201_EduMapper.Controllers
         [Authorize]
         public async Task<IActionResult> CreateRequestUrl([FromBody] PaymentRequestDTO request)
         {
+            _logger.LogInformation("In payment request");
             if (!ModelState.IsValid)
             {
                 return BadRequest(new ResponseDTO
