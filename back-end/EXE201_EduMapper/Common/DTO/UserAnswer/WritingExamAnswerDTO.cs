@@ -12,5 +12,6 @@ namespace Common.DTO.UserAnswer
         public int? QuestionIndex { get; set; }
         public string QuestionText { get; set; } = null!;
         public string UserChoice { get; set; } = null!;
+        public string? PassageImage { get; set; } = string.Empty;
     }
 }
