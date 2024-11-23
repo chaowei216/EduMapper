@@ -1015,6 +1015,7 @@ namespace BLL.Service
                                 eachResponse.QuestionText = ques.QuestionText;
                                 eachResponse.UserChoice = eachAnswer.UserChoice;
                                 eachResponse.QuestionId = ques.QuestionId;
+                                eachResponse.PassageImage = passage.PassageImage;
 
                                 thisResponse.Add(eachResponse);
                             }

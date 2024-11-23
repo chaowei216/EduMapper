@@ -1,17 +1,3 @@
-//{
-//  "type": "service_account",
-//  "project_id": "edumapper-ed77e",
-//  "private_key_id": "8a66948b158b75dbdab6b125505fb0870db04144",
-//  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDgr846aEui6rmW\nVNIIa4fnUo2wJ6CpTkUGi5MBd3i2Y+HGDSo0St+43x+TapcwJYuXPHZ2YhR6TAYL\nkJ/eOv6Svo2k2zKuYDlzsUAqinoHW3xNjbnJr2tc6OArceguh8+nL9vjdf7qpT6C\nDVE2vXjSMnoNQKNiRBtJjtqH+fyvgh+IPxMefOMZDqIVC8n25tkG520yfiLvOHSp\nwHa3Hh9DnCOUc5u6TIpDJ9sm4482HaM/QM8EWd/UvK1M87uYhZipGfmKryhN+Vra\neSKmlCsNntKNGsDpTG8loP9kdwOL8N+AIunZf/2RwBsaagPY/+VmLGanbkTU4L1P\nETwSomMlAgMBAAECggEAB19tdngupzFplpfA7prMslgAozuhp3yUgkL5N26arO15\nHp0W+fFNBw13RUiVnnRU8MkAoCDWyC6Pcji0LkAkU19iWXsB3jv1FqlF0D+MAorL\neOYCJy6U6M8RcAuEUWaOd094OS4Jh9yVQQI73H56JPeYDrBEzDgs5wyDejvHQWEF\nd0NRlIW5cULuWFIZVYVd8oPnI60kWeaREMC6qbSa1Pf+7rR04zpwvrqAtnVNICZV\nz+mIxK/6JG3Y3K2wg/HS8jnTQ/VRLrdjgDEErZirlFKZ6wRQ5iXs7PYb47pMiZ8G\nGt/SUvmKfjjxQNNRcKAh0hSZACwFAc7NiOe1iA1VvwKBgQDyWLA2QM3ZK2NL1fyw\nB6FlCeouEWZZ6pHeCg+ysJ28dgSCjoBPmIomeHEndMOuvv3jYdDedqSYjHCjm4NR\nH/RBqg0espfLaoF7+ykQOzVn/ZqWnSdID9Pm7l/4AbiB5t9/BfaQ1nj/tSUamJKK\nUNW53cmaPgsnh6MBauoU4ijmNwKBgQDtWGpGp11C1QrqPsSfP1zZP19/V9GbTQnB\nJK9Y5TKHKWTtyA/MBUTsMafUI7BiSVtk4yto0bYhy5oJCQxHRy8z33jEfW5Oa8NR\nQyCW9YlbrOR7EzgcHrb1/HFv7JKMXjsDwW282lS63oSQwRqkdAm8zF5iX2Kd8n6C\n9t9/TxWTgwKBgGFsedo1jwsgwBg6fAyf5KfjpnrCj+zRubYTQWBKU/7xSrrZYoed\nANyaSpLcA9Z5/UKtjfQAqgaRXq7G07GHMQA8xm1yykcCF++pdkaKJtwZPU4S+zmi\n80LAzV+8AVpnX62GzipHrfjN746Ti0WDXYgMuwEAtCc+Ba+KNXQTvvFdAoGBAKf/\n/nH2g6AL1scKGPkzy5AHOJyV18ta033AbtG4onRjy4o4I15hmHCrkUUq4e4gSK33\n0sFGN+piCK0+l09YxsOr+frzYgHma4F4x3ezYz/d+HhZmUzmPNGPl+gGh5EOHi3B\nW+DiljkTyrf/x9ECReY6rtBo/hAZFo2zG24s13PrAoGBAO4oqKoP6+rUIeXBCqIG\npgh7HDQ3kz/0nh6B//iaznwLlapGv9aftPEbQhYtVsOgnuM9Kq69wPFARg5zDlsP\nL6wmXghCOQI/oI5CCJJ9hHxQRCcJ7DQ/1LDD8EQpHOqetS9Uo02sPsw8wY3Q0nVb\nA0CKfjNoFbx6znPdnPeX68Ai\n-----END PRIVATE KEY-----\n",
-//  "client_email": "firebase-adminsdk-i4dvc@edumapper-ed77e.iam.gserviceaccount.com",
-//  "client_id": "107936989547261046260",
-//  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-//  "token_uri": "https://oauth2.googleapis.com/token",
-//  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-//  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-i4dvc%40edumapper-ed77e.iam.gserviceaccount.com",
-//  "universe_domain": "googleapis.com"
-//}
-
 {
   "type": "service_account",
   "project_id": "edumapper-ed77e",
