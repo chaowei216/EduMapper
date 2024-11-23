@@ -82,12 +82,10 @@ builder.Services.Configure<PaymentConfig>(builder.Configuration.GetSection("PayO
 // CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("Cors", builder =>
-    {
-        builder.WithOrigins("*")
-               .AllowAnyHeader()
-               .AllowAnyMethod();
-    });
+    options.AddPolicy("Cors", builder => builder
+                                .WithOrigins("*")
+                                .AllowAnyMethod()
+                                .AllowAnyHeader());
 });
 
 var app = builder.Build();

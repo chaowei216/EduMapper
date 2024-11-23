@@ -121,7 +121,8 @@ namespace BLL.Service
                     returnUrl = _configuration["PaymentOSCallBack:ReturnUrl"]!,
                     cancelUrl = _configuration["PaymentOSCallBack:CancelUrl"]!
                 });
-            } else
+            }
+            else
             {
                 response = _vnpPayService.CreatePaymentUrl(memberShip, context);
             }
